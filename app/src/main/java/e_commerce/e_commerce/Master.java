@@ -128,7 +128,7 @@ public class Master extends ActionBarActivity {
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
-
+    public static Handler backPressedHandler;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
     String[] loc_city = {"Chennai"};
@@ -136,6 +136,7 @@ public class Master extends ActionBarActivity {
     String[] loc_lat = {"13.0063","13.0983","13.0846"};
     String[] loc_long = {"80.2574","80.1622","80.2179"};
     private static int fragPos = -1;
+    private int curFrag;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -157,6 +158,7 @@ public class Master extends ActionBarActivity {
 
         menuHandler = new Handler();
         itemDetailsHandler = new Handler();
+        backPressedHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -252,6 +254,8 @@ public class Master extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_drawer);
         mDrawerToggle.syncState();
+
+        curFrag = 0;
 
         Master.locationHandler = new Handler() {
             public void handleMessage(Message msg) {
@@ -403,6 +407,8 @@ public class Master extends ActionBarActivity {
         msg.arg2 = position;
         menuHandler.sendMessage(msg);
 
+        curFrag = position;
+
         if (position == 0) {
             fragmentTransaction.replace(R.id.frame_container, new ProductsFragment(), "ProductsFragment");
         } else if (position == 1) {
@@ -512,6 +518,12 @@ public class Master extends ActionBarActivity {
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(Gravity.LEFT))
             drawerLayout.closeDrawer(Gravity.LEFT);
+
+        else if(curFrag == 0){
+            Message msg = new Message();
+            msg.arg1 = 1;
+            backPressedHandler.sendMessage(msg);
+        }
 
         else {
             finish();
@@ -1866,6 +1878,25 @@ public class Master extends ActionBarActivity {
             cartItemRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
             cartItemRecyclerView.setAdapter(cAdapter);
+
+            Handler backPressedHandler = new Handler(){
+                public void handleMessage(Message msg){
+                    if(msg.arg1==1){
+                        if(rootView1.findViewById(R.id.products).isEnabled()){
+                            rootView1.findViewById(R.id.products).setVisibility(View.INVISIBLE);
+                            rootView1.findViewById(R.id.category).setVisibility(View.INVISIBLE);
+                            rootView1.findViewById(R.id.subcategory).setVisibility(View.VISIBLE);
+                        }
+                        else if(rootView1.findViewById(R.id.subcategory).isEnabled()){
+                            rootView1.findViewById(R.id.products).setVisibility(View.INVISIBLE);
+                            rootView1.findViewById(R.id.category).setVisibility(View.VISIBLE);
+                            rootView1.findViewById(R.id.subcategory).setVisibility(View.INVISIBLE);
+                        }
+                        else
+                            getActivity().finish();
+                    }
+                }
+            };
 
             return rootView1;
 

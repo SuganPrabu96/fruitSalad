@@ -1993,13 +1993,13 @@ public class Master extends ActionBarActivity {
         Log.i("Cart Recycler View Size", String.valueOf(cAdapter.getItemCount()));
     }
 
-    public static void removefrom_cart(int position){
+    /*public static void removefrom_cart(int position){
 
         //Master.cAdapter.remove(position);
         cAdapter.remove(position,cAdapter);
         cAdapter.notifyDataSetChanged();
 
-    }
+    }*/
     public static void addDialog(ItemDetailsClass item1)
     {
         final ItemDetailsClass item = item1;

@@ -1,12 +1,10 @@
 package Cart;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
@@ -55,7 +53,8 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
         removeFromCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Master.removefrom_cart(position);
+                //Master.removefrom_cart(position);
+                remove(position, Master.cAdapter);
 
             }
         });
@@ -69,7 +68,10 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 
     public void remove(int position,CartRecyclerViewAdapter c){
         listitems.remove(position);
-       c.notifyDataSetChanged();
+        Master.cAdapter = null;
+        Master.cAdapter = new CartRecyclerViewAdapter(listitems, context);
+        Master.cartItemRecyclerView.setAdapter(Master.cAdapter);
+//       c.notifyDataSetChanged();
 //        notifyItemRemoved(position);
 //        notifyItemRangeChanged(position, listitems.size()-position+1);//TODO have to modify this line
 

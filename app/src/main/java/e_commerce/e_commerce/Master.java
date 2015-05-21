@@ -490,7 +490,7 @@ public class Master extends ActionBarActivity {
             }
         }
 
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
         // Highlight the selected item, update the title, and close the drawer
         drawerList.setItemChecked(position, true);
         int k;
@@ -1879,18 +1879,20 @@ public class Master extends ActionBarActivity {
 
             cartItemRecyclerView.setAdapter(cAdapter);
 
-            Handler backPressedHandler = new Handler(){
+            Master.backPressedHandler = new Handler(){
                 public void handleMessage(Message msg){
                     if(msg.arg1==1){
-                        if(rootView1.findViewById(R.id.products).isEnabled()){
+                        if(rootView1.findViewById(R.id.products).getVisibility()==View.VISIBLE){
                             rootView1.findViewById(R.id.products).setVisibility(View.INVISIBLE);
                             rootView1.findViewById(R.id.category).setVisibility(View.INVISIBLE);
                             rootView1.findViewById(R.id.subcategory).setVisibility(View.VISIBLE);
+                            Log.i("Products","Visible");
                         }
-                        else if(rootView1.findViewById(R.id.subcategory).isEnabled()){
+                        else if(rootView1.findViewById(R.id.subcategory).getVisibility()==View.VISIBLE){
                             rootView1.findViewById(R.id.products).setVisibility(View.INVISIBLE);
                             rootView1.findViewById(R.id.category).setVisibility(View.VISIBLE);
                             rootView1.findViewById(R.id.subcategory).setVisibility(View.INVISIBLE);
+                            Log.i("SubCategory","Visible");
                         }
                         else
                             getActivity().finish();

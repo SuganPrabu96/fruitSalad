@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.R;
 
 //import com.example.srikrishna.startupapp.FirstPageAfterLogin;
 

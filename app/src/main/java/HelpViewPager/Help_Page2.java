@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.R;
 
 /**
  * Created by Suganprabu on 18-03-2015.

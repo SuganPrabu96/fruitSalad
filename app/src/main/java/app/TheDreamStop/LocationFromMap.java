@@ -1,4 +1,4 @@
-package e_commerce.e_commerce;
+package app.TheDreamStop;
 
 /**
  * Created by Suganprabu on 17-04-2015.

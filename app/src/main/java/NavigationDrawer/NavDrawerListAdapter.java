@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.R;
 
 public class NavDrawerListAdapter extends BaseAdapter {
 

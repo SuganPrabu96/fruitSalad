@@ -1,4 +1,4 @@
-package e_commerce.e_commerce;
+package app.TheDreamStop;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

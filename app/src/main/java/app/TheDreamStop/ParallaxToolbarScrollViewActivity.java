@@ -1,10 +1,9 @@
-package e_commerce.e_commerce; /**
+package app.TheDreamStop; /**
  * Created by srikrishna on 15-04-2015.
  */
 
 
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -20,7 +19,6 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 
-import Cart.CartItemsClass;
 import ItemDisplay.ItemDetailsClass;
 
 public class ParallaxToolbarScrollViewActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {

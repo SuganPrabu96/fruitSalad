@@ -9,8 +9,8 @@ import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
-import e_commerce.e_commerce.Master;
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.Master;
+import app.TheDreamStop.R;
 
 
 /**

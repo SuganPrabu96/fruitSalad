@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.R;
 
 /**
  * Created by Suganprabu on 18-04-2015.

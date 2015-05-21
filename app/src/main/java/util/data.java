@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import NavigationDrawer.NavDrawerItem;
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.R;
 
 public class data {
     public static NavDrawerItem[] navtitles={

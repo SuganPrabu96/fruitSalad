@@ -12,8 +12,8 @@ import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 
-import e_commerce.e_commerce.Master;
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.Master;
+import app.TheDreamStop.R;
 
 /**
  * Created by Suganprabu on 18-04-2015.

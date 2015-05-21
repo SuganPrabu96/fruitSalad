@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.R;
 
 /**
  * Created by srikrishna on 19-04-2015.

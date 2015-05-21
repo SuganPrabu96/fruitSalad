@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import e_commerce.e_commerce.R;
+import app.TheDreamStop.R;
 
 public abstract class BaseActivity extends ActionBarActivity {
     private static final int NUM_OF_ITEMS = 100;

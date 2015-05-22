@@ -1108,7 +1108,7 @@ public class Master extends ActionBarActivity {
 
         private EditText editNewName, editNewEmail, editNewAddress, editNewPhone, editNewPassword;
         private TextView name, email, address, phone, password;
-        Button submit;
+        Button submit, cancel;
         public static Handler msgHandler;
         private Dialog confirmChangesDialog;
         private boolean confirmChangesAuth;
@@ -1124,6 +1124,7 @@ public class Master extends ActionBarActivity {
             myAccountLayout = (LinearLayout) rootView.findViewById(R.id.my_account_layout);
 
             submit = (Button) rootView.findViewById(R.id.accountButtonSubmit);
+            cancel = (Button) rootView.findViewById(R.id.accountButtonCancel);
 
             editNewName = (EditText) rootView.findViewById(R.id.accountEditTextName);
             name = (TextView) rootView.findViewById(R.id.accountTextViewName);
@@ -1156,6 +1157,7 @@ public class Master extends ActionBarActivity {
             password.setVisibility(View.VISIBLE);
 
             submit.setVisibility(View.INVISIBLE);
+            cancel.setVisibility(View.INVISIBLE);
 
             name.setText(LoginActivity.prefs.getString("Name", ""));
             email.setText(LoginActivity.prefs.getString("Email", ""));
@@ -1317,12 +1319,15 @@ public class Master extends ActionBarActivity {
                         name.setText(s.toString());
                         editNewName.setHint(s.toString());
                         submit.setVisibility(View.VISIBLE);
+                        cancel.setVisibility(View.VISIBLE);
                     } else if (LoginActivity.prefs.getString("Name", "").equals(name.getText()) &&
                             LoginActivity.prefs.getString("Email", "").equals(email.getText()) &&
                             LoginActivity.prefs.getString("Address", "").equals(address.getText()) &&
                             LoginActivity.prefs.getString("Phone", "").equals(phone.getText()) &&
-                            LoginActivity.prefs.getString("Password", "").equals(password.getText()))
+                            LoginActivity.prefs.getString("Password", "").equals(password.getText())) {
                         submit.setVisibility(View.INVISIBLE);
+                        cancel.setVisibility(View.INVISIBLE);
+                    }
 
                 }
             });
@@ -1345,12 +1350,15 @@ public class Master extends ActionBarActivity {
                         email.setText(s.toString());
                         editNewEmail.setHint(s.toString());
                         submit.setVisibility(View.VISIBLE);
+                        cancel.setVisibility(View.VISIBLE);
                     } else if (LoginActivity.prefs.getString("Name", "").equals(name.getText()) &&
                             LoginActivity.prefs.getString("Email", "").equals(email.getText()) &&
                             LoginActivity.prefs.getString("Address", "").equals(address.getText()) &&
                             LoginActivity.prefs.getString("Phone", "").equals(phone.getText()) &&
-                            LoginActivity.prefs.getString("Password", "").equals(password.getText()))
+                            LoginActivity.prefs.getString("Password", "").equals(password.getText())) {
                         submit.setVisibility(View.INVISIBLE);
+                        cancel.setVisibility(View.INVISIBLE);
+                    }
                 }
             });
 
@@ -1372,12 +1380,15 @@ public class Master extends ActionBarActivity {
                         phone.setText(s.toString());
                         editNewPhone.setHint(s.toString());
                         submit.setVisibility(View.VISIBLE);
+                        cancel.setVisibility(View.VISIBLE);
                     } else if (LoginActivity.prefs.getString("Name", "").equals(name.getText()) &&
                             LoginActivity.prefs.getString("Email", "").equals(email.getText()) &&
                             LoginActivity.prefs.getString("Address", "").equals(address.getText()) &&
                             LoginActivity.prefs.getString("Phone", "").equals(phone.getText()) &&
-                            LoginActivity.prefs.getString("Password", "").equals(password.getText()))
+                            LoginActivity.prefs.getString("Password", "").equals(password.getText())) {
                         submit.setVisibility(View.INVISIBLE);
+                        cancel.setVisibility(View.INVISIBLE);
+                    }
                 }
             });
 
@@ -1399,12 +1410,15 @@ public class Master extends ActionBarActivity {
                         address.setText(s.toString());
                         editNewAddress.setText(s.toString());
                         submit.setVisibility(View.VISIBLE);
+                        cancel.setVisibility(View.VISIBLE);
                     } else if (LoginActivity.prefs.getString("Name", "").equals(name.getText()) &&
                             LoginActivity.prefs.getString("Email", "").equals(email.getText()) &&
                             LoginActivity.prefs.getString("Address", "").equals(address.getText()) &&
                             LoginActivity.prefs.getString("Phone", "").equals(phone.getText()) &&
-                            LoginActivity.prefs.getString("Password", "").equals(password.getText()))
+                            LoginActivity.prefs.getString("Password", "").equals(password.getText())) {
                         submit.setVisibility(View.INVISIBLE);
+                        cancel.setVisibility(View.INVISIBLE);
+                    }
                 }
             });
 
@@ -1426,12 +1440,16 @@ public class Master extends ActionBarActivity {
                         password.setText(s.toString());
                         editNewPassword.setHint(s.toString());
                         submit.setVisibility(View.VISIBLE);
+                        cancel.setVisibility(View.VISIBLE);
                     } else if (LoginActivity.prefs.getString("Name", "").equals(name.getText()) &&
                             LoginActivity.prefs.getString("Email", "").equals(email.getText()) &&
                             LoginActivity.prefs.getString("Address", "").equals(address.getText()) &&
                             LoginActivity.prefs.getString("Phone", "").equals(phone.getText()) &&
-                            LoginActivity.prefs.getString("Password", "").equals(password.getText()))
+                            LoginActivity.prefs.getString("Password", "").equals(password.getText())) {
                         submit.setVisibility(View.INVISIBLE);
+                        cancel.setVisibility(View.INVISIBLE);
+                    }
+
                 }
             });
 
@@ -1549,6 +1567,35 @@ public class Master extends ActionBarActivity {
                         editNewPassword.setVisibility(View.INVISIBLE);
                     }
                     return false;
+                }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    name.setVisibility(View.VISIBLE);
+                    email.setVisibility(View.VISIBLE);
+                    phone.setVisibility(View.VISIBLE);
+                    address.setVisibility(View.VISIBLE);
+                    password.setVisibility(View.VISIBLE);
+
+                    editNewName.setVisibility(View.INVISIBLE);
+                    editNewAddress.setVisibility(View.INVISIBLE);
+                    editNewEmail.setVisibility(View.INVISIBLE);
+                    editNewPhone.setVisibility(View.INVISIBLE);
+                    editNewPassword.setVisibility(View.INVISIBLE);
+
+                    name.setText(LoginActivity.prefs.getString("Name",""));
+                    email.setText(LoginActivity.prefs.getString("Email",""));
+                    address.setText(LoginActivity.prefs.getString("Address",""));
+                    phone.setText(LoginActivity.prefs.getString("Phone",""));
+                    password.setText(LoginActivity.prefs.getString("Password",""));
+
+                    editNewName.setHint(name.getText());
+                    editNewAddress.setHint(address.getText());
+                    editNewPhone.setHint(phone.getText());
+                    editNewPassword.setHint(password.getText());
+                    editNewEmail.setHint(email.getText());
                 }
             });
 

@@ -1218,6 +1218,7 @@ public class Master extends ActionBarActivity {
                     editNewPhone.setVisibility(View.INVISIBLE);
                     editNewEmail.setVisibility(View.INVISIBLE);
                     editNewName.setVisibility(View.VISIBLE);
+                    editNewName.setHint("");
 
                     inputMethodManager.showSoftInput(editNewName,InputMethodManager.SHOW_FORCED);
 
@@ -1238,6 +1239,7 @@ public class Master extends ActionBarActivity {
                     editNewPhone.setVisibility(View.INVISIBLE);
                     editNewEmail.setVisibility(View.VISIBLE);
                     editNewName.setVisibility(View.INVISIBLE);
+                    editNewEmail.setHint("");
 
                     inputMethodManager.showSoftInput(editNewEmail,InputMethodManager.SHOW_FORCED);
                 }
@@ -1256,6 +1258,7 @@ public class Master extends ActionBarActivity {
                     editNewPhone.setVisibility(View.VISIBLE);
                     editNewEmail.setVisibility(View.INVISIBLE);
                     editNewName.setVisibility(View.INVISIBLE);
+                    editNewPhone.setHint("");
 
                     inputMethodManager.showSoftInput(editNewPhone,InputMethodManager.SHOW_FORCED);
                 }
@@ -1274,6 +1277,7 @@ public class Master extends ActionBarActivity {
                     editNewPhone.setVisibility(View.INVISIBLE);
                     editNewEmail.setVisibility(View.INVISIBLE);
                     editNewName.setVisibility(View.INVISIBLE);
+                    editNewAddress.setHint("");
 
                     inputMethodManager.showSoftInput(editNewAddress,InputMethodManager.SHOW_FORCED);
                 }
@@ -1292,6 +1296,7 @@ public class Master extends ActionBarActivity {
                     editNewPhone.setVisibility(View.INVISIBLE);
                     editNewEmail.setVisibility(View.INVISIBLE);
                     editNewName.setVisibility(View.INVISIBLE);
+                    editNewPassword.setHint("");
 
                     inputMethodManager.showSoftInput(editNewPassword,InputMethodManager.RESULT_HIDDEN);
 
@@ -1408,7 +1413,7 @@ public class Master extends ActionBarActivity {
 
                     if (address.getText() != s.toString()) {
                         address.setText(s.toString());
-                        editNewAddress.setText(s.toString());
+                        editNewAddress.setHint(s.toString());
                         submit.setVisibility(View.VISIBLE);
                         cancel.setVisibility(View.VISIBLE);
                     } else if (LoginActivity.prefs.getString("Name", "").equals(name.getText()) &&
@@ -1493,7 +1498,7 @@ public class Master extends ActionBarActivity {
 
                     int result = actionId & EditorInfo.IME_MASK_ACTION;
                     if(result==EditorInfo.IME_ACTION_DONE) {
-                        inputMethodManager.hideSoftInputFromWindow(editNewName.getWindowToken(), 0);
+                        inputMethodManager.hideSoftInputFromWindow(editNewEmail.getWindowToken(), 0);
                         email.setVisibility(View.VISIBLE);
                         editNewEmail.setVisibility(View.INVISIBLE);
                     }
@@ -1517,7 +1522,7 @@ public class Master extends ActionBarActivity {
 
                     int result = actionId & EditorInfo.IME_MASK_ACTION;
                     if(result==EditorInfo.IME_ACTION_DONE) {
-                        inputMethodManager.hideSoftInputFromWindow(editNewName.getWindowToken(), 0);
+                        inputMethodManager.hideSoftInputFromWindow(editNewPhone.getWindowToken(), 0);
                         phone.setVisibility(View.VISIBLE);
                         editNewPhone.setVisibility(View.INVISIBLE);
                     }
@@ -1540,8 +1545,11 @@ public class Master extends ActionBarActivity {
                     Log.i("actionId", String.valueOf(actionId));
 
                     int result = actionId & EditorInfo.IME_MASK_ACTION;
-                    if(result==EditorInfo.IME_ACTION_DONE)
-                        inputMethodManager.hideSoftInputFromWindow(editNewAddress.getWindowToken(),0);
+                    if(result==EditorInfo.IME_ACTION_DONE) {
+                        inputMethodManager.hideSoftInputFromWindow(editNewAddress.getWindowToken(), 0);
+                        address.setVisibility(View.VISIBLE);
+                        editNewAddress.setVisibility(View.INVISIBLE);
+                    }
                     return false;
                 }
             });
@@ -1562,7 +1570,7 @@ public class Master extends ActionBarActivity {
 
                     int result = actionId & EditorInfo.IME_MASK_ACTION;
                     if(result==EditorInfo.IME_ACTION_DONE) {
-                        inputMethodManager.hideSoftInputFromWindow(editNewName.getWindowToken(), 0);
+                        inputMethodManager.hideSoftInputFromWindow(editNewPassword.getWindowToken(), 0);
                         password.setVisibility(View.VISIBLE);
                         editNewPassword.setVisibility(View.INVISIBLE);
                     }
@@ -1596,6 +1604,9 @@ public class Master extends ActionBarActivity {
                     editNewPhone.setHint(phone.getText());
                     editNewPassword.setHint(password.getText());
                     editNewEmail.setHint(email.getText());
+
+                    submit.setVisibility(View.INVISIBLE);
+                    cancel.setVisibility(View.INVISIBLE);
                 }
             });
 
@@ -1615,9 +1626,6 @@ public class Master extends ActionBarActivity {
                                 else if (msg.arg2 == 1)
                                     confirmChangesAuth = true;
                             }
-                        }
-                    };
-
                     if (confirmChangesAuth == true) {
 
                         if (LoginActivity.prefs.getString("Password", "").equals(editNewPassword.getText().toString()))
@@ -1628,6 +1636,9 @@ public class Master extends ActionBarActivity {
                                     , address.getText().toString(), phone.getText().toString());
                     } else
                         Toast.makeText(rootView.getContext(), "Wrong password", Toast.LENGTH_SHORT).show();
+
+                        }
+                    };
                 }
             });
 
@@ -1636,6 +1647,7 @@ public class Master extends ActionBarActivity {
                 public void onClick(View v) {
                     editNewName.setVisibility(View.INVISIBLE);
                     name.setVisibility(View.VISIBLE);
+                    inputMethodManager.hideSoftInputFromWindow(editNewName.getWindowToken(),0);
                 }
             });
 
@@ -1644,6 +1656,7 @@ public class Master extends ActionBarActivity {
                 public void onClick(View v) {
                     editNewEmail.setVisibility(View.INVISIBLE);
                     email.setVisibility(View.VISIBLE);
+                    inputMethodManager.hideSoftInputFromWindow(editNewEmail.getWindowToken(),0);
                 }
             });
 
@@ -1652,6 +1665,7 @@ public class Master extends ActionBarActivity {
                 public void onClick(View v) {
                     editNewAddress.setVisibility(View.INVISIBLE);
                     address.setVisibility(View.VISIBLE);
+                    inputMethodManager.hideSoftInputFromWindow(editNewAddress.getWindowToken(),0);
                 }
             });
 
@@ -1660,6 +1674,7 @@ public class Master extends ActionBarActivity {
                 public void onClick(View v) {
                     editNewPhone.setVisibility(View.INVISIBLE);
                     phone.setVisibility(View.VISIBLE);
+                    inputMethodManager.hideSoftInputFromWindow(editNewPhone.getWindowToken(),0);
                 }
             });
 
@@ -1668,6 +1683,7 @@ public class Master extends ActionBarActivity {
                 public void onClick(View v) {
                     editNewPassword.setVisibility(View.INVISIBLE);
                     password.setVisibility(View.VISIBLE);
+                    inputMethodManager.hideSoftInputFromWindow(editNewPassword.getWindowToken(),0);
                 }
             });
 
@@ -2282,6 +2298,8 @@ public class Master extends ActionBarActivity {
             if (updateDetailsReturnedJSON != null) {
                 try {
                     JSONObject updateJSON = new JSONObject(updateDetailsReturnedJSON);
+
+                    Log.i("updateJSON",String.valueOf(updateJSON));
                     if (updateJSON.getString("success").equals("true")) {
 
                         LoginActivity.customerEmail = email;

@@ -87,7 +87,7 @@
         </activity>
 
         <provider android:name="util.SearchSuggestionProvider"
-                    android:authorities="e_commerce.e_commerce.SearchSuggestionProvider" />
+                    android:authorities="app.TheDreamStop.SearchSuggestionProvider" />
 
     </application>
 

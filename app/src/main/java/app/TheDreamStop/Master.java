@@ -72,6 +72,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import OrderHistory.OrderHistoryClass;
+import OrderHistory.OrderHistoryRecyclerViewAdapter;
 import Cart.CartItemsClass;
 import Cart.CartRecyclerViewAdapter;
 import HelpViewPager.ViewPagerAdapter;
@@ -109,6 +111,7 @@ public class Master extends ActionBarActivity {
     private static final String itemsImagesURL = "http://grokart.ueuo.com/prodImage.php";
     private static final String logoutURL = "http://grokart.ueuo.com/logout.php";
     private static final String newItemsURL = "http://grokart.ueuo.com/latest.php";
+    private static final String orderHistoryURL = "http://grokart.ueuo.com/orderHistory.php";
     public FragmentTransaction fragmentTransaction;
     public static Dialog locationDialog,addtocartDialog;
 
@@ -123,7 +126,7 @@ public class Master extends ActionBarActivity {
     private static String itemsReturnedJSON, itemsURLReturnedJSON, logoutReturnedJSON, newItemsReturnedJSON;
     private static String updateDetailsReturnedJSON;
     public static ProgressDialog updateProgress, locationProgress, loadItemsProgress, logoutProgress, loadCatSubCatProgress,
-            loadNewItemsProgress;
+            loadNewItemsProgress, orderHistoryProgress;
     public static Handler locationHandler, logoutHandler, loadItems, loadItemImages, newItemsHandler, menuHandler, itemDetailsHandler;
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
@@ -166,6 +169,7 @@ public class Master extends ActionBarActivity {
         logoutProgress = new ProgressDialog(Master.this);
         loadCatSubCatProgress = new ProgressDialog(Master.this);
         loadNewItemsProgress = new ProgressDialog(Master.this);
+        orderHistoryProgress = new ProgressDialog(Master.this);
 
         facebookProfileIcon = (ProfilePictureView) findViewById(R.id.profilepic_facebook);
         profileIconText = (TextView) findViewById(R.id.profilepic_name);
@@ -1067,11 +1071,16 @@ public class Master extends ActionBarActivity {
         public OrderHistoryFragment() {
         }
 
+        ArrayList<OrderHistoryClass> orders;
+        OrderHistoryRecyclerViewAdapter ordersAdapter;
+        RecyclerView ordersRecylerView;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_order_history, container, false);
 
+            new OrderHistory().execute();
 
             cartItemRecyclerView = (RecyclerView) rootView.findViewById(R.id.cart_items_recyclerview);
             cartItemRecyclerView.setHasFixedSize(false);
@@ -1079,6 +1088,14 @@ public class Master extends ActionBarActivity {
             cartItemRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
             cartItemRecyclerView.setAdapter(cAdapter);
+
+            ordersRecylerView = (RecyclerView) rootView.findViewById(R.id.order_history_recyclerview);
+            ordersRecylerView.setHasFixedSize(false);
+            ordersRecylerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+            ordersRecylerView.setItemAnimator(new DefaultItemAnimator());
+
+            ordersAdapter = new OrderHistoryRecyclerViewAdapter(orders, rootView.getContext());
+            ordersRecylerView.setAdapter(ordersAdapter);
 
             return rootView;
         }
@@ -1245,8 +1262,8 @@ public class Master extends ActionBarActivity {
             address.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    address.setVisibility(View.VISIBLE);
-                    password.setVisibility(View.INVISIBLE);
+                    address.setVisibility(View.INVISIBLE);
+                    password.setVisibility(View.VISIBLE);
                     phone.setVisibility(View.VISIBLE);
                     email.setVisibility(View.VISIBLE);
                     name.setVisibility(View.VISIBLE);
@@ -1275,9 +1292,9 @@ public class Master extends ActionBarActivity {
                     editNewName.setVisibility(View.INVISIBLE);
 
                     inputMethodManager.showSoftInput(editNewPassword,InputMethodManager.RESULT_HIDDEN);
-/*
-                    inputMethodManager.showSoftInput(editNewPassword,InputMethodManager.SHOW_FORCED);
-*/
+
+                    //inputMethodManager.showSoftInput(editNewPassword,InputMethodManager.SHOW_FORCED);
+
                 }
 
             });
@@ -2570,6 +2587,54 @@ public class Master extends ActionBarActivity {
 
         }
 
+    }
+
+    private static class OrderHistory extends AsyncTask<Void,Void,String>{
+
+        private boolean orderHistorySuccess = false;
+
+        @Override
+        protected void onPreExecute(){
+            Log.i("Order History", "Inside PreExecute");
+            orderHistoryProgress.setTitle("Loading your order history...");
+            orderHistoryProgress.setCancelable(false);
+            orderHistoryProgress.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            Log.i("Order History", "Inside doInBackground");
+            ServiceHandler jsonParser = new ServiceHandler();
+
+            List<NameValuePair> paramsItems = new ArrayList<>();
+            paramsItems.add(new BasicNameValuePair("session", LoginActivity.session));
+
+            String orderHistoryReturnedJSON = jsonParser.makeServiceCall(orderHistoryURL, ServiceHandler.POST);
+            if(orderHistoryReturnedJSON != null){
+                try {
+                    Log.i("order_hisReturnedJSON", orderHistoryReturnedJSON);
+                    JSONObject orderHistoryJSON = new JSONObject(orderHistoryReturnedJSON);
+
+                    if(orderHistoryJSON.getString("success").equals("true")){
+                        //TODO get the details from here and put it in orderhistoryclass
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String res){
+            super.onPostExecute(res);
+
+            if(orderHistoryProgress!=null && orderHistoryProgress.isShowing()){
+                orderHistoryProgress.hide();
+                orderHistoryProgress.cancel();
+            }
+        }
     }
 
     private class Logout extends AsyncTask<String, Void, String> {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">E-Commerce</string>
+    <string name="app_name">The Dream Stop</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -23,7 +23,8 @@
     <string name="status_revoke_access">Revoked access</string>
     <string name="status_revoke_access_error">Error revoking access: %s</string>
     <string name="signed_in_as">Signed in as %s</string>
-    <string name="google_maps_key">AIzaSyBn0XSzU3mVmrwHISw-Cx7mkC0gDt9iZkw</string>
+    <string name="google_api_key">AIzaSyBvWhPN5tcqRCuOi0uQ9AzoIp4VMuh1JWo</string>
+    <string name="GCM_server_key">AIzaSyC5frlcEK7-D88Xk3N1f8KHuej2uGBef_g</string>
     <!-- Used if there was an error loading the signed in user's name. -->
     <string name="unknown_person">Unknown</string>
     <string name="play_services_error">Google Play services is not available.  This application will close.</string>

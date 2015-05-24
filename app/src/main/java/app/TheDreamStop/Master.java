@@ -4,9 +4,6 @@ package app.TheDreamStop;
  * Created by Suganprabu on 17-04-2015.
  */
 
-
-//TODO in cart_card.xml I have changed the marginLeft of the removeButton for testing purposes
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -72,8 +69,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import OrderHistory.OrderHistoryClass;
-import OrderHistory.OrderHistoryRecyclerViewAdapter;
 import Cart.CartItemsClass;
 import Cart.CartRecyclerViewAdapter;
 import HelpViewPager.ViewPagerAdapter;
@@ -85,6 +80,8 @@ import ItemDisplay.SubcategoryCardAdapter;
 import ItemDisplay.SubcategoryCardClass;
 import NavigationDrawer.NavDrawerItem;
 import NavigationDrawer.NavDrawerListAdapter;
+import OrderHistory.OrderHistoryClass;
+import OrderHistory.OrderHistoryRecyclerViewAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 import util.ServiceHandler;
 import util.data;
@@ -98,11 +95,12 @@ public class Master extends ActionBarActivity {
     public static ImageView profileIcon;
     public static CircleImageView googleProfileIcon;
     public static String modeOfLogin;
-    public static int numCategories, numSubCategories[], categoryID[], productsID[], numProducts,
+    public static int numCategories, numSubCategories[], numProducts,
                   newProductsID[], newProductsCatId[], newProductsSubCatId[];
     public static ArrayList<Double> productsPrice, productsMRP;
     public static ArrayList<String> categoryName, productsName, productDesc;
     public static ArrayList<int[]> subcategoryID;
+    public static ArrayList<Integer> categoryID, productsID;
     public static ArrayList<String[]> subcategoryName;
     private final String categoriesURL = "http://thedreamstop.in/api/listCategories.php";
     private static final String updateDetailsURL = "http://thedreamstop.in/api/editInfo.php";
@@ -127,7 +125,7 @@ public class Master extends ActionBarActivity {
     private static String itemsReturnedJSON, itemsURLReturnedJSON, logoutReturnedJSON, newItemsReturnedJSON;
     private static String updateDetailsReturnedJSON;
     public static ProgressDialog updateProgress, locationProgress, loadItemsProgress, logoutProgress, loadCatSubCatProgress,
-            loadNewItemsProgress, orderHistoryProgress;
+            loadNewItemsProgress, orderHistoryProgress, addorderProgress;
     public static Handler locationHandler, logoutHandler, loadItems, loadItemImages, newItemsHandler, menuHandler, itemDetailsHandler;
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
@@ -141,6 +139,8 @@ public class Master extends ActionBarActivity {
     String[] loc_long = {"80.2574","80.1622","80.2179"};
     private static int fragPos = -1;
     private int curFrag;
+    public static double totalCost = 0.0;
+    private static Dialog checkoutDialog;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -171,6 +171,9 @@ public class Master extends ActionBarActivity {
         loadCatSubCatProgress = new ProgressDialog(Master.this);
         loadNewItemsProgress = new ProgressDialog(Master.this);
         orderHistoryProgress = new ProgressDialog(Master.this);
+        addorderProgress = new ProgressDialog(Master.this);
+
+        checkoutDialog = new Dialog(this);
 
         facebookProfileIcon = (ProfilePictureView) findViewById(R.id.profilepic_facebook);
         profileIconText = (TextView) findViewById(R.id.profilepic_name);
@@ -1761,6 +1764,7 @@ public class Master extends ActionBarActivity {
         private int catID,subcatID;
         private int[] categoryImageURL = {R.drawable.personalcare, R.drawable.brandedfoods, R.drawable.groceries};
         private static FragmentManager fragManag;
+        private ImageView checkoutButton;
 
         public ProductsFragment() {
         }
@@ -1771,6 +1775,8 @@ public class Master extends ActionBarActivity {
             final View rootView1 = inflater.inflate(R.layout.fragment_category, container, false);
 
             fragManag = getFragmentManager();
+
+            checkoutButton = (ImageView) rootView1.findViewById(R.id.checkoutbutton);
 
             /*if (savedInstanceState == null) {
                 fragManag
@@ -1984,11 +1990,98 @@ public class Master extends ActionBarActivity {
                 }
             };
 
+            checkoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkoutDialog();
+                }
+            });
+
             return rootView1;
 
         }
 
-        private void refreshItems() {
+       private void checkoutDialog(){
+
+           checkoutDialog.setCancelable(true);
+           checkoutDialog.setContentView(R.layout.checkout_layout);
+           checkoutDialog.setTitle("Confirm your details");
+           checkoutDialog.show();
+
+           final EditText name, phone, address;
+           final TextView price;
+           ImageView proceed;
+
+           name = (EditText) checkoutDialog.findViewById(R.id.checkout_name);
+           phone = (EditText) checkoutDialog.findViewById(R.id.checkout_phone_number);
+           address = (EditText) checkoutDialog.findViewById(R.id.checkout_shippingaddress);
+           price = (TextView) checkoutDialog.findViewById(R.id.checkout_totalcost);
+           proceed = (ImageView) checkoutDialog.findViewById(R.id.proceedtopayment_btn);
+
+           name.setText(LoginActivity.prefs.getString("Name",""));
+           phone.setText(LoginActivity.prefs.getString("Phone",""));
+           address.setText(LoginActivity.prefs.getString("Address",""));
+           price.setText(String.valueOf(totalCost));
+
+           proceed.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+
+                   String cName, cPhone, cAddress, cPrice;
+                   cName = String.valueOf(name.getText());
+                   cPhone = String.valueOf(phone.getText());
+                   cAddress = String.valueOf(address.getText());
+                   cPrice = String.valueOf(price.getText());
+
+                   if(!cName.equals("")&&!cPhone.equals("")&&!cAddress.equals("")&&!cPrice.equals(""))
+                   {
+                       JSONObject checkoutJSON = new JSONObject();
+                       try {
+                           checkoutJSON.put("Name", cName);
+                           checkoutJSON.put("Phone", cPhone);
+                           checkoutJSON.put("Address", cAddress);
+                           checkoutJSON.put("Total Cost", cPrice);
+                       } catch (JSONException e) {
+                           e.printStackTrace();
+                       }
+
+                       JSONArray itemsArray = new JSONArray();
+                       for(int i=0;i<cartitems.size();i++){
+                           JSONObject tempJSON = new JSONObject();
+                           CartItemsClass cItem = cartitems.get(i);
+                           try {
+                               /*tempJSON.put("CatID", categoryID.get());
+                               tempJSON.put("SubID", );
+                               tempJSON.put("PID", );
+                               */tempJSON.put("Name", cItem.getcartItemname());
+                               tempJSON.put("Price", cItem.getCartitemprice());
+                               tempJSON.put("Quantity", cItem.getQuantity());
+                               tempJSON.put("Net Price", Double.parseDouble(cItem.getCartitemprice())*cItem.getQuantity());
+
+                               itemsArray.put(i, tempJSON);
+                           }catch (Exception e){
+                               e.printStackTrace();
+                           }
+                       }
+                       new AddOrder().execute(checkoutJSON.toString(), itemsArray.toString());
+                   }
+
+                   else if(cName.equals("")){
+                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your name",Toast.LENGTH_SHORT).show();
+                   }
+
+                   else if(cPhone.equals("")){
+                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your contact number",Toast.LENGTH_SHORT).show();
+                   }
+
+                   else if(cAddress.equals("")){
+                       Toast.makeText(getActivity().getApplicationContext(),"Please enter shipping address",Toast.LENGTH_SHORT).show();
+                   }
+               }
+           });
+       }
+
+       private void refreshItems() {
 
             new Handler().post(new Runnable() {
                 @Override
@@ -2210,7 +2303,7 @@ public class Master extends ActionBarActivity {
                         numCategories = productsListJSON.getInt("numCategories");
                         JSONArray list = new JSONArray(String.valueOf(productsListJSON.getJSONArray("list")));
 
-                        categoryID = new int[numCategories];
+                        categoryID = new ArrayList<>();
                         numSubCategories = new int[numCategories];
                         subcategoryID = new ArrayList<>();
                         subcategoryName = new ArrayList<>();
@@ -2220,7 +2313,7 @@ public class Master extends ActionBarActivity {
                         for (int i = 0; i < numCategories; i++) {
                             JSONObject catObj = list.getJSONObject(i);
                             JSONArray sub = catObj.getJSONArray("subcategories");
-                            categoryID[i] = catObj.getInt("ID");
+                            categoryID.add(i,catObj.getInt("ID"));
                             categoryName.add(i, catObj.getString("name"));
                             numSubCategories[i] = catObj.getInt("numSubcategories");
                             int[] subIds = new int[numSubCategories[i]];
@@ -2462,7 +2555,7 @@ public class Master extends ActionBarActivity {
                         JSONArray itemsList = new JSONArray(String.valueOf(itemsJSON.getJSONArray("items")));
                         JSONObject tempItemJSON;
                         numProducts = itemsJSON.getInt("itemCount");
-                        productsID = new int[numProducts];
+                        productsID = new ArrayList<>();
                         oldItemsIDs = new int[numProducts];
                         newItemsIDs = new int[numProducts];
                         oldItemsNames = new String[numProducts];
@@ -2538,11 +2631,11 @@ public class Master extends ActionBarActivity {
                         }
 
                         Log.i("oldItemsNames",oldItemsNames[0]);
-                        Log.i("productsIdLength", String.valueOf(productsID.length));
+                        Log.i("productsIdLength", String.valueOf(productsID.size()));
                         Log.i("oldIDLength", String.valueOf(oldItemsIDs.length));
 
                         for(int i=0;i<newID;i++){
-                            productsID[i] = newItemsIDs[i];
+                            productsID.add(i,newItemsIDs[i]);
                             productsName.add(newItemsName[i]);
                             productsPrice.add(newItemsPrice[i]);
                             productsMRP.add(newItemsMRP[i]);
@@ -2550,16 +2643,16 @@ public class Master extends ActionBarActivity {
 
                         Log.i("productsNameStatus", String.valueOf(productsName.isEmpty()));
                         if(!productsName.isEmpty())
-                        for(int j=productsID.length;j<(productsID.length+oldID);j++){
-                            productsID[j] = oldItemsIDs[j-productsID.length];
-                            productsName.add(oldItemsNames[j-productsID.length]);
+                        for(int j=productsID.size();j<(productsID.size()+oldID);j++){
+                            productsID.add(j,oldItemsIDs[j-productsID.size()]);
+                            productsName.add(oldItemsNames[j-productsID.size()]);
                             productsPrice.add(oldItemsPrice[j-productsPrice.size()]);
                             productsMRP.add(oldItemsMRP[j-productsMRP.size()]);
                         }
 
                         else
                         for(int j=0;j<oldID;j++){
-                            productsID[j] = oldItemsIDs[j];
+                            productsID.add(j,oldItemsIDs[j]);
                             productsName.add(oldItemsNames[j]);
                             productsPrice.add(oldItemsPrice[j]);
                             productsMRP.add(oldItemsMRP[j]);
@@ -2656,6 +2749,45 @@ public class Master extends ActionBarActivity {
 
         }
 
+    }
+
+    private static class AddOrder extends AsyncTask<String, Void, String>{
+
+        private boolean addOrderSuccess = false;
+
+        @Override
+        protected void onPreExecute(){
+            Log.i("Add Order","Inside PreExceute");
+            addorderProgress.setTitle("Preparing to submit your order...");
+            addorderProgress.setCancelable(false);
+            orderHistoryProgress.show();
+        }
+        @Override
+        protected String doInBackground(String... params) {
+
+            Log.i("Add Order","Inside doInBackground");
+            ServiceHandler jsonParser = new ServiceHandler();
+            List<NameValuePair> paramsItems = new ArrayList<>();
+            paramsItems.add(new BasicNameValuePair("session", LoginActivity.session));
+            paramsItems.add(new BasicNameValuePair("prodArray",params[0]));
+            paramsItems.add(new BasicNameValuePair("itemArray",params[1]));
+
+            String addOrderReturnedJSON = jsonParser.makeServiceCall(orderHistoryURL, ServiceHandler.POST);
+            if(addOrderReturnedJSON != null){
+                try {
+                    Log.i("addOrderReturnedJSON", addOrderReturnedJSON);
+                    JSONObject addOrderJSON = new JSONObject(addOrderReturnedJSON);
+
+                    if(addOrderJSON.getString("success").equals("true")){
+                        //TODO Proceed to payment gateway from here
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
     }
 
     private static class OrderHistory extends AsyncTask<Void,Void,String>{

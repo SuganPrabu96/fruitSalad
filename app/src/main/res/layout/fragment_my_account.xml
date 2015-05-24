@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
 
     android:paddingTop="@dimen/activity_vertical_margin"
+
     android:orientation="vertical"
     tools:context="e_commerce.e_commerce.MyAccount$PlaceholderFragment">
 
@@ -20,6 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
             android:layout_marginTop="20dp"
             android:weightSum="6"
             android:id="@+id/my_account_layout">
@@ -54,6 +57,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="#000"
                         android:gravity="center"
+                        android:background="@drawable/rounded_corner"
                         android:layout_gravity="center"
                         android:textSize="18sp"
                         android:id="@+id/accountTextViewName"
@@ -64,6 +68,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_gravity="center"
+                        android:background="@drawable/rounded_corner"
                         android:textSize="18sp"
                         android:textColor="#000"
                         android:clickable="false"
@@ -105,6 +110,7 @@
                         android:textColor="#000"
                         android:textSize="18sp"
                         android:gravity="center"
+                        android:background="@drawable/rounded_corner"
                         android:layout_gravity="center"
                         android:id="@+id/accountTextViewEmail"
                         android:clickable="false"/>
@@ -115,6 +121,7 @@
                         android:gravity="center"
                         android:layout_gravity="center"                        android:textSize="18sp"
                         android:textColor="#000"
+                        android:background="@drawable/rounded_corner"
                         android:clickable="false"
                         android:id="@+id/accountEditEmail"
                         android:inputType="textEmailAddress"/>
@@ -153,6 +160,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="#000"
                         android:gravity="center"
+                        android:background="@drawable/rounded_corner"
                         android:layout_gravity="center"
                         android:textSize="18sp"
                         android:id="@+id/accountTextViewPhone"
@@ -164,6 +172,7 @@
                         android:gravity="center"
                         android:layout_gravity="center"                        android:textSize="18sp"
                         android:textColor="#000"
+                        android:background="@drawable/rounded_corner"
                         android:clickable="false"
                         android:id="@+id/accountEditTextPhone"
                         android:inputType="phone"/>
@@ -203,6 +212,7 @@
                         android:textColor="#000"
                         android:textSize="18sp"
                         android:gravity="center"
+                        android:background="@drawable/rounded_corner"
                         android:layout_gravity="center"
                         android:id="@+id/accountTextViewAddress"
                         android:clickable="false"/>
@@ -211,6 +221,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:background="@drawable/rounded_corner"
                         android:layout_gravity="center"                        android:textSize="18sp"
                         android:textColor="#000"
                         android:clickable="false"
@@ -253,6 +264,7 @@
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:textSize="18sp"
+                        android:background="@drawable/rounded_corner"
                         android:id="@+id/accountTextViewPassword"
                         android:inputType="textPassword"
                         android:clickable="false"/>
@@ -263,6 +275,7 @@
                         android:gravity="center"
                         android:layout_gravity="center"                        android:textSize="18sp"
                         android:textColor="#000"
+                        android:background="@drawable/rounded_corner"
                         android:clickable="false"
                         android:id="@+id/accountEditTextPassword"
                         android:inputType="textPassword"/>

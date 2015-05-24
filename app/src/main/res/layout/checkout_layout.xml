@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-bold"
+        android:text = "Sri Krishna S"
+        android:id="@+id/name"
+        android:textSize="40sp"/>
+
+        <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:id="@+id/phone_number"
+         android:text="9791300108"
+         android:fontFamily="sans-serif-light"
+         android:textSize="30sp"
+         android:paddingBottom="4dp"
+         android:paddingRight="50dp" />
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:singleLine="false"
+    android:paddingTop="5dp"
+    android:id="@+id/shippingaddress"
+    android:text="@string/sampleadd"
+    android:fontFamily="sans-serif-light"
+    android:textSize="30sp"/>
+
+
+   <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Cost : "
+        android:layout_marginTop="20dp"
+
+        android:id="@+id/texttotalcost"
+        android:fontFamily="sans-serif-bold"
+        android:textSize="30sp"/>
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/totalcost"
+           android:textColor="#E53935"
+           android:text="Rs.1500"
+           android:fontFamily="sans-serif-bold"
+           android:textSize="30sp"
+           android:layout_marginLeft="25dp"
+           android:layout_gravity="right|bottom"
+           />
+   </FrameLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray"/>
+    <ImageView
+        android:layout_width="190dp"
+        android:layout_marginTop="70dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/button_proceed"
+        android:layout_gravity="center"
+        android:id="@+id/proceedtopayment_btn"
+        />
+</LinearLayout>

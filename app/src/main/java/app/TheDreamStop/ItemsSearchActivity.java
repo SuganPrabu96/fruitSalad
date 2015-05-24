@@ -32,7 +32,7 @@ import util.ServiceHandler;
 public class ItemsSearchActivity extends ActionBarActivity {
 
     private String searchQuery, SearchReturnedJSON;
-    private final String searchURL="http://grokart.ueuo.com/search.php";
+    private final String searchURL="http://thedreamstop.in/api/search.php";
     public static SearchRecentSuggestions recentSuggestions;
     ArrayList<ItemDetailsClass> listOfItems;
     ArrayList<String> Name;

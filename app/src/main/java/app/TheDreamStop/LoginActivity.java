@@ -108,9 +108,9 @@ public class LoginActivity extends FragmentActivity implements
     private SignInButton mSignInButton;
     public static ProgressDialog registerProgressDialog, loginProgressDialog;
     private String loginReturnedJSON,loginUserDetailsReturnedJSON;
-    private final String LoginURL = "http://grokart.ueuo.com/login.php";
-    private final String RegisterURL = "http://grokart.ueuo.com/newUser.php";
-    private final String UserInfoURL = "http://grokart.ueuo.com/userInfo.php";
+    private final String LoginURL = "http://thedreamstop.in/api/login.php";
+    private final String RegisterURL = "http://thedreamstop.in/api/newUser.php";
+    private final String UserInfoURL = "http://thedreamstop.in/api/userInfo.php";
     public static String sessionId,session;
     public static String fbName,fbEmail,fbPhone,fbAddress;
 

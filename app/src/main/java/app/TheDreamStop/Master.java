@@ -104,14 +104,15 @@ public class Master extends ActionBarActivity {
     public static ArrayList<String> categoryName, productsName, productDesc;
     public static ArrayList<int[]> subcategoryID;
     public static ArrayList<String[]> subcategoryName;
-    private final String categoriesURL = "http://grokart.ueuo.com/listCategories.php";
-    private static final String updateDetailsURL = "http://grokart.ueuo.com/editInfo.php";
-    private final String locationURL = "http://grokart.ueuo.com/latlong.php";
-    private static final String itemsURL = "http://grokart.ueuo.com/catProds.php";
-    private static final String itemsImagesURL = "http://grokart.ueuo.com/prodImage.php";
-    private static final String logoutURL = "http://grokart.ueuo.com/logout.php";
-    private static final String newItemsURL = "http://grokart.ueuo.com/latest.php";
-    private static final String orderHistoryURL = "http://grokart.ueuo.com/orderHistory.php";
+    private final String categoriesURL = "http://thedreamstop.in/api/listCategories.php";
+    private static final String updateDetailsURL = "http://thedreamstop.in/api/editInfo.php";
+    private final String locationURL = "http://thedreamstop.in/api/latlong.php";
+    private static final String itemsURL = "http://thedreamstop.in/api/catProds.php";
+    private static final String itemsImagesURL = "http://thedreamstop.in/api/prodImage.php";
+    private static final String logoutURL = "http://thedreamstop.in/api/logout.php";
+    private static final String newItemsURL = "http://thedreamstop.in/api/latest.php";
+    private static final String orderHistoryURL = "http://thedreamstop.in/api/orderHistory.php";
+    private static final String addOrderURL = "http://thedreamstop.in/api/addOrder.php";
     public FragmentTransaction fragmentTransaction;
     public static Dialog locationDialog,addtocartDialog;
 
@@ -1779,10 +1780,13 @@ public class Master extends ActionBarActivity {
             }*/
 
             if(MainActivity.internetConnection.isConnectingToInternet())
-                if (numCategories > 0)
+                if (numCategories > 0) {
+                    listOfCateg = new ArrayList<>();
+                    if(categoryName.size()>0)
                     for (int i = 0; i < numCategories; i++) {
-                        listOfCateg.add(i, new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i]));
+                        listOfCateg.add(new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i]));
                     }
+                }
 
                 else{
                     listOfCateg.clear();

@@ -111,6 +111,7 @@ public class Master extends ActionBarActivity {
     private static final String newItemsURL = "http://thedreamstop.in/api/latest.php";
     private static final String orderHistoryURL = "http://thedreamstop.in/api/orderHistory.php";
     private static final String addOrderURL = "http://thedreamstop.in/api/addOrder.php";
+    private static final String viewTransactionURL = "http://thedreamstop.in/api/viewTransaction.php";
     public FragmentTransaction fragmentTransaction;
     public static Dialog locationDialog,addtocartDialog;
 
@@ -130,7 +131,7 @@ public class Master extends ActionBarActivity {
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
-    public static Handler backPressedHandler, orderHistoryHandler;
+    public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler;
     public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
@@ -165,6 +166,7 @@ public class Master extends ActionBarActivity {
         itemDetailsHandler = new Handler();
         backPressedHandler = new Handler();
         orderHistoryHandler = new Handler();
+        orderHistoryMoreHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -277,6 +279,16 @@ public class Master extends ActionBarActivity {
             }
         };
 
+        Master.orderHistoryMoreHandler = new Handler(){
+            public void handleMessage(Message msg){
+                if(msg.arg1==1) {
+                    Intent i = new Intent(Master.this, TransactionDetails.class);
+                    Bundle b = msg.getData();
+                    i.putExtra("JSON", b.getString("JSON"));
+                    startActivity(i);
+                }
+            }
+        };
     }
 
     private void getLocationForItems(){
@@ -2898,6 +2910,68 @@ public class Master extends ActionBarActivity {
                 Message msg = new Message();
                 msg.arg1 = 1;
                 orderHistoryHandler.sendMessage(msg);
+            }
+
+        }
+    }
+
+    public static class OrdersMoreDetails extends AsyncTask<String, Void, String>{
+
+        private boolean orderHistorySuccess = false;
+        String viewTransactionReturnedJSON;
+
+        @Override
+        protected void onPreExecute(){
+            Log.i("Order History", "Inside PreExecute");
+            orderHistoryProgress.setTitle("Loading your order list...");
+            orderHistoryProgress.setCancelable(false);
+            orderHistoryProgress.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            Log.i("Order More Details", "Inside doInBackground");
+            ServiceHandler jsonParser = new ServiceHandler();
+
+            List<NameValuePair> paramsItems = new ArrayList<>();
+            paramsItems.add(new BasicNameValuePair("session", LoginActivity.prefs.getString("session","")));
+            paramsItems.add(new BasicNameValuePair("TID",params[0]));
+
+            viewTransactionReturnedJSON = jsonParser.makeServiceCall(viewTransactionURL, ServiceHandler.POST, paramsItems);
+            if(viewTransactionReturnedJSON != null){
+                try {
+                    Log.i("viewTransReturnedJSON", viewTransactionReturnedJSON);
+                    JSONObject viewTransactionJSON = new JSONObject(viewTransactionReturnedJSON);
+
+                    if(viewTransactionJSON.getString("success").equals("true")){
+                        orderHistorySuccess = true;
+                    }
+                    else
+                        orderHistorySuccess = false;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String res){
+            super.onPostExecute(res);
+
+            if(orderHistoryProgress!=null && orderHistoryProgress.isShowing()){
+                orderHistoryProgress.hide();
+                orderHistoryProgress.cancel();
+            }
+
+            if(orderHistorySuccess){
+                Message msg = new Message();
+                msg.arg1 = 1;
+                Bundle b = new Bundle();
+                b.putString("JSON", viewTransactionReturnedJSON);
+                msg.setData(b);
+                Master.orderHistoryMoreHandler.sendMessage(msg);
             }
 
         }

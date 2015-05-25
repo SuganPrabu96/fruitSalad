@@ -130,7 +130,8 @@ public class Master extends ActionBarActivity {
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
-    public static Handler backPressedHandler;
+    public static Handler backPressedHandler, orderHistoryHandler;
+    public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
     String[] loc_city = {"Chennai"};
@@ -163,6 +164,7 @@ public class Master extends ActionBarActivity {
         menuHandler = new Handler();
         itemDetailsHandler = new Handler();
         backPressedHandler = new Handler();
+        orderHistoryHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -1075,14 +1077,15 @@ public class Master extends ActionBarActivity {
         public OrderHistoryFragment() {
         }
 
-        ArrayList<OrderHistoryClass> orders;
-        OrderHistoryRecyclerViewAdapter ordersAdapter;
+        public static OrderHistoryRecyclerViewAdapter ordersAdapter;
         RecyclerView ordersRecylerView;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_order_history, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_order_history, container, false);
+
+            Master.orders = new ArrayList<>();
 
             new OrderHistory().execute();
 
@@ -1098,9 +1101,16 @@ public class Master extends ActionBarActivity {
             ordersRecylerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
             ordersRecylerView.setItemAnimator(new DefaultItemAnimator());
 
-            ordersAdapter = new OrderHistoryRecyclerViewAdapter(orders, rootView.getContext());
-            ordersRecylerView.setAdapter(ordersAdapter);
+            Log.d("orders",Master.orders.toString());
 
+            orderHistoryHandler = new Handler() {
+                public void handleMessage(Message msg) {
+                    if(msg.arg1==1) {
+                        ordersAdapter = new OrderHistoryRecyclerViewAdapter(Master.orders, rootView.getContext());
+                        ordersRecylerView.setAdapter(ordersAdapter);
+                    }
+                }
+            };
             return rootView;
         }
     }
@@ -2816,8 +2826,8 @@ public class Master extends ActionBarActivity {
                 addorderProgress.hide();
                 addorderProgress.cancel();
             }
-
-        }
+            Master.cAdapter.emptyCart();
+       }
     }
 
     private static class OrderHistory extends AsyncTask<Void,Void,String>{
@@ -2841,14 +2851,29 @@ public class Master extends ActionBarActivity {
             List<NameValuePair> paramsItems = new ArrayList<>();
             paramsItems.add(new BasicNameValuePair("session", LoginActivity.prefs.getString("session","")));
 
-            String orderHistoryReturnedJSON = jsonParser.makeServiceCall(orderHistoryURL, ServiceHandler.POST);
+            String orderHistoryReturnedJSON = jsonParser.makeServiceCall(orderHistoryURL, ServiceHandler.POST, paramsItems);
             if(orderHistoryReturnedJSON != null){
                 try {
                     Log.i("order_hisReturnedJSON", orderHistoryReturnedJSON);
                     JSONObject orderHistoryJSON = new JSONObject(orderHistoryReturnedJSON);
 
                     if(orderHistoryJSON.getString("success").equals("true")){
-                        //TODO get the details from here and put it in orderhistoryclass
+                        int count = orderHistoryJSON.getInt("count");
+                        JSONArray history = orderHistoryJSON.getJSONArray("history");
+                        String name, phone, address, price, id;
+
+                        Master.orders = new ArrayList();
+
+                        for(int i=1;i<count;i++){
+                            JSONObject tempJSON = history.getJSONObject(i);
+                            name = tempJSON.getString("Name");
+                            phone = tempJSON.getString("Phone");
+                            address = tempJSON.getString("Address");
+                            price = tempJSON.getString("Total Cost");
+                            id = tempJSON.getString("TID");
+
+                            Master.orders.add(new OrderHistoryClass(id, name, phone, address, price));
+                        }
                         orderHistorySuccess = true;
                     }
                     else
@@ -2868,6 +2893,13 @@ public class Master extends ActionBarActivity {
                 orderHistoryProgress.hide();
                 orderHistoryProgress.cancel();
             }
+
+            if(orderHistorySuccess){
+                Message msg = new Message();
+                msg.arg1 = 1;
+                orderHistoryHandler.sendMessage(msg);
+            }
+
         }
     }
 

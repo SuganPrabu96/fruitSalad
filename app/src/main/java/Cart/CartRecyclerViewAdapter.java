@@ -81,6 +81,14 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 
     }
 
+    public void emptyCart(){
+        Master.totalCost = 0;
+        listitems.clear();
+        Master.cAdapter = null;
+        Master.cAdapter = new CartRecyclerViewAdapter(listitems, context);
+        Master.cartItemRecyclerView.setAdapter(Master.cAdapter);
+    }
+
     public int getItemCount() {
         return listitems == null ? 0 : listitems.size();
     }

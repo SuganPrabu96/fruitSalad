@@ -38,7 +38,8 @@ public class OrderHistoryRecyclerViewAdapter extends RecyclerView.Adapter<OrderH
         OrderHistoryClass order = orders.get(position);
 
         holder.orderNo.setText(order.getOrderHistoryId());
-        holder.orderDeliveryDate.setText(order.getOrderHistoryDate());
+        holder.orderName.setText(order.getOrderHistoryName());
+        holder.orderPhone.setText(order.getOrderHsitoryPhone());
         holder.orderPrice.setText(order.getOrderHistoryPrice());
         holder.orderAddress.setText(order.getOrderHistoryAddress());
 

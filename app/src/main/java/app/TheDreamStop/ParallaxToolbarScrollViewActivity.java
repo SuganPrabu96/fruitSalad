@@ -33,6 +33,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     private String name,imageURL;
     private double MRP,price;
     public static Dialog addtocartD;
+    private int pID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +61,10 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         price = getIntent.getExtras().getDouble("price");
         MRP = getIntent.getExtras().getDouble("MRP");
         imageURL = getIntent.getExtras().getString("image");
+        pID = getIntent.getExtras().getInt("PID");
         itemName.setText(name);
         itemPrice.setText(String.valueOf(price));
-        final ItemDetailsClass item = new ItemDetailsClass(name,imageURL,price,MRP) ;
+        final ItemDetailsClass item = new ItemDetailsClass(name,imageURL,price,MRP,pID) ;
 
         //itemDescription.setText(getIntent.getExtras().getString("Description").toString());
 
@@ -97,7 +99,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
             @Override
             public void onClick(View v) {
 
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString());
+                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid());
                 Log.e("Value of Qty", String.valueOf(np.getValue()));
 
                 addtocartD.dismiss();

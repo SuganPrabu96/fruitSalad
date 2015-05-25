@@ -13,17 +13,15 @@ public class ItemDetailsClass {
 
     public Double itemMRP;
 
-    private int categid, subcategid, productid;
+    private int productid;
 
 
-    public ItemDetailsClass(String itemtitle, String itemimgurl, Double itemprice, Double itemMRP, int categid, int subcategid, int productid) {
+    public ItemDetailsClass(String itemtitle, String itemimgurl, Double itemprice, Double itemMRP, int productid) {
 
         this.itemtitle = itemtitle;
         this.itemimgurl = itemimgurl;
         this.itemprice = itemprice;
         this.itemMRP = itemMRP;
-        this.categid = categid;
-        this.subcategid = subcategid;
         this.productid = productid;
     }
 
@@ -39,10 +37,6 @@ public class ItemDetailsClass {
     public Double getItemprice() { return itemprice; }
 
     public Double getItemMRP() { return itemMRP; }
-
-    public int getCategid() { return categid; }
-
-    public int getSubcategid() { return subcategid; }
 
     public int getProductid() { return productid; }
 }

@@ -1790,7 +1790,7 @@ public class Master extends ActionBarActivity {
                     listOfCateg = new ArrayList<>();
                     if(categoryName.size()>0)
                     for (int i = 0; i < numCategories; i++) {
-                        listOfCateg.add(new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i], i));
+                        listOfCateg.add(new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i], i+1));
                     }
                 }
 
@@ -1837,6 +1837,7 @@ public class Master extends ActionBarActivity {
                         i.putExtra("image",b.getString("image"));
                         i.putExtra("price",b.getDouble("price"));
                         i.putExtra("MRP",b.getDouble("MRP"));
+                        i.putExtra("PID",b.getInt("PID"));
                         startActivity(i);
                     }
                 }
@@ -1854,7 +1855,7 @@ public class Master extends ActionBarActivity {
                         listOfSubCateg = new ArrayList<>();
 
                         for (int i = 0; i < numSubCategories[msg.arg2-1]; i++) {
-                            listOfSubCateg.add(i, new SubcategoryCardClass(subcategoryName.get(msg.arg2-1)[i].toUpperCase(), 0, catID, i));
+                            listOfSubCateg.add(i, new SubcategoryCardClass(subcategoryName.get(msg.arg2-1)[i].toUpperCase(), 0));
                             //TODO change this to image URL received from db
                         }
 
@@ -1900,13 +1901,14 @@ public class Master extends ActionBarActivity {
                         Bundle b = msg.getData();
                         int cID = b.getInt("CatID");
                         int sID = b.getInt("SubID");
+                        ArrayList<Integer> pID = b.getIntegerArrayList("ProdId");
                         listOfItems = new ArrayList<>();
 
                         Log.i("numProducts", String.valueOf(numProducts));
                         Log.i("productsNameLength", String.valueOf(productsName.size()));
                         if(numProducts!=0)
                             for(int i=0;i<numProducts;i++)
-                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i),"1", productsPrice.get(i), productsMRP.get(i), cID, sID, i)); //TODO change this to URL from db
+                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i),"1", productsPrice.get(i), productsMRP.get(i), pID.get(i))); //TODO change this to URL from db
 
                         else
                             listOfItems = null;
@@ -2052,8 +2054,6 @@ public class Master extends ActionBarActivity {
                            JSONObject tempJSON = new JSONObject();
                            CartItemsClass cItem = cartitems.get(i);
                            try {
-                               tempJSON.put("CatID", cItem.getCategId());
-                               tempJSON.put("SubID", cItem.getSubcategId());
                                tempJSON.put("PID", cItem.getProductId());
                                tempJSON.put("Name", cItem.getcartItemname());
                                tempJSON.put("Price", cItem.getCartitemprice());
@@ -2166,9 +2166,10 @@ public class Master extends ActionBarActivity {
 
     }
 
-    public static void addtocart_fn(String name, int qty, String price, int categID, int subcategID, int productID){
+    public static void addtocart_fn(String name, int qty, String price, int productID){
 
-        Master.cAdapter.add(new CartItemsClass(name,qty,price,categID,subcategID,productID));
+        Log.i("addtocart_fn_PID", String.valueOf(productID));
+        Master.cAdapter.add(new CartItemsClass(name,qty,price,productID));
 
         Log.i("CartItems Length", String.valueOf(cartitems.size()));
         Log.i("Cart Recycler View Size", String.valueOf(cAdapter.getItemCount()));
@@ -2184,6 +2185,8 @@ public class Master extends ActionBarActivity {
     public static void addDialog(ItemDetailsClass item1)
     {
         final ItemDetailsClass item = item1;
+
+        Log.d("item1 PID", String.valueOf(item1.getProductid()));
 
         addtocartDialog.setTitle("Select Quantity");
         addtocartDialog.setContentView(R.layout.add_dialog);
@@ -2206,8 +2209,8 @@ public class Master extends ActionBarActivity {
               //  addtocart_fn(cartitem);
               //  Log.i("Value of Qty",String.valueOf(np.getValue()));
                 //Log.d("Value of Qty","check");
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getCategid(),item.getSubcategid(),item.getProductid());
-                Log.e("Value of Qty",String.valueOf(np.getValue()));
+                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid());
+                Log.i("Value of Qty",String.valueOf(np.getValue()));
 
                 addtocartDialog.dismiss();
             }
@@ -2698,6 +2701,7 @@ public class Master extends ActionBarActivity {
                 Bundle b = new Bundle();
                 b.putInt("CatId", catID);
                 b.putInt("SubId", subID);
+                b.putIntegerArrayList("ProdId",productsID);
                 itemsMsg.setData(b);
                 ProductsFragment.productsMsgHandler.sendMessage(itemsMsg);
 
@@ -2770,7 +2774,7 @@ public class Master extends ActionBarActivity {
             Log.i("Add Order","Inside PreExceute");
             addorderProgress.setTitle("Preparing to submit your order...");
             addorderProgress.setCancelable(false);
-            orderHistoryProgress.show();
+            addorderProgress.show();
         }
         @Override
         protected String doInBackground(String... params) {
@@ -2778,11 +2782,14 @@ public class Master extends ActionBarActivity {
             Log.i("Add Order","Inside doInBackground");
             ServiceHandler jsonParser = new ServiceHandler();
             List<NameValuePair> paramsItems = new ArrayList<>();
-            paramsItems.add(new BasicNameValuePair("session", LoginActivity.session));
+            paramsItems.add(new BasicNameValuePair("session",LoginActivity.prefs.getString("session","")));
             paramsItems.add(new BasicNameValuePair("prodArray",params[0]));
             paramsItems.add(new BasicNameValuePair("itemArray",params[1]));
 
-            String addOrderReturnedJSON = jsonParser.makeServiceCall(orderHistoryURL, ServiceHandler.POST);
+            Log.i("prodArray",params[0]);
+            Log.i("itemArray",params[1]);
+
+            String addOrderReturnedJSON = jsonParser.makeServiceCall(addOrderURL, ServiceHandler.POST, paramsItems);
             if(addOrderReturnedJSON != null){
                 try {
                     Log.i("addOrderReturnedJSON", addOrderReturnedJSON);
@@ -2832,7 +2839,7 @@ public class Master extends ActionBarActivity {
             ServiceHandler jsonParser = new ServiceHandler();
 
             List<NameValuePair> paramsItems = new ArrayList<>();
-            paramsItems.add(new BasicNameValuePair("session", LoginActivity.session));
+            paramsItems.add(new BasicNameValuePair("session", LoginActivity.prefs.getString("session","")));
 
             String orderHistoryReturnedJSON = jsonParser.makeServiceCall(orderHistoryURL, ServiceHandler.POST);
             if(orderHistoryReturnedJSON != null){

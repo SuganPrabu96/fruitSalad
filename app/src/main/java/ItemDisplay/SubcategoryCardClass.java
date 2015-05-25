@@ -9,11 +9,17 @@ public class SubcategoryCardClass {
 
     private int subcategimg;
 
+    private int subcategid;
 
-    public SubcategoryCardClass(String subcategtitle, int subcategimg) {
+    private int categid;
+
+
+    public SubcategoryCardClass(String subcategtitle, int subcategimg, int categid, int subcategid) {
 
         this.subcategtitle = subcategtitle;
         this.subcategimg = subcategimg;
+        this.subcategid = subcategid;
+        this.categid = categid;
     }
 
     //   public String getItemcateg(){ return itemcateg;}
@@ -24,5 +30,9 @@ public class SubcategoryCardClass {
     public int getSubcategimg() {
         return subcategimg;
     }
+
+    public int getSubcategid() { return subcategid; }
+
+    public int getCategid() { return categid; }
 }
 

@@ -1790,7 +1790,7 @@ public class Master extends ActionBarActivity {
                     listOfCateg = new ArrayList<>();
                     if(categoryName.size()>0)
                     for (int i = 0; i < numCategories; i++) {
-                        listOfCateg.add(new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i]));
+                        listOfCateg.add(new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i], i));
                     }
                 }
 
@@ -1854,7 +1854,7 @@ public class Master extends ActionBarActivity {
                         listOfSubCateg = new ArrayList<>();
 
                         for (int i = 0; i < numSubCategories[msg.arg2-1]; i++) {
-                            listOfSubCateg.add(i, new SubcategoryCardClass(subcategoryName.get(msg.arg2-1)[i].toUpperCase(), 0));
+                            listOfSubCateg.add(i, new SubcategoryCardClass(subcategoryName.get(msg.arg2-1)[i].toUpperCase(), 0, catID, i));
                             //TODO change this to image URL received from db
                         }
 
@@ -1897,14 +1897,16 @@ public class Master extends ActionBarActivity {
                 public void handleMessage(Message msg) {
                     if (msg.arg1 == 3) {
 
-
+                        Bundle b = msg.getData();
+                        int cID = b.getInt("CatID");
+                        int sID = b.getInt("SubID");
                         listOfItems = new ArrayList<>();
 
                         Log.i("numProducts", String.valueOf(numProducts));
                         Log.i("productsNameLength", String.valueOf(productsName.size()));
                         if(numProducts!=0)
                             for(int i=0;i<numProducts;i++)
-                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i),"1", productsPrice.get(i), productsMRP.get(i))); //TODO change this to URL from db
+                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i),"1", productsPrice.get(i), productsMRP.get(i), cID, sID, i)); //TODO change this to URL from db
 
                         else
                             listOfItems = null;
@@ -2050,10 +2052,10 @@ public class Master extends ActionBarActivity {
                            JSONObject tempJSON = new JSONObject();
                            CartItemsClass cItem = cartitems.get(i);
                            try {
-                               /*tempJSON.put("CatID", categoryID.get());
-                               tempJSON.put("SubID", );
-                               tempJSON.put("PID", );
-                               */tempJSON.put("Name", cItem.getcartItemname());
+                               tempJSON.put("CatID", cItem.getCategId());
+                               tempJSON.put("SubID", cItem.getSubcategId());
+                               tempJSON.put("PID", cItem.getProductId());
+                               tempJSON.put("Name", cItem.getcartItemname());
                                tempJSON.put("Price", cItem.getCartitemprice());
                                tempJSON.put("Quantity", cItem.getQuantity());
                                tempJSON.put("Net Price", Double.parseDouble(cItem.getCartitemprice())*cItem.getQuantity());
@@ -2164,9 +2166,9 @@ public class Master extends ActionBarActivity {
 
     }
 
-    public static void addtocart_fn(String name, int qty, String price){
+    public static void addtocart_fn(String name, int qty, String price, int categID, int subcategID, int productID){
 
-        Master.cAdapter.add(new CartItemsClass(name,qty,price));
+        Master.cAdapter.add(new CartItemsClass(name,qty,price,categID,subcategID,productID));
 
         Log.i("CartItems Length", String.valueOf(cartitems.size()));
         Log.i("Cart Recycler View Size", String.valueOf(cAdapter.getItemCount()));
@@ -2204,7 +2206,7 @@ public class Master extends ActionBarActivity {
               //  addtocart_fn(cartitem);
               //  Log.i("Value of Qty",String.valueOf(np.getValue()));
                 //Log.d("Value of Qty","check");
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString());
+                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getCategid(),item.getSubcategid(),item.getProductid());
                 Log.e("Value of Qty",String.valueOf(np.getValue()));
 
                 addtocartDialog.dismiss();
@@ -2519,6 +2521,7 @@ public class Master extends ActionBarActivity {
         private Double tempProductsPrice, tempProductsMRP;
         private boolean newItemCatSuccess = false, newItemSubCatSuccess = false, newItemProductSuccess= false;
         private int newID = 0, oldID = 0;
+        private int catID, subID;
 
         @Override
         protected void onPreExecute() {
@@ -2536,6 +2539,9 @@ public class Master extends ActionBarActivity {
 
             Log.i("catID",params[0]);
             Log.i("subCatID",params[1]);
+
+            catID = Integer.parseInt(params[0]);
+            subID = Integer.parseInt(params[1]);
 
             paramsItems.add(new BasicNameValuePair("session", LoginActivity.prefs.getString("session","")));
             paramsItems.add(new BasicNameValuePair("ID",params[0]));
@@ -2689,6 +2695,10 @@ public class Master extends ActionBarActivity {
             if(loadItemsSuccess) {
                 Message itemsMsg = new Message();
                 itemsMsg.arg1=3;
+                Bundle b = new Bundle();
+                b.putInt("CatId", catID);
+                b.putInt("SubId", subID);
+                itemsMsg.setData(b);
                 ProductsFragment.productsMsgHandler.sendMessage(itemsMsg);
 
             }
@@ -2779,14 +2789,27 @@ public class Master extends ActionBarActivity {
                     JSONObject addOrderJSON = new JSONObject(addOrderReturnedJSON);
 
                     if(addOrderJSON.getString("success").equals("true")){
+                        addOrderSuccess = true;
                         //TODO Proceed to payment gateway from here
                     }
+                    else
+                        addOrderSuccess = false;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String res){
+            super.onPostExecute(res);
+            if(addorderProgress!=null&&addorderProgress.isShowing()) {
+                addorderProgress.hide();
+                addorderProgress.cancel();
+            }
+
         }
     }
 
@@ -2819,7 +2842,10 @@ public class Master extends ActionBarActivity {
 
                     if(orderHistoryJSON.getString("success").equals("true")){
                         //TODO get the details from here and put it in orderhistoryclass
+                        orderHistorySuccess = true;
                     }
+                    else
+                        orderHistorySuccess = false;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

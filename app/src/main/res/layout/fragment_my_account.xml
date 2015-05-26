@@ -24,7 +24,7 @@
             android:orientation="vertical"
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:weightSum="6"
             android:id="@+id/my_account_layout">
 
@@ -53,28 +53,30 @@
                 android:layout_weight="2"
                 android:layout_marginLeft="5dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000"
-                        android:gravity="center"
-                        android:background="@drawable/rounded_corner"
-                        android:layout_gravity="center"
-                        android:textSize="18sp"
-                        android:id="@+id/accountTextViewName"
-                        android:clickable="false"/>
+                <EditText
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="right|bottom"
+                    android:background="@drawable/rounded_corner"
+                    android:textSize="18sp"
+                    android:paddingTop="10dp"
+                    android:textColor="#000"
+                    android:clickable="false"
+                    android:id="@+id/accountEditTextName"
+                    android:inputType="textPersonName"/>
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:background="@drawable/rounded_corner"
-                        android:textSize="18sp"
-                        android:textColor="#000"
-                        android:clickable="false"
-                        android:id="@+id/accountEditTextName"
-                        android:inputType="textPersonName"/>
+                <TextView
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:gravity="center"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_gravity="right|bottom"
+                    android:textSize="18sp"
+                    android:paddingTop="10dp"
+                    android:id="@+id/accountTextViewName"
+                    android:clickable="false"/>
 
             </FrameLayout>
 
@@ -105,27 +107,29 @@
                     android:layout_weight="2"
                     android:layout_marginLeft="5dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000"
-                        android:textSize="18sp"
-                        android:gravity="center"
-                        android:background="@drawable/rounded_corner"
-                        android:layout_gravity="center"
-                        android:id="@+id/accountTextViewEmail"
-                        android:clickable="false"/>
-
                     <EditText
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_gravity="center"                        android:textSize="18sp"
+                        android:layout_gravity="right|bottom"                        android:textSize="18sp"
                         android:textColor="#000"
+                        android:paddingTop="10dp"
                         android:background="@drawable/rounded_corner"
                         android:clickable="false"
                         android:id="@+id/accountEditEmail"
                         android:inputType="textEmailAddress"/>
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:paddingTop="10dp"
+                        android:background="@drawable/rounded_corner"
+                        android:layout_gravity="right|bottom"
+                        android:id="@+id/accountTextViewEmail"
+                        android:clickable="false"/>
 
                 </FrameLayout>
 
@@ -156,27 +160,29 @@
                     android:layout_weight="2"
                     android:layout_marginLeft="5dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000"
-                        android:gravity="center"
-                        android:background="@drawable/rounded_corner"
-                        android:layout_gravity="center"
-                        android:textSize="18sp"
-                        android:id="@+id/accountTextViewPhone"
-                        android:clickable="false"/>
-
                     <EditText
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_gravity="center"                        android:textSize="18sp"
+                        android:layout_gravity="right|bottom"                        android:textSize="18sp"
                         android:textColor="#000"
+                        android:paddingTop="10dp"
                         android:background="@drawable/rounded_corner"
                         android:clickable="false"
                         android:id="@+id/accountEditTextPhone"
                         android:inputType="phone"/>
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:gravity="center"
+                        android:paddingTop="10dp"
+                        android:background="@drawable/rounded_corner"
+                        android:layout_gravity="right|bottom"
+                        android:textSize="18sp"
+                        android:id="@+id/accountTextViewPhone"
+                        android:clickable="false"/>
 
                 </FrameLayout>
 
@@ -192,7 +198,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delivery Address :"
+                    android:text="Delivery Address:"
                     android:fontFamily="sans-serif-black"
                     android:paddingTop="5dp"
                     android:paddingLeft="10dp"
@@ -208,25 +214,27 @@
                     android:layout_marginLeft="5dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
                         android:textColor="#000"
                         android:textSize="18sp"
                         android:gravity="center"
+                        android:paddingTop="10dp"
                         android:background="@drawable/rounded_corner"
-                        android:layout_gravity="center"
+                        android:layout_gravity="right|bottom"
                         android:singleLine="false"
                         android:id="@+id/accountTextViewAddress"
                         android:clickable="false"/>
 
                     <EditText
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:background="@drawable/rounded_corner"
-                        android:layout_gravity="center"                        android:textSize="18sp"
+                        android:layout_gravity="right|bottom"                        android:textSize="18sp"
                         android:textColor="#000"
                         android:clickable="false"
+                        android:paddingTop="10dp"
                         android:singleLine="false"
                         android:id="@+id/accountEditTextAddress"
                         android:inputType="textPostalAddress"/>
@@ -261,23 +269,26 @@
                     android:layout_marginLeft="5dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
                         android:textColor="#000"
                         android:gravity="center"
-                        android:layout_gravity="center"
+                        android:layout_gravity="right|bottom"
                         android:textSize="18sp"
+                        android:paddingTop="10dp"
                         android:background="@drawable/rounded_corner"
                         android:id="@+id/accountTextViewPassword"
                         android:inputType="textPassword"
                         android:clickable="false"/>
 
                     <EditText
-                        android:layout_width="match_parent"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_gravity="center"                        android:textSize="18sp"
+                        android:layout_gravity="right|bottom"
+                        android:textSize="18sp"
                         android:textColor="#000"
+                        android:paddingTop="10dp"
                         android:background="@drawable/rounded_corner"
                         android:clickable="false"
                         android:id="@+id/accountEditTextPassword"

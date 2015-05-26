@@ -13,6 +13,8 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -147,10 +149,11 @@ public class Master extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addtocartDialog = new Dialog(Master.this);
-
         modeOfLogin = getIntent().getExtras().getString("loginMethod").toString();
 
         setContentView(R.layout.nav_bar);
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
 
         inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 

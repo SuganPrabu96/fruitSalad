@@ -9,7 +9,7 @@
     -->
 
     <color name="myPrimaryColor">#3F51B5</color>
-    <color name="myStatusBarColor">#283593</color>
+    <color name="myStatusBarColor">#388E3C</color>
     <color name="Textcolour">#000000</color>
     <color name="mySponsorColor">#757575</color>
     <color name="myAccentColor">#ffffff</color>
@@ -18,9 +18,9 @@
     <color name="myTextPrimaryColor">#FFFFFF</color>
     <color name="myNavigationColor">#000000</color>
     <color name="myBackgroundColor">#E3F2FD</color>
-    <color name="myNavigationBarProPicBackgroundColor">#9FA8DA</color>
-    <color name="NavigationBarSelectedItem">#E0E0E0</color>
-    <color name="NavigationBarUnselectedItem">#ffffff</color>
+    <color name="myNavigationBarProPicBackgroundColor">#4caf50</color>
+    <color name="NavigationBarSelectedItem">#ffffff</color>
+    <color name="NavigationBarUnselectedItem">#868686</color>
     <color name="primary">#009688</color>
     <color name="warnings">#E53935</color>
     <color name="myDrawerItemSelectedColor">#ff47d8db</color>

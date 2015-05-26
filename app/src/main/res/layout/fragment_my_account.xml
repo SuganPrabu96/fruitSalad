@@ -214,6 +214,7 @@
                         android:gravity="center"
                         android:background="@drawable/rounded_corner"
                         android:layout_gravity="center"
+                        android:singleLine="false"
                         android:id="@+id/accountTextViewAddress"
                         android:clickable="false"/>
 
@@ -225,6 +226,7 @@
                         android:layout_gravity="center"                        android:textSize="18sp"
                         android:textColor="#000"
                         android:clickable="false"
+                        android:singleLine="false"
                         android:id="@+id/accountEditTextAddress"
                         android:inputType="textPostalAddress"/>
 

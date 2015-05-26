@@ -8,8 +8,8 @@ import app.TheDreamStop.R;
 
 public class data {
     public static NavDrawerItem[] navtitles={
-            new NavDrawerItem("Products", R.drawable.ic_launcher),
-            new NavDrawerItem("My account", R.drawable.ic_launcher),
+            new NavDrawerItem("Products", R.drawable.basket2),
+            new NavDrawerItem("My Account", R.drawable.ic_launcher),
             new NavDrawerItem("General Settings", R.drawable.ic_launcher),
             new NavDrawerItem("Order History", R.drawable.ic_launcher),
             new NavDrawerItem("About", R.drawable.ic_launcher),

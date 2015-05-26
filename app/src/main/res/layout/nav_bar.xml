@@ -3,7 +3,8 @@
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <!-- Framelayout to display Fragments -->
 
@@ -11,7 +12,8 @@
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+       />
 
     <!-- Listview to display slider menu -->
 
@@ -22,24 +24,28 @@
         android:layout_gravity="start"
         android:orientation="vertical"
         android:clickable="true"
+
         >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="103dp"
                 android:orientation="vertical"
                 android:gravity="left"
+
                 android:background="@color/myNavigationBarProPicBackgroundColor">
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/frame_profile_pic">
+                    android:id="@+id/frame_profile_pic"
+                    >
 
                     <ImageView
                         android:layout_width="80dp"
@@ -51,8 +57,7 @@
                         android:clickable="false"
                         android:layout_marginTop="20dp"
                         android:src="@drawable/profilegrey"
-                        android:background="@color/myNavigationBarProPicBackgroundColor" />-->
-
+                        android:background="@color/myNavigationBarProPicBackgroundColor" />
                     <com.facebook.widget.ProfilePictureView
                         android:id="@+id/profilepic_facebook"
                         android:layout_height="wrap_content"
@@ -93,10 +98,11 @@
                     android:paddingBottom="5dp"
                     android:textSize="18dp"
                     android:paddingTop="5dp"
+                    android:fontFamily="sans-serif-light"
 
                     android:layout_marginBottom="5dp"
                     android:layout_below="@+id/frame_profile_pic"
-                    android:textColor="#000"
+                    android:textColor="#ffffff"
                     android:background="@color/myNavigationBarProPicBackgroundColor"/>
 
             </RelativeLayout>
@@ -108,11 +114,12 @@
                 android:layout_gravity="start"
                 android:choiceMode="singleChoice"
                 android:divider="#00123456"
-                android:paddingTop="14dp"
+                android:paddingTop="0dp"
                 android:layout_below="@+id/profilepic_name"
                 android:dividerHeight="1dp"
-                android:listSelector="#888888"
-                android:background="#FFFFFF">
+                android:listSelector="#ffffff"
+                android:background="#363535"
+                >
             </ListView>
         </LinearLayout>
 

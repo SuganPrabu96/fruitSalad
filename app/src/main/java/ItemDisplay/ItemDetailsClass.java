@@ -13,13 +13,16 @@ public class ItemDetailsClass {
 
     public Double itemMRP;
 
+    private int productid;
 
-    public ItemDetailsClass(String itemtitle, String itemimgurl, Double itemprice, Double itemMRP) {
+
+    public ItemDetailsClass(String itemtitle, String itemimgurl, Double itemprice, Double itemMRP, int productid) {
 
         this.itemtitle = itemtitle;
         this.itemimgurl = itemimgurl;
         this.itemprice = itemprice;
         this.itemMRP = itemMRP;
+        this.productid = productid;
     }
 
     //   public String getItemcateg(){ return itemcateg;}
@@ -34,4 +37,6 @@ public class ItemDetailsClass {
     public Double getItemprice() { return itemprice; }
 
     public Double getItemMRP() { return itemMRP; }
+
+    public int getProductid() { return productid; }
 }

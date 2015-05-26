@@ -9,7 +9,6 @@ public class SubcategoryCardClass {
 
     private int subcategimg;
 
-
     public SubcategoryCardClass(String subcategtitle, int subcategimg) {
 
         this.subcategtitle = subcategtitle;
@@ -24,5 +23,6 @@ public class SubcategoryCardClass {
     public int getSubcategimg() {
         return subcategimg;
     }
+
 }
 

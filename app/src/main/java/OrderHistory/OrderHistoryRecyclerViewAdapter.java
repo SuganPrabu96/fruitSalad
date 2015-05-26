@@ -5,9 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import app.TheDreamStop.Master;
 import app.TheDreamStop.R;
 
 /**
@@ -17,6 +19,7 @@ public class OrderHistoryRecyclerViewAdapter extends RecyclerView.Adapter<OrderH
 
     private ArrayList<OrderHistoryClass> orders;
     private Context context;
+    TextView tv;
 
     public OrderHistoryRecyclerViewAdapter(ArrayList<OrderHistoryClass> items,Context context){
         this.orders = items;
@@ -29,18 +32,28 @@ public class OrderHistoryRecyclerViewAdapter extends RecyclerView.Adapter<OrderH
         View v = LayoutInflater.from(context).inflate(R.layout.order_history_card, parent, false);
         OrderHistoryViewHolder vH = new OrderHistoryViewHolder(context, v);
 
+        tv = (TextView) v.findViewById(R.id.order_history_more);
+
         return vH;
     }
 
     @Override
     public void onBindViewHolder(OrderHistoryViewHolder holder, int position) {
 
-        OrderHistoryClass order = orders.get(position);
+        final OrderHistoryClass order = orders.get(position);
 
         holder.orderNo.setText(order.getOrderHistoryId());
-        holder.orderDeliveryDate.setText(order.getOrderHistoryDate());
+        holder.orderName.setText(order.getOrderHistoryName());
+        holder.orderPhone.setText(order.getOrderHsitoryPhone());
         holder.orderPrice.setText(order.getOrderHistoryPrice());
         holder.orderAddress.setText(order.getOrderHistoryAddress());
+
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Master.OrdersMoreDetails().execute(order.getOrderHistoryId());
+            }
+        });
 
     }
 

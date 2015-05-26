@@ -5,13 +5,14 @@ package OrderHistory;
  */
 public class OrderHistoryClass {
 
-    public String orderHistoryId, orderHistoryAddress, orderHistoryDate, orderHistoryPrice;
+    private String orderHistoryId, orderHistoryAddress, orderHistoryName, orderHistoryPrice, orderHsitoryPhone;
 
-    public OrderHistoryClass(String id, String date, String address, String price){
+    public OrderHistoryClass(String id, String name, String phone, String address, String price){
 
         this.orderHistoryId = id;
         this.orderHistoryAddress = address;
-        this.orderHistoryDate = date;
+        this.orderHistoryName = name;
+        this.orderHsitoryPhone = phone;
         this.orderHistoryPrice = price;
     }
 
@@ -21,12 +22,12 @@ public class OrderHistoryClass {
     public String getOrderHistoryAddress(){
         return orderHistoryAddress;
     }
-    public String getOrderHistoryDate(){
-        return orderHistoryDate;
+    public String getOrderHistoryName(){
+        return orderHistoryName;
     }
     public String getOrderHistoryPrice(){
         return orderHistoryPrice;
     }
-
+    public String getOrderHsitoryPhone() { return orderHsitoryPhone; }
 
 }

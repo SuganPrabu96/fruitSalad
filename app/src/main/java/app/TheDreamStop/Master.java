@@ -4,9 +4,6 @@ package app.TheDreamStop;
  * Created by Suganprabu on 17-04-2015.
  */
 
-
-//TODO in cart_card.xml I have changed the marginLeft of the removeButton for testing purposes
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -74,8 +71,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import OrderHistory.OrderHistoryClass;
-import OrderHistory.OrderHistoryRecyclerViewAdapter;
 import Cart.CartItemsClass;
 import Cart.CartRecyclerViewAdapter;
 import HelpViewPager.ViewPagerAdapter;
@@ -87,6 +82,8 @@ import ItemDisplay.SubcategoryCardAdapter;
 import ItemDisplay.SubcategoryCardClass;
 import NavigationDrawer.NavDrawerItem;
 import NavigationDrawer.NavDrawerListAdapter;
+import OrderHistory.OrderHistoryClass;
+import OrderHistory.OrderHistoryRecyclerViewAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 import util.ServiceHandler;
 import util.data;
@@ -100,20 +97,23 @@ public class Master extends ActionBarActivity {
     public static ImageView profileIcon;
     public static CircleImageView googleProfileIcon;
     public static String modeOfLogin;
-    public static int numCategories, numSubCategories[], categoryID[], productsID[], numProducts,
+    public static int numCategories, numSubCategories[], numProducts,
                   newProductsID[], newProductsCatId[], newProductsSubCatId[];
     public static ArrayList<Double> productsPrice, productsMRP;
     public static ArrayList<String> categoryName, productsName, productDesc;
     public static ArrayList<int[]> subcategoryID;
+    public static ArrayList<Integer> categoryID, productsID;
     public static ArrayList<String[]> subcategoryName;
-    private final String categoriesURL = "http://grokart.ueuo.com/listCategories.php";
-    private static final String updateDetailsURL = "http://grokart.ueuo.com/editInfo.php";
-    private final String locationURL = "http://grokart.ueuo.com/latlong.php";
-    private static final String itemsURL = "http://grokart.ueuo.com/catProds.php";
-    private static final String itemsImagesURL = "http://grokart.ueuo.com/prodImage.php";
-    private static final String logoutURL = "http://grokart.ueuo.com/logout.php";
-    private static final String newItemsURL = "http://grokart.ueuo.com/latest.php";
-    private static final String orderHistoryURL = "http://grokart.ueuo.com/orderHistory.php";
+    private final String categoriesURL = "http://thedreamstop.in/api/listCategories.php";
+    private static final String updateDetailsURL = "http://thedreamstop.in/api/editInfo.php";
+    private final String locationURL = "http://thedreamstop.in/api/latlong.php";
+    private static final String itemsURL = "http://thedreamstop.in/api/catProds.php";
+    private static final String itemsImagesURL = "http://thedreamstop.in/api/prodImage.php";
+    private static final String logoutURL = "http://thedreamstop.in/api/logout.php";
+    private static final String newItemsURL = "http://thedreamstop.in/api/latest.php";
+    private static final String orderHistoryURL = "http://thedreamstop.in/api/orderHistory.php";
+    private static final String addOrderURL = "http://thedreamstop.in/api/addOrder.php";
+    private static final String viewTransactionURL = "http://thedreamstop.in/api/viewTransaction.php";
     public FragmentTransaction fragmentTransaction;
     public static Dialog locationDialog,addtocartDialog;
 
@@ -128,12 +128,13 @@ public class Master extends ActionBarActivity {
     private static String itemsReturnedJSON, itemsURLReturnedJSON, logoutReturnedJSON, newItemsReturnedJSON;
     private static String updateDetailsReturnedJSON;
     public static ProgressDialog updateProgress, locationProgress, loadItemsProgress, logoutProgress, loadCatSubCatProgress,
-            loadNewItemsProgress, orderHistoryProgress;
+            loadNewItemsProgress, orderHistoryProgress, addorderProgress;
     public static Handler locationHandler, logoutHandler, loadItems, loadItemImages, newItemsHandler, menuHandler, itemDetailsHandler;
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
-    public static Handler backPressedHandler;
+    public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler;
+    public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
     String[] loc_city = {"Chennai"};
@@ -142,6 +143,8 @@ public class Master extends ActionBarActivity {
     String[] loc_long = {"80.2574","80.1622","80.2179"};
     private static int fragPos = -1;
     private int curFrag;
+    public static double totalCost = 0.0;
+    private static Dialog checkoutDialog;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -165,6 +168,8 @@ public class Master extends ActionBarActivity {
         menuHandler = new Handler();
         itemDetailsHandler = new Handler();
         backPressedHandler = new Handler();
+        orderHistoryHandler = new Handler();
+        orderHistoryMoreHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -173,6 +178,9 @@ public class Master extends ActionBarActivity {
         loadCatSubCatProgress = new ProgressDialog(Master.this);
         loadNewItemsProgress = new ProgressDialog(Master.this);
         orderHistoryProgress = new ProgressDialog(Master.this);
+        addorderProgress = new ProgressDialog(Master.this);
+
+        checkoutDialog = new Dialog(this);
 
         facebookProfileIcon = (ProfilePictureView) findViewById(R.id.profilepic_facebook);
         profileIconText = (TextView) findViewById(R.id.profilepic_name);
@@ -274,6 +282,16 @@ public class Master extends ActionBarActivity {
             }
         };
 
+        Master.orderHistoryMoreHandler = new Handler(){
+            public void handleMessage(Message msg){
+                if(msg.arg1==1) {
+                    Intent i = new Intent(Master.this, TransactionDetails.class);
+                    Bundle b = msg.getData();
+                    i.putExtra("JSON", b.getString("JSON"));
+                    startActivity(i);
+                }
+            }
+        };
     }
 
     private void getLocationForItems(){
@@ -1074,14 +1092,15 @@ public class Master extends ActionBarActivity {
         public OrderHistoryFragment() {
         }
 
-        ArrayList<OrderHistoryClass> orders;
-        OrderHistoryRecyclerViewAdapter ordersAdapter;
+        public static OrderHistoryRecyclerViewAdapter ordersAdapter;
         RecyclerView ordersRecylerView;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_order_history, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_order_history, container, false);
+
+            Master.orders = new ArrayList<>();
 
             new OrderHistory().execute();
 
@@ -1097,9 +1116,16 @@ public class Master extends ActionBarActivity {
             ordersRecylerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
             ordersRecylerView.setItemAnimator(new DefaultItemAnimator());
 
-            ordersAdapter = new OrderHistoryRecyclerViewAdapter(orders, rootView.getContext());
-            ordersRecylerView.setAdapter(ordersAdapter);
+            Log.d("orders",Master.orders.toString());
 
+            orderHistoryHandler = new Handler() {
+                public void handleMessage(Message msg) {
+                    if(msg.arg1==1) {
+                        ordersAdapter = new OrderHistoryRecyclerViewAdapter(Master.orders, rootView.getContext());
+                        ordersRecylerView.setAdapter(ordersAdapter);
+                    }
+                }
+            };
             return rootView;
         }
     }
@@ -1763,6 +1789,7 @@ public class Master extends ActionBarActivity {
         private int catID,subcatID;
         private int[] categoryImageURL = {R.drawable.personalcare, R.drawable.brandedfoods, R.drawable.groceries};
         private static FragmentManager fragManag;
+        private ImageView checkoutButton;
 
         public ProductsFragment() {
         }
@@ -1774,6 +1801,8 @@ public class Master extends ActionBarActivity {
 
             fragManag = getFragmentManager();
 
+            checkoutButton = (ImageView) rootView1.findViewById(R.id.checkoutbutton);
+
             /*if (savedInstanceState == null) {
                 fragManag
                         .beginTransaction()
@@ -1782,10 +1811,13 @@ public class Master extends ActionBarActivity {
             }*/
 
             if(MainActivity.internetConnection.isConnectingToInternet())
-                if (numCategories > 0)
+                if (numCategories > 0) {
+                    listOfCateg = new ArrayList<>();
+                    if(categoryName.size()>0)
                     for (int i = 0; i < numCategories; i++) {
-                        listOfCateg.add(i, new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i]));
+                        listOfCateg.add(new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i], i+1));
                     }
+                }
 
                 else{
                     listOfCateg.clear();
@@ -1830,6 +1862,7 @@ public class Master extends ActionBarActivity {
                         i.putExtra("image",b.getString("image"));
                         i.putExtra("price",b.getDouble("price"));
                         i.putExtra("MRP",b.getDouble("MRP"));
+                        i.putExtra("PID",b.getInt("PID"));
                         startActivity(i);
                     }
                 }
@@ -1890,14 +1923,17 @@ public class Master extends ActionBarActivity {
                 public void handleMessage(Message msg) {
                     if (msg.arg1 == 3) {
 
-
+                        Bundle b = msg.getData();
+                        int cID = b.getInt("CatID");
+                        int sID = b.getInt("SubID");
+                        ArrayList<Integer> pID = b.getIntegerArrayList("ProdId");
                         listOfItems = new ArrayList<>();
 
                         Log.i("numProducts", String.valueOf(numProducts));
                         Log.i("productsNameLength", String.valueOf(productsName.size()));
                         if(numProducts!=0)
                             for(int i=0;i<numProducts;i++)
-                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i),"1", productsPrice.get(i), productsMRP.get(i))); //TODO change this to URL from db
+                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i),"1", productsPrice.get(i), productsMRP.get(i), pID.get(i))); //TODO change this to URL from db
 
                         else
                             listOfItems = null;
@@ -1983,11 +2019,96 @@ public class Master extends ActionBarActivity {
                 }
             };
 
+            checkoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkoutDialog();
+                }
+            });
+
             return rootView1;
 
         }
 
-        private void refreshItems() {
+       private void checkoutDialog(){
+
+           checkoutDialog.setCancelable(true);
+           checkoutDialog.setContentView(R.layout.checkout_layout);
+           checkoutDialog.setTitle("Confirm your details");
+           checkoutDialog.show();
+
+           final EditText name, phone, address;
+           final TextView price;
+           ImageView proceed;
+
+           name = (EditText) checkoutDialog.findViewById(R.id.checkout_name);
+           phone = (EditText) checkoutDialog.findViewById(R.id.checkout_phone_number);
+           address = (EditText) checkoutDialog.findViewById(R.id.checkout_shippingaddress);
+           price = (TextView) checkoutDialog.findViewById(R.id.checkout_totalcost);
+           proceed = (ImageView) checkoutDialog.findViewById(R.id.proceedtopayment_btn);
+
+           name.setText(LoginActivity.prefs.getString("Name",""));
+           phone.setText(LoginActivity.prefs.getString("Phone",""));
+           address.setText(LoginActivity.prefs.getString("Address",""));
+           price.setText(String.valueOf(totalCost));
+
+           proceed.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+
+                   String cName, cPhone, cAddress, cPrice;
+                   cName = String.valueOf(name.getText());
+                   cPhone = String.valueOf(phone.getText());
+                   cAddress = String.valueOf(address.getText());
+                   cPrice = String.valueOf(price.getText());
+
+                   if(!cName.equals("")&&!cPhone.equals("")&&!cAddress.equals("")&&!cPrice.equals(""))
+                   {
+                       JSONObject checkoutJSON = new JSONObject();
+                       try {
+                           checkoutJSON.put("Name", cName);
+                           checkoutJSON.put("Phone", cPhone);
+                           checkoutJSON.put("Address", cAddress);
+                           checkoutJSON.put("Total Cost", cPrice);
+                       } catch (JSONException e) {
+                           e.printStackTrace();
+                       }
+
+                       JSONArray itemsArray = new JSONArray();
+                       for(int i=0;i<cartitems.size();i++){
+                           JSONObject tempJSON = new JSONObject();
+                           CartItemsClass cItem = cartitems.get(i);
+                           try {
+                               tempJSON.put("PID", cItem.getProductId());
+                               tempJSON.put("Name", cItem.getcartItemname());
+                               tempJSON.put("Price", cItem.getCartitemprice());
+                               tempJSON.put("Quantity", cItem.getQuantity());
+                               tempJSON.put("Net Price", Double.parseDouble(cItem.getCartitemprice())*cItem.getQuantity());
+
+                               itemsArray.put(i, tempJSON);
+                           }catch (Exception e){
+                               e.printStackTrace();
+                           }
+                       }
+                       new AddOrder().execute(checkoutJSON.toString(), itemsArray.toString());
+                   }
+
+                   else if(cName.equals("")){
+                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your name",Toast.LENGTH_SHORT).show();
+                   }
+
+                   else if(cPhone.equals("")){
+                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your contact number",Toast.LENGTH_SHORT).show();
+                   }
+
+                   else if(cAddress.equals("")){
+                       Toast.makeText(getActivity().getApplicationContext(),"Please enter shipping address",Toast.LENGTH_SHORT).show();
+                   }
+               }
+           });
+       }
+
+       private void refreshItems() {
 
             new Handler().post(new Runnable() {
                 @Override
@@ -2070,9 +2191,10 @@ public class Master extends ActionBarActivity {
 
     }
 
-    public static void addtocart_fn(String name, int qty, String price){
+    public static void addtocart_fn(String name, int qty, String price, int productID){
 
-        Master.cAdapter.add(new CartItemsClass(name,qty,price));
+        Log.i("addtocart_fn_PID", String.valueOf(productID));
+        Master.cAdapter.add(new CartItemsClass(name,qty,price,productID));
 
         Log.i("CartItems Length", String.valueOf(cartitems.size()));
         Log.i("Cart Recycler View Size", String.valueOf(cAdapter.getItemCount()));
@@ -2088,6 +2210,8 @@ public class Master extends ActionBarActivity {
     public static void addDialog(ItemDetailsClass item1)
     {
         final ItemDetailsClass item = item1;
+
+        Log.d("item1 PID", String.valueOf(item1.getProductid()));
 
         addtocartDialog.setTitle("Select Quantity");
         addtocartDialog.setContentView(R.layout.add_dialog);
@@ -2110,8 +2234,8 @@ public class Master extends ActionBarActivity {
               //  addtocart_fn(cartitem);
               //  Log.i("Value of Qty",String.valueOf(np.getValue()));
                 //Log.d("Value of Qty","check");
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString());
-                Log.e("Value of Qty",String.valueOf(np.getValue()));
+                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid());
+                Log.i("Value of Qty",String.valueOf(np.getValue()));
 
                 addtocartDialog.dismiss();
             }
@@ -2209,7 +2333,7 @@ public class Master extends ActionBarActivity {
                         numCategories = productsListJSON.getInt("numCategories");
                         JSONArray list = new JSONArray(String.valueOf(productsListJSON.getJSONArray("list")));
 
-                        categoryID = new int[numCategories];
+                        categoryID = new ArrayList<>();
                         numSubCategories = new int[numCategories];
                         subcategoryID = new ArrayList<>();
                         subcategoryName = new ArrayList<>();
@@ -2219,7 +2343,7 @@ public class Master extends ActionBarActivity {
                         for (int i = 0; i < numCategories; i++) {
                             JSONObject catObj = list.getJSONObject(i);
                             JSONArray sub = catObj.getJSONArray("subcategories");
-                            categoryID[i] = catObj.getInt("ID");
+                            categoryID.add(i,catObj.getInt("ID"));
                             categoryName.add(i, catObj.getString("name"));
                             numSubCategories[i] = catObj.getInt("numSubcategories");
                             int[] subIds = new int[numSubCategories[i]];
@@ -2425,6 +2549,7 @@ public class Master extends ActionBarActivity {
         private Double tempProductsPrice, tempProductsMRP;
         private boolean newItemCatSuccess = false, newItemSubCatSuccess = false, newItemProductSuccess= false;
         private int newID = 0, oldID = 0;
+        private int catID, subID;
 
         @Override
         protected void onPreExecute() {
@@ -2442,6 +2567,9 @@ public class Master extends ActionBarActivity {
 
             Log.i("catID",params[0]);
             Log.i("subCatID",params[1]);
+
+            catID = Integer.parseInt(params[0]);
+            subID = Integer.parseInt(params[1]);
 
             paramsItems.add(new BasicNameValuePair("session", LoginActivity.prefs.getString("session","")));
             paramsItems.add(new BasicNameValuePair("ID",params[0]));
@@ -2461,7 +2589,7 @@ public class Master extends ActionBarActivity {
                         JSONArray itemsList = new JSONArray(String.valueOf(itemsJSON.getJSONArray("items")));
                         JSONObject tempItemJSON;
                         numProducts = itemsJSON.getInt("itemCount");
-                        productsID = new int[numProducts];
+                        productsID = new ArrayList<>();
                         oldItemsIDs = new int[numProducts];
                         newItemsIDs = new int[numProducts];
                         oldItemsNames = new String[numProducts];
@@ -2537,11 +2665,11 @@ public class Master extends ActionBarActivity {
                         }
 
                         Log.i("oldItemsNames",oldItemsNames[0]);
-                        Log.i("productsIdLength", String.valueOf(productsID.length));
+                        Log.i("productsIdLength", String.valueOf(productsID.size()));
                         Log.i("oldIDLength", String.valueOf(oldItemsIDs.length));
 
                         for(int i=0;i<newID;i++){
-                            productsID[i] = newItemsIDs[i];
+                            productsID.add(i,newItemsIDs[i]);
                             productsName.add(newItemsName[i]);
                             productsPrice.add(newItemsPrice[i]);
                             productsMRP.add(newItemsMRP[i]);
@@ -2549,16 +2677,16 @@ public class Master extends ActionBarActivity {
 
                         Log.i("productsNameStatus", String.valueOf(productsName.isEmpty()));
                         if(!productsName.isEmpty())
-                        for(int j=productsID.length;j<(productsID.length+oldID);j++){
-                            productsID[j] = oldItemsIDs[j-productsID.length];
-                            productsName.add(oldItemsNames[j-productsID.length]);
+                        for(int j=productsID.size();j<(productsID.size()+oldID);j++){
+                            productsID.add(j,oldItemsIDs[j-productsID.size()]);
+                            productsName.add(oldItemsNames[j-productsID.size()]);
                             productsPrice.add(oldItemsPrice[j-productsPrice.size()]);
                             productsMRP.add(oldItemsMRP[j-productsMRP.size()]);
                         }
 
                         else
                         for(int j=0;j<oldID;j++){
-                            productsID[j] = oldItemsIDs[j];
+                            productsID.add(j,oldItemsIDs[j]);
                             productsName.add(oldItemsNames[j]);
                             productsPrice.add(oldItemsPrice[j]);
                             productsMRP.add(oldItemsMRP[j]);
@@ -2595,6 +2723,11 @@ public class Master extends ActionBarActivity {
             if(loadItemsSuccess) {
                 Message itemsMsg = new Message();
                 itemsMsg.arg1=3;
+                Bundle b = new Bundle();
+                b.putInt("CatId", catID);
+                b.putInt("SubId", subID);
+                b.putIntegerArrayList("ProdId",productsID);
+                itemsMsg.setData(b);
                 ProductsFragment.productsMsgHandler.sendMessage(itemsMsg);
 
             }
@@ -2657,6 +2790,61 @@ public class Master extends ActionBarActivity {
 
     }
 
+    private static class AddOrder extends AsyncTask<String, Void, String>{
+
+        private boolean addOrderSuccess = false;
+
+        @Override
+        protected void onPreExecute(){
+            Log.i("Add Order","Inside PreExceute");
+            addorderProgress.setTitle("Preparing to submit your order...");
+            addorderProgress.setCancelable(false);
+            addorderProgress.show();
+        }
+        @Override
+        protected String doInBackground(String... params) {
+
+            Log.i("Add Order","Inside doInBackground");
+            ServiceHandler jsonParser = new ServiceHandler();
+            List<NameValuePair> paramsItems = new ArrayList<>();
+            paramsItems.add(new BasicNameValuePair("session",LoginActivity.prefs.getString("session","")));
+            paramsItems.add(new BasicNameValuePair("prodArray",params[0]));
+            paramsItems.add(new BasicNameValuePair("itemArray",params[1]));
+
+            Log.i("prodArray",params[0]);
+            Log.i("itemArray",params[1]);
+
+            String addOrderReturnedJSON = jsonParser.makeServiceCall(addOrderURL, ServiceHandler.POST, paramsItems);
+            if(addOrderReturnedJSON != null){
+                try {
+                    Log.i("addOrderReturnedJSON", addOrderReturnedJSON);
+                    JSONObject addOrderJSON = new JSONObject(addOrderReturnedJSON);
+
+                    if(addOrderJSON.getString("success").equals("true")){
+                        addOrderSuccess = true;
+                        //TODO Proceed to payment gateway from here
+                    }
+                    else
+                        addOrderSuccess = false;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String res){
+            super.onPostExecute(res);
+            if(addorderProgress!=null&&addorderProgress.isShowing()) {
+                addorderProgress.hide();
+                addorderProgress.cancel();
+            }
+            Master.cAdapter.emptyCart();
+       }
+    }
+
     private static class OrderHistory extends AsyncTask<Void,Void,String>{
 
         private boolean orderHistorySuccess = false;
@@ -2676,17 +2864,35 @@ public class Master extends ActionBarActivity {
             ServiceHandler jsonParser = new ServiceHandler();
 
             List<NameValuePair> paramsItems = new ArrayList<>();
-            paramsItems.add(new BasicNameValuePair("session", LoginActivity.session));
+            paramsItems.add(new BasicNameValuePair("session", LoginActivity.prefs.getString("session","")));
 
-            String orderHistoryReturnedJSON = jsonParser.makeServiceCall(orderHistoryURL, ServiceHandler.POST);
+            String orderHistoryReturnedJSON = jsonParser.makeServiceCall(orderHistoryURL, ServiceHandler.POST, paramsItems);
             if(orderHistoryReturnedJSON != null){
                 try {
                     Log.i("order_hisReturnedJSON", orderHistoryReturnedJSON);
                     JSONObject orderHistoryJSON = new JSONObject(orderHistoryReturnedJSON);
 
                     if(orderHistoryJSON.getString("success").equals("true")){
-                        //TODO get the details from here and put it in orderhistoryclass
+                        int count = orderHistoryJSON.getInt("count");
+                        JSONArray history = orderHistoryJSON.getJSONArray("history");
+                        String name, phone, address, price, id;
+
+                        Master.orders = new ArrayList();
+
+                        for(int i=1;i<count;i++){
+                            JSONObject tempJSON = history.getJSONObject(i);
+                            name = tempJSON.getString("Name");
+                            phone = tempJSON.getString("Phone");
+                            address = tempJSON.getString("Address");
+                            price = tempJSON.getString("Total Cost");
+                            id = tempJSON.getString("TID");
+
+                            Master.orders.add(new OrderHistoryClass(id, name, phone, address, price));
+                        }
+                        orderHistorySuccess = true;
                     }
+                    else
+                        orderHistorySuccess = false;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -2702,6 +2908,75 @@ public class Master extends ActionBarActivity {
                 orderHistoryProgress.hide();
                 orderHistoryProgress.cancel();
             }
+
+            if(orderHistorySuccess){
+                Message msg = new Message();
+                msg.arg1 = 1;
+                orderHistoryHandler.sendMessage(msg);
+            }
+
+        }
+    }
+
+    public static class OrdersMoreDetails extends AsyncTask<String, Void, String>{
+
+        private boolean orderHistorySuccess = false;
+        String viewTransactionReturnedJSON;
+
+        @Override
+        protected void onPreExecute(){
+            Log.i("Order History", "Inside PreExecute");
+            orderHistoryProgress.setTitle("Loading your order list...");
+            orderHistoryProgress.setCancelable(false);
+            orderHistoryProgress.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            Log.i("Order More Details", "Inside doInBackground");
+            ServiceHandler jsonParser = new ServiceHandler();
+
+            List<NameValuePair> paramsItems = new ArrayList<>();
+            paramsItems.add(new BasicNameValuePair("session", LoginActivity.prefs.getString("session","")));
+            paramsItems.add(new BasicNameValuePair("TID",params[0]));
+
+            viewTransactionReturnedJSON = jsonParser.makeServiceCall(viewTransactionURL, ServiceHandler.POST, paramsItems);
+            if(viewTransactionReturnedJSON != null){
+                try {
+                    Log.i("viewTransReturnedJSON", viewTransactionReturnedJSON);
+                    JSONObject viewTransactionJSON = new JSONObject(viewTransactionReturnedJSON);
+
+                    if(viewTransactionJSON.getString("success").equals("true")){
+                        orderHistorySuccess = true;
+                    }
+                    else
+                        orderHistorySuccess = false;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String res){
+            super.onPostExecute(res);
+
+            if(orderHistoryProgress!=null && orderHistoryProgress.isShowing()){
+                orderHistoryProgress.hide();
+                orderHistoryProgress.cancel();
+            }
+
+            if(orderHistorySuccess){
+                Message msg = new Message();
+                msg.arg1 = 1;
+                Bundle b = new Bundle();
+                b.putString("JSON", viewTransactionReturnedJSON);
+                msg.setData(b);
+                Master.orderHistoryMoreHandler.sendMessage(msg);
+            }
+
         }
     }
 

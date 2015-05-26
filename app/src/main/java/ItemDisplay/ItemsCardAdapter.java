@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,9 +54,9 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d("item PID", String.valueOf(item.getProductid()));
                 Master.addDialog(item);
-
-
             }
         });
 
@@ -67,8 +68,9 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
                 Bundle b = new Bundle();
                 b.putString("name",item.getItemtitle());
                 b.putString("image",item.getItemimgurl());
-                b.putDouble("price",item.getItemprice());
+                b.putDouble("price", item.getItemprice());
                 b.putDouble("MRP",item.getItemMRP());
+                b.putInt("PID",item.getProductid());
                 msg.setData(b);
                 Master.itemDetailsHandler.sendMessage(msg);
             }

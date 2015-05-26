@@ -32,12 +32,13 @@ import util.ServiceHandler;
 public class ItemsSearchActivity extends ActionBarActivity {
 
     private String searchQuery, SearchReturnedJSON;
-    private final String searchURL="http://grokart.ueuo.com/search.php";
+    private final String searchURL="http://thedreamstop.in/api/search.php";
     public static SearchRecentSuggestions recentSuggestions;
     ArrayList<ItemDetailsClass> listOfItems;
     ArrayList<String> Name;
     ArrayList<Double> price;
     ArrayList<Double> MRP;
+    ArrayList<Integer> cID, sID, pID;
     ItemsCardAdapter mAdapter;
     RecyclerView mRecyclerView;
     static Handler searchHandler;
@@ -117,17 +118,23 @@ public class ItemsSearchActivity extends ActionBarActivity {
                         Name = new ArrayList<>();
                         MRP = new ArrayList<>();
                         price = new ArrayList<>();
+                        cID = new ArrayList<>();
+                        sID = new ArrayList<>();
+                        pID = new ArrayList<>();
 
                         for (int i = 0; i < searchJSONArray.length(); i++) {
                             JSONObject temp = searchJSONArray.getJSONObject(i);
                             Name.add(temp.getString("name"));
                             MRP.add(temp.getDouble("MRP"));
                             price.add(temp.getDouble("price"));
+                            cID.add(temp.getInt("catID"));
+                            sID.add(temp.getInt("subCatID"));
+                            pID.add(temp.getInt("PID"));
                         }
                         listOfItems = new ArrayList<>();
 
                         for (int i = 0; i < searchJSONArray.length(); i++) {
-                            listOfItems.add(new ItemDetailsClass(Name.get(i), "1", price.get(i), MRP.get(i))); //TODO Have to change URL
+                            listOfItems.add(new ItemDetailsClass(Name.get(i), "1", price.get(i), MRP.get(i), pID.get(i))); //TODO Have to change URL
                         }
                     }
 

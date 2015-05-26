@@ -2,6 +2,7 @@ package Cart;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,10 +65,13 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
     public void add(CartItemsClass item){
         listitems.add(item);
         notifyItemInserted(listitems.indexOf(item));
+        Master.totalCost += item.getQuantity()*(Double.parseDouble(item.getCartitemprice()));
     }
 
     public void remove(int position,CartRecyclerViewAdapter c){
+        Master.totalCost -= listitems.get(position).getQuantity()*(Double.parseDouble(listitems.get(position).getCartitemprice()));
         listitems.remove(position);
+        Log.i("CartItems Length", String.valueOf(Master.cartitems.size()));
         Master.cAdapter = null;
         Master.cAdapter = new CartRecyclerViewAdapter(listitems, context);
         Master.cartItemRecyclerView.setAdapter(Master.cAdapter);
@@ -75,6 +79,14 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 //        notifyItemRemoved(position);
 //        notifyItemRangeChanged(position, listitems.size()-position+1);//TODO have to modify this line
 
+    }
+
+    public void emptyCart(){
+        Master.totalCost = 0;
+        listitems.clear();
+        Master.cAdapter = null;
+        Master.cAdapter = new CartRecyclerViewAdapter(listitems, context);
+        Master.cartItemRecyclerView.setAdapter(Master.cAdapter);
     }
 
     public int getItemCount() {

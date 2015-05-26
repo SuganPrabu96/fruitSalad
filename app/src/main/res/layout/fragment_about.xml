@@ -5,15 +5,34 @@
 
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="e_commerce.e_commerce.MyAccount$PlaceholderFragment">
+    tools:context="e_commerce.e_commerce.MyAccount$PlaceholderFragment"
+    android:background="@drawable/concrete_seamless">
 
-        <LinearLayout
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="35dp"
+        sothree:umanoShadowHeight="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="About Fragment"
+            android:textColor="#000"
+            android:fontFamily="sans-serif-bold"/>
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
             <include layout="@layout/cart"></include>
 
         </LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </LinearLayout>

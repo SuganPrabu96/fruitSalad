@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4caf50">
+    android:background="#C8E6C9">
 
     <TextView
         android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:gravity="center|top"
         android:layout_marginTop="5dp"
         android:text="My Cart"
-        android:textColor="#ffffff"
+        android:textColor="#000"
         android:textSize="16sp"
         android:fontFamily="sans-serif-black"/>
   <FrameLayout
@@ -22,7 +22,7 @@
         android:gravity="right|top"
         android:text="Total Cost :"
 
-        android:textColor="#ffffff"
+        android:textColor="#000"
         android:paddingRight="80dp"
 
         android:paddingBottom="0dp"
@@ -38,6 +38,17 @@
           android:src="@drawable/checkout1"
           android:layout_gravity="left|center_vertical"
           android:id="@+id/checkoutbutton" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Price"
+          android:id="@+id/cart_totalcost"
+          android:textColor="#E53935"
+          android:textSize="16sp"
+          android:fontFamily="sans-serif-bold"
+          android:paddingRight="25dp"
+          android:layout_gravity="right|top" />
 
   </FrameLayout>
     <android.support.v7.widget.RecyclerView

@@ -67,6 +67,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -943,6 +944,7 @@ public class Master extends ActionBarActivity {
     public static class HelpFragment extends Fragment {
 
         ViewPager mViewPager;
+
         ViewPagerAdapter customAdapter;
         private ImageView _btn1, _btn2, _btn3;
         private LinearLayout.LayoutParams selectedParams, unselectedParams;

@@ -48,7 +48,7 @@
                 android:paddingLeft="5dp"
 
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#009688" />
+                android:textColor="#4caf50" />
 
 
         </FrameLayout>

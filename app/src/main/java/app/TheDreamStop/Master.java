@@ -2036,7 +2036,7 @@ public class Master extends ActionBarActivity {
 
            checkoutDialog.setCancelable(true);
            checkoutDialog.setContentView(R.layout.checkout_layout);
-           checkoutDialog.setTitle("Confirm your details");
+           checkoutDialog.setTitle("Confirm your Details");
            checkoutDialog.show();
 
            final EditText name, phone, address;

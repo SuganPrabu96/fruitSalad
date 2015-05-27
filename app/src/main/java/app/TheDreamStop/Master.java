@@ -8,11 +8,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -69,7 +67,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -679,15 +676,15 @@ public class Master extends ActionBarActivity {
 
             locationDialog = new Dialog(Master.this);
             locationDialog.setContentView(R.layout.choose_location);
-            locationDialog.setCancelable(true);
+            locationDialog.setCancelable(false);
             locationDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             locationDialog.setTitle("Location");
-            locationDialog.show();
 
             final Spinner city = (Spinner) locationDialog.findViewById(R.id.spinnerLocationCity);
             final Spinner area = (Spinner) locationDialog.findViewById(R.id.spinnerLocationArea);
+            Button save = (Button) locationDialog.findViewById(R.id.buttonChooseLocation);
 
-           // final RadioButton selectFromMap = (RadioButton) locationDialog.findViewById(R.id.radio_select_from_map);
+            // final RadioButton selectFromMap = (RadioButton) locationDialog.findViewById(R.id.radio_select_from_map);
 
             ArrayAdapter<String> adapter_area = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, loc_area);
             area.setAdapter(adapter_area);
@@ -727,16 +724,17 @@ public class Master extends ActionBarActivity {
 
             city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 boolean check = false;
+
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(check) {
+                    if (check) {
                         location[0] = city.getSelectedItem().toString();
                         LoginActivity.prefs.edit().putString("city", String.valueOf(id)).apply();
                         LoginActivity.prefs.edit().putString("city", String.valueOf(id)).commit();
 
                         LoginActivity.prefs.edit().putString("cityname", location[0]).apply();
                     }
-                    check=true;
+                    check = true;
                 }
 
                 @Override
@@ -747,9 +745,10 @@ public class Master extends ActionBarActivity {
 
             area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 boolean check = false;
+
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(check) {
+                    if (check) {
                         location[1] = area.getSelectedItem().toString();
                         actionBar.setTitle(location[1]);
                         LoginActivity.prefs.edit().putString("area", String.valueOf(id)).apply();
@@ -759,7 +758,7 @@ public class Master extends ActionBarActivity {
                         LoginActivity.prefs.edit().putString("areaname", location[1]).apply();
                         Log.i("areaname", LoginActivity.prefs.getString("areaname", ""));
                     }
-                    check=true;
+                    check = true;
                 }
 
                 @Override
@@ -776,6 +775,38 @@ public class Master extends ActionBarActivity {
                     getLocationFromMap();
                 }
             });*/
+
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    locationDialog.dismiss();
+                    locationDialog.cancel();
+                    locationDialog.hide();
+                }
+            });
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(Master.this);
+            alert.setTitle("Do you want to change your location?");
+            alert.setMessage("Changing location now will reload all products and will empty your cart. Do you wish to continue?");
+            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    selectItem(0);
+                    Master.cAdapter.emptyCart();
+                    locationDialog.show();
+
+                }
+            });
+            alert.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alert.create().show();
+
+
 
             return true;
         } else if (id == R.id.menu_master_home) {

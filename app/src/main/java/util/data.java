@@ -9,12 +9,12 @@ import app.TheDreamStop.R;
 public class data {
     public static NavDrawerItem[] navtitles={
             new NavDrawerItem("Products", R.drawable.basket2),
-            new NavDrawerItem("My Account", R.drawable.ic_launcher),
-            new NavDrawerItem("General Settings", R.drawable.ic_launcher),
-            new NavDrawerItem("Order History", R.drawable.ic_launcher),
+            new NavDrawerItem("My Account", R.drawable.my_account),
+            new NavDrawerItem("General Settings", R.drawable.settings),
+            new NavDrawerItem("Order History", R.drawable.orders),
             new NavDrawerItem("About", R.drawable.ic_launcher),
-            new NavDrawerItem("Help", R.drawable.ic_launcher),
-            new NavDrawerItem("Logout", R.drawable.ic_launcher)
+            new NavDrawerItem("Help", R.drawable.help),
+            new NavDrawerItem("Logout", R.drawable.logout)
     };
     public static List<NavDrawerItem> getNavDrawerItems(){
         return Arrays.asList(navtitles);

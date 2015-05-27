@@ -48,7 +48,7 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
         final ItemDetailsClass item = items.get(position);
 
         viewHolder.itemname.setText(item.getItemtitle());
-        viewHolder.itemimg.setImageResource(Integer.parseInt(item.getItemimgurl()));
+//        viewHolder.itemimg.setImageResource(Integer.parseInt(item.getItemimgurl()));
         viewHolder.selPrice.setText(item.getItemprice().toString());
 
         addBtn.setOnClickListener(new View.OnClickListener() {

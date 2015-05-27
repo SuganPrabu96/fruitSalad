@@ -8,9 +8,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -2032,12 +2034,14 @@ public class Master extends ActionBarActivity {
 
         }
 
-       private void checkoutDialog(){
+       public void checkoutDialog(){
 
            checkoutDialog.setCancelable(true);
            checkoutDialog.setContentView(R.layout.checkout_layout);
+           checkoutDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
            checkoutDialog.setTitle("Confirm your Details");
            checkoutDialog.show();
+
 
            final EditText name, phone, address;
            final TextView price;

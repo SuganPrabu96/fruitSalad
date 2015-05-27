@@ -23,7 +23,7 @@ public class ViewHolderItems extends RecyclerView.ViewHolder{
         super(itemView);
         this.context = context;
         itemname = (TextView) itemView.findViewById(R.id.itemname);
-        itemimg = (ImageView) itemView.findViewById(R.id.itemimg);
+
         selPrice = (TextView) itemView.findViewById(R.id.item_selprice);
        // mrp = itemView.findViewById(R.id.item_)
 

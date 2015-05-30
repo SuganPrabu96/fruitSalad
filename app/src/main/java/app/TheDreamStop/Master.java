@@ -1822,7 +1822,7 @@ public class Master extends ActionBarActivity {
         private SubcategoryCardAdapter mAdapter3;
         private static SwipeRefreshLayout swipeRefreshLayoutProducts;
         private int catID,subcatID;
-        private int[] categoryImageURL = {R.drawable.personalcare, R.drawable.brandedfoods, R.drawable.groceries};
+        private int[] categoryImageURL = {R.drawable.personalcare, R.drawable.brandedfoods, R.drawable.groceries, 0, 0, 0, 0, 0};  //TODO change this
         private static FragmentManager fragManag;
         private ImageView checkoutButton;
 
@@ -1850,7 +1850,7 @@ public class Master extends ActionBarActivity {
                     listOfCateg = new ArrayList<>();
                     if(categoryName.size()>0)
                     for (int i = 0; i < numCategories; i++) {
-                        listOfCateg.add(new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i], i+1));
+                        listOfCateg.add(new CategoryCardClass(categoryName.get(i).toUpperCase(), categoryImageURL[i]));
                     }
                 }
 

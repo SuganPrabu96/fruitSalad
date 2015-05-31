@@ -5,11 +5,16 @@ package app.TheDreamStop; /**
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -19,7 +24,15 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import ItemDisplay.ItemDetailsClass;
+import util.ServiceHandler;
 
 public class ParallaxToolbarScrollViewActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
 
@@ -28,12 +41,18 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     private ObservableScrollView mScrollView;
     private int mParallaxImageHeight;
     private TextView itemDescription, itemName, itemPrice;
+    private static ImageView itemImage;
     private Button addToCart;
     private Intent getIntent;
-    private String name,imageURL;
+    private String name;
     private double MRP,price;
     public static Dialog addtocartD;
     private int pID;
+    private DisplayMetrics displayMetrics;
+    private static float width, height;
+    private static String itemsURLReturnedJSON;
+    private static final String itemsImagesURL = "http://thedreamstop.in/api/prodImage.php";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +64,16 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
 
         //mImageView = findViewById(R.id.image);
 
+        displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        width = displayMetrics.widthPixels / 2;
+        height = displayMetrics.heightPixels / 4;
         getIntent = getIntent();
         mImageView = findViewById(R.id.itemdetail_name);
         mToolbarView = findViewById(R.id.toolbar);
         itemDescription = (TextView) findViewById(R.id.parallaxItemDescription);
         itemName = (TextView) findViewById(R.id.itemdetail_name);
         itemPrice = (TextView) findViewById(R.id.itemdetail_price);
+        itemImage = (ImageView) findViewById(R.id.itemdetail_image);
         addToCart = (Button) findViewById(R.id.itemdetail_addbutton);
         mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
 
@@ -60,13 +83,14 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         name = getIntent.getExtras().getString("name");
         price = getIntent.getExtras().getDouble("price");
         MRP = getIntent.getExtras().getDouble("MRP");
-        imageURL = getIntent.getExtras().getString("image");
         pID = getIntent.getExtras().getInt("PID");
         itemName.setText(name);
         itemPrice.setText(String.valueOf(price));
-        final ItemDetailsClass item = new ItemDetailsClass(name,imageURL,price,MRP,pID) ;
+        final ItemDetailsClass item = new ItemDetailsClass(name,price,MRP,pID) ;
 
         //itemDescription.setText(getIntent.getExtras().getString("Description").toString());
+
+        new LoadProductImages().execute(String.valueOf(pID));
 
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +162,46 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
     }
 
+    private static class LoadProductImages extends AsyncTask<String, String, Bitmap> {
+
+        Bitmap image;
+        @Override
+        protected void onPreExecute() {
+            Log.i("Inside PreExecute", "True");
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            Log.i("Inside Background", "True");
+
+            List<NameValuePair> paramsItems = new ArrayList<NameValuePair>();
+
+            paramsItems.add(new BasicNameValuePair("PID",params[0]));
+            paramsItems.add(new BasicNameValuePair("width", String.valueOf(width)));
+            paramsItems.add(new BasicNameValuePair("height", String.valueOf(height)));
+            ServiceHandler jsonParser = new ServiceHandler();
+            itemsURLReturnedJSON = jsonParser.makeServiceCall(itemsImagesURL, ServiceHandler.GET, paramsItems);
+            if (itemsURLReturnedJSON != null) {
+                try{
+                    Log.i("itemsURLReturnedJSON",itemsURLReturnedJSON);
+                    URL url = new URL("http://thedreamstop.in/api/prodImage.php?PID="+params[0]+"&width="+String.valueOf(width)+"&height="+String.valueOf(height));
+                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            Log.i("Inside PostExecute", "True");
+            super.onPostExecute(result);
+            itemImage.setImageBitmap(image);
+        }
+
+    }
 
 
 }

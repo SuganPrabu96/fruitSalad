@@ -67,7 +67,6 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
                 msg.arg1 = 1;
                 Bundle b = new Bundle();
                 b.putString("name",item.getItemtitle());
-                b.putString("image",item.getItemimgurl());
                 b.putDouble("price", item.getItemprice());
                 b.putDouble("MRP",item.getItemMRP());
                 b.putInt("PID",item.getProductid());

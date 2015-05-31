@@ -7,8 +7,6 @@ public class ItemDetailsClass {
 
     public String itemtitle;
 
-    public String itemimgurl = "none";
-
     public Double itemprice;
 
     public Double itemMRP;
@@ -16,10 +14,9 @@ public class ItemDetailsClass {
     private int productid;
 
 
-    public ItemDetailsClass(String itemtitle, String itemimgurl, Double itemprice, Double itemMRP, int productid) {
+    public ItemDetailsClass(String itemtitle, Double itemprice, Double itemMRP, int productid) {
 
         this.itemtitle = itemtitle;
-        this.itemimgurl = itemimgurl;
         this.itemprice = itemprice;
         this.itemMRP = itemMRP;
         this.productid = productid;
@@ -28,10 +25,6 @@ public class ItemDetailsClass {
     //   public String getItemcateg(){ return itemcateg;}
     public String getItemtitle() {
         return itemtitle;
-    }
-
-    public String getItemimgurl() {
-        return itemimgurl;
     }
 
     public Double getItemprice() { return itemprice; }

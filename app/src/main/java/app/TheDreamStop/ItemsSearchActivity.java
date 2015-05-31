@@ -140,7 +140,7 @@ public class ItemsSearchActivity extends ActionBarActivity {
                         listOfItems = new ArrayList<>();
 
                         for (int i = 0; i < searchJSONArray.length(); i++) {
-                            listOfItems.add(new ItemDetailsClass(Name.get(i), "1", price.get(i), MRP.get(i), pID.get(i))); //TODO Have to change URL
+                            listOfItems.add(new ItemDetailsClass(Name.get(i), price.get(i), MRP.get(i), pID.get(i)));
                         }
                     }
 

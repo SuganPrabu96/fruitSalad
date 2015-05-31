@@ -108,7 +108,6 @@ public class Master extends ActionBarActivity {
     private static final String updateDetailsURL = "http://thedreamstop.in/api/editInfo.php";
     private final String locationURL = "http://thedreamstop.in/api/latlong.php";
     private static final String itemsURL = "http://thedreamstop.in/api/catProds.php";
-    private static final String itemsImagesURL = "http://thedreamstop.in/api/prodImage.php";
     private static final String logoutURL = "http://thedreamstop.in/api/logout.php";
     private static final String newItemsURL = "http://thedreamstop.in/api/latest.php";
     private static final String orderHistoryURL = "http://thedreamstop.in/api/orderHistory.php";
@@ -125,7 +124,7 @@ public class Master extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String productsJSON;
     private String locationReturnedJSON;
-    private static String itemsReturnedJSON, itemsURLReturnedJSON, logoutReturnedJSON, newItemsReturnedJSON;
+    private static String itemsReturnedJSON, logoutReturnedJSON, newItemsReturnedJSON;
     private static String updateDetailsReturnedJSON;
     public static ProgressDialog updateProgress, locationProgress, loadItemsProgress, logoutProgress, loadCatSubCatProgress,
             loadNewItemsProgress, orderHistoryProgress, addorderProgress;
@@ -519,6 +518,7 @@ public class Master extends ActionBarActivity {
         // Highlight the selected item, update the title, and close the drawer
         drawerList.setItemChecked(position, true);
         int k;
+        //TODO edit this
         if (position != 9) {
             for (int i = 0; i < drawerList.getChildCount(); i++)
                 drawerList.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.NavigationBarUnselectedItem));
@@ -1894,7 +1894,6 @@ public class Master extends ActionBarActivity {
                         Bundle b = msg.getData();
                         Intent i = new Intent(getActivity(), ParallaxToolbarScrollViewActivity.class);
                         i.putExtra("name",b.getString("name"));
-                        i.putExtra("image",b.getString("image"));
                         i.putExtra("price",b.getDouble("price"));
                         i.putExtra("MRP",b.getDouble("MRP"));
                         i.putExtra("PID",b.getInt("PID"));
@@ -1909,8 +1908,16 @@ public class Master extends ActionBarActivity {
 
                         Log.i("Arg2", String.valueOf(msg.arg2));
                         catID = msg.arg2;
-                        subCategorySubCat.setText(msg.getData().getString("categoryName").substring(0,10)+"...");
-                        productsSubCat.setText(msg.getData().getString("categoryName").substring(0,10)+"...");
+                        String categName = msg.getData().getString("categoryName");
+                        String subcategName = msg.getData().getString("categoryName");
+                        if(categName.length()>10)
+                            subCategorySubCat.setText(categName.substring(0,10)+"...");
+                        else
+                            subCategorySubCat.setText(categName);
+                        if(subcategName.length()>10)
+                            productsSubCat.setText(subcategName.substring(0,10)+"...");
+                        else
+                            productsSubCat.setText(subcategName);
 
                         listOfSubCateg = new ArrayList<>();
 
@@ -1968,7 +1975,7 @@ public class Master extends ActionBarActivity {
                         Log.i("productsNameLength", String.valueOf(productsName.size()));
                         if(numProducts!=0)
                             for(int i=0;i<numProducts;i++)
-                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i),"1", productsPrice.get(i), productsMRP.get(i), pID.get(i))); //TODO change this to URL from db
+                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i), productsPrice.get(i), productsMRP.get(i), pID.get(i)));
 
                         else
                             listOfItems = null;
@@ -2771,57 +2778,6 @@ public class Master extends ActionBarActivity {
 
             /*for(int i=0;i<numProducts;i++)
                 new LoadProductImages().execute(String.valueOf(productsID[i]));*/
-
-        }
-
-    }
-
-    private static class LoadProductImages extends AsyncTask<String, Void, String>{
-
-        @Override
-        protected void onPreExecute() {
-            Log.i("Inside PreExecute", "True");
-            loadItemsProgress.setTitle("Loading items list...");
-            loadItemsProgress.setCancelable(false);
-            loadItemsProgress.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            Log.i("Inside Background", "True");
-
-            List<NameValuePair> paramsItems = new ArrayList<NameValuePair>();
-
-            paramsItems.add(new BasicNameValuePair("PID",params[0]));
-            paramsItems.add(new BasicNameValuePair("width", "100"));
-            ServiceHandler jsonParser = new ServiceHandler();
-            itemsURLReturnedJSON = jsonParser.makeServiceCall(itemsImagesURL, ServiceHandler.GET, paramsItems);
-            if (itemsURLReturnedJSON != null) {
-                try{
-                    Log.i("itemsURLReturnedJSON",itemsURLReturnedJSON);
-                    JSONObject itemsURLJSON = new JSONObject(itemsURLReturnedJSON);
-                    if(itemsURLJSON.getString("success").equals("true")){
-                        //TODO load item images from this place
-                    }
-                    else
-                        ;
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Log.i("Inside PostExecute", "True");
-            super.onPostExecute(result);
-
-            if(loadItemsProgress!=null && loadItemsProgress.isShowing()) {
-                loadItemsProgress.hide();
-                loadItemsProgress.dismiss();
-            }
 
         }
 

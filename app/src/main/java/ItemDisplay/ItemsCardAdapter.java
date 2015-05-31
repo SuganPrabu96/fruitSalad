@@ -70,6 +70,10 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
                 b.putDouble("price", item.getItemprice());
                 b.putDouble("MRP",item.getItemMRP());
                 b.putInt("PID",item.getProductid());
+                b.putString("unit",item.getUnit());
+                b.putFloat("quantity",item.getQty());
+                b.putInt("q",item.getQ());
+                b.putChar("changeable",item.getChangeable());
                 msg.setData(b);
                 Master.itemDetailsHandler.sendMessage(msg);
             }

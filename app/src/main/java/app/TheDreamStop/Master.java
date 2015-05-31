@@ -101,9 +101,11 @@ public class Master extends ActionBarActivity {
     public static int numCategories, numSubCategories[], numProducts,
                   newProductsID[], newProductsCatId[], newProductsSubCatId[];
     public static ArrayList<Double> productsPrice, productsMRP;
-    public static ArrayList<String> categoryName, productsName, productDesc;
+    public static ArrayList<String> categoryName, productsName, productDesc, itemUnit;
     public static ArrayList<int[]> subcategoryID;
-    public static ArrayList<Integer> categoryID, productsID;
+    public static ArrayList<Integer> categoryID, productsID, item_q;
+    public static ArrayList<Float> itemQuantity;
+    public static ArrayList<Character> itemChangeable;
     public static ArrayList<String[]> subcategoryName;
     private final String categoriesURL = "http://thedreamstop.in/api/listCategories.php";
     private static final String updateDetailsURL = "http://thedreamstop.in/api/editInfo.php";
@@ -165,6 +167,10 @@ public class Master extends ActionBarActivity {
         categoryName = new ArrayList();
         productsName = new ArrayList();
         loc_area = new ArrayList<>();
+        item_q = new ArrayList<>();
+        itemChangeable = new ArrayList<>();
+        itemQuantity = new ArrayList<>();
+        itemUnit = new ArrayList<>();
 
         loc_area.add("Adyar");
         loc_area.add("Mandaveli");
@@ -1865,7 +1871,7 @@ public class Master extends ActionBarActivity {
         private SubcategoryCardAdapter mAdapter3;
         private static SwipeRefreshLayout swipeRefreshLayoutProducts;
         private int catID,subcatID;
-        private int[] categoryImageURL = {R.drawable.personalcare, R.drawable.brandedfoods, R.drawable.groceries, 0, 0, 0, 0, 0};  //TODO change this
+        private int[] categoryImageURL = {R.drawable.personalcare, R.drawable.brandedfoods, R.drawable.groceries, R.drawable.beverages, R.drawable.bread_dairy_eggs, R.drawable.imported_and_gourmet, R.drawable.household};  //TODO change this
         private static FragmentManager fragManag;
         private ImageView checkoutButton;
 
@@ -1940,6 +1946,10 @@ public class Master extends ActionBarActivity {
                         i.putExtra("price",b.getDouble("price"));
                         i.putExtra("MRP",b.getDouble("MRP"));
                         i.putExtra("PID",b.getInt("PID"));
+                        i.putExtra("quantity",b.getFloat("quantity"));
+                        i.putExtra("unit",b.getString("unit"));
+                        i.putExtra("changeable",b.getChar("changeable"));
+                        i.putExtra("q",b.getInt("q"));
                         startActivity(i);
                     }
                 }
@@ -2018,7 +2028,7 @@ public class Master extends ActionBarActivity {
                         Log.i("productsNameLength", String.valueOf(productsName.size()));
                         if(numProducts!=0)
                             for(int i=0;i<numProducts;i++)
-                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i), productsPrice.get(i), productsMRP.get(i), pID.get(i)));
+                                listOfItems.add(i, new ItemDetailsClass(productsName.get(i), productsPrice.get(i), productsMRP.get(i), pID.get(i), itemQuantity.get(i), itemUnit.get(i), itemChangeable.get(i), item_q.get(i)));
 
                         else
                             listOfItems = null;
@@ -2685,12 +2695,16 @@ public class Master extends ActionBarActivity {
     public static class LoadItems extends AsyncTask<String, Void, String> {
 
         private boolean loadItemsSuccess = false;
-        private int[] newItemsIDs, oldItemsIDs;
-        private String[] newItemsName, oldItemsNames;
+        private int[] newItemsIDs, oldItemsIDs, newItems_q, oldItems_q;
+        private String[] newItemsName, oldItemsNames, newItemsUnit, oldItemsUnit;
         private Double[] newItemsPrice, oldItemsPrice, oldItemsMRP, newItemsMRP;
-        private int tempProductsId;
-        private String tempProductsName;
+        private Character[] newItemsChangeable, oldItemsChangeable;
+        private Float[] newItemsQuantity, oldItemsQuantity;
+        private int tempProductsId, tempProducts_q;
+        private String tempProductsName, tempProductsUnit;
         private Double tempProductsPrice, tempProductsMRP;
+        private Float tempProductsQuantity;
+        private Character tempProductsChangeable;
         private boolean newItemCatSuccess = false, newItemSubCatSuccess = false, newItemProductSuccess= false;
         private int newID = 0, oldID = 0;
         private int catID, subID;
@@ -2699,7 +2713,7 @@ public class Master extends ActionBarActivity {
         protected void onPreExecute() {
             Log.i("Inside PreExecute", "True");
             loadItemsProgress.setTitle("Loading items list...");
-            loadItemsProgress.setCancelable(false);
+            loadItemsProgress.setCancelable(true);
             loadItemsProgress.show();
         }
 
@@ -2742,11 +2756,23 @@ public class Master extends ActionBarActivity {
                         newItemsPrice = new Double[numProducts];
                         oldItemsMRP = new Double[numProducts];
                         newItemsMRP = new Double[numProducts];
+                        newItems_q = new int[numProducts];
+                        oldItems_q = new int[numProducts];
+                        newItemsChangeable = new Character[numProducts];
+                        oldItemsChangeable = new Character[numProducts];
+                        newItemsQuantity = new Float[numProducts];
+                        oldItemsQuantity = new Float[numProducts];
+                        newItemsUnit = new String[numProducts];
+                        oldItemsUnit = new String[numProducts];
 
                         productDesc = new ArrayList<>();
                         productsName = new ArrayList<>();
                         productsPrice = new ArrayList<>();
                         productsMRP = new ArrayList<>();
+                        item_q = new ArrayList<>();
+                        itemQuantity = new ArrayList<>();
+                        itemUnit = new ArrayList<>();
+                        itemChangeable = new ArrayList<>();
 
                         for(int i=0;i<numProducts;i++) {
                             tempItemJSON = new JSONObject(String.valueOf(itemsList.getJSONObject(i)));
@@ -2756,6 +2782,10 @@ public class Master extends ActionBarActivity {
                             tempProductsName = tempItemJSON.getString("name");
                             tempProductsPrice = tempItemJSON.getDouble("price");
                             tempProductsMRP = tempItemJSON.getDouble("MRP");
+                            tempProducts_q = tempItemJSON.getInt("q");
+                            tempProductsQuantity = Float.valueOf(tempItemJSON.getString("qty"));
+                            tempProductsUnit = tempItemJSON.getString("unit");
+                            tempProductsChangeable = tempItemJSON.getString("cb").charAt(0);
 
                         if(newProductsCatId!=null)
                             for(int j=0;j<newProductsCatId.length;j++){
@@ -2795,6 +2825,10 @@ public class Master extends ActionBarActivity {
                                 newItemsName[newID] = tempProductsName;
                                 newItemsPrice[newID] = tempProductsPrice;
                                 newItemsMRP[newID] = tempProductsMRP;
+                                newItems_q[newID] = tempProducts_q;
+                                newItemsUnit[newID] = tempProductsUnit;
+                                newItemsChangeable[newID] = tempProductsChangeable;
+                                newItemsQuantity[newID] = tempProductsQuantity;
                                 newID++;
                             }
 
@@ -2803,6 +2837,10 @@ public class Master extends ActionBarActivity {
                                 oldItemsNames[oldID] = tempProductsName;
                                 oldItemsPrice[oldID] = tempProductsPrice;
                                 oldItemsMRP[oldID] = tempProductsMRP;
+                                oldItemsUnit[oldID]= tempProductsUnit;
+                                oldItemsChangeable[oldID] = tempProductsChangeable;
+                                oldItemsQuantity[oldID] = tempProductsQuantity;
+                                oldItems_q[oldID] = tempProducts_q;
                                 oldID++;
                             }
 
@@ -2817,6 +2855,10 @@ public class Master extends ActionBarActivity {
                             productsName.add(newItemsName[i]);
                             productsPrice.add(newItemsPrice[i]);
                             productsMRP.add(newItemsMRP[i]);
+                            itemQuantity.add(newItemsQuantity[i]);
+                            item_q.add(newItems_q[i]);
+                            itemUnit.add(newItemsUnit[i]);
+                            itemChangeable.add(newItemsChangeable[i]);
                         }
 
                         Log.i("productsNameStatus", String.valueOf(productsName.isEmpty()));
@@ -2826,6 +2868,10 @@ public class Master extends ActionBarActivity {
                             productsName.add(oldItemsNames[j-productsID.size()]);
                             productsPrice.add(oldItemsPrice[j-productsPrice.size()]);
                             productsMRP.add(oldItemsMRP[j-productsMRP.size()]);
+                            itemQuantity.add(oldItemsQuantity[j-itemQuantity.size()]);
+                            item_q.add(oldItems_q[j-item_q.size()]);
+                            itemUnit.add(oldItemsUnit[j-itemUnit.size()]);
+                            itemChangeable.add(oldItemsChangeable[j=itemChangeable.size()]);
                         }
 
                         else
@@ -2834,6 +2880,10 @@ public class Master extends ActionBarActivity {
                             productsName.add(oldItemsNames[j]);
                             productsPrice.add(oldItemsPrice[j]);
                             productsMRP.add(oldItemsMRP[j]);
+                            itemQuantity.add(oldItemsQuantity[j]);
+                            item_q.add(oldItems_q[j]);
+                            itemUnit.add(oldItemsUnit[j]);
+                            itemChangeable.add(oldItemsChangeable[j]);
                         }
 
                         Log.i("productsLength", String.valueOf(productsName.size()));

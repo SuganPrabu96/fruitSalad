@@ -38,10 +38,12 @@ public class ItemsSearchActivity extends ActionBarActivity {
     private final String searchURL="http://thedreamstop.in/api/search.php";
     public static SearchRecentSuggestions recentSuggestions;
     ArrayList<ItemDetailsClass> listOfItems;
-    ArrayList<String> Name;
+    ArrayList<String> Name, unit;
     ArrayList<Double> price;
     ArrayList<Double> MRP;
-    ArrayList<Integer> cID, sID, pID;
+    ArrayList<Integer> cID, sID, pID, q;
+    ArrayList<Float> quantity;
+    ArrayList<Character> changeable;
     ItemsCardAdapter mAdapter;
     RecyclerView mRecyclerView;
     static Handler searchHandler;
@@ -127,6 +129,10 @@ public class ItemsSearchActivity extends ActionBarActivity {
                         cID = new ArrayList<>();
                         sID = new ArrayList<>();
                         pID = new ArrayList<>();
+                        unit = new ArrayList<>();
+                        q = new ArrayList<>();
+                        changeable = new ArrayList<>();
+                        quantity = new ArrayList<>();
 
                         for (int i = 0; i < searchJSONArray.length(); i++) {
                             JSONObject temp = searchJSONArray.getJSONObject(i);
@@ -136,11 +142,15 @@ public class ItemsSearchActivity extends ActionBarActivity {
                             cID.add(temp.getInt("catID"));
                             sID.add(temp.getInt("subCatID"));
                             pID.add(temp.getInt("PID"));
+                            unit.add(temp.getString("unit"));
+                            q.add(temp.getInt("q"));
+                            changeable.add(temp.getString("cb").charAt(0));
+                            quantity.add(Float.valueOf(temp.getString("qty")));
                         }
                         listOfItems = new ArrayList<>();
 
                         for (int i = 0; i < searchJSONArray.length(); i++) {
-                            listOfItems.add(new ItemDetailsClass(Name.get(i), price.get(i), MRP.get(i), pID.get(i)));
+                            listOfItems.add(new ItemDetailsClass(Name.get(i), price.get(i), MRP.get(i), pID.get(i), quantity.get(i), unit.get(i), changeable.get(i), q.get(i)));
                         }
                     }
 

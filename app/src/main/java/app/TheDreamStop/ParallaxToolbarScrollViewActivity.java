@@ -44,10 +44,12 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     private static ImageView itemImage;
     private Button addToCart;
     private Intent getIntent;
-    private String name;
-    private double MRP,price;
+    private String name, unit;
+    private double MRP, price;
+    private Float quantity;
     public static Dialog addtocartD;
-    private int pID;
+    private int pID, q;
+    private Character changeable;
     private DisplayMetrics displayMetrics;
     private static float width, height;
     private static String itemsURLReturnedJSON;
@@ -84,9 +86,13 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         price = getIntent.getExtras().getDouble("price");
         MRP = getIntent.getExtras().getDouble("MRP");
         pID = getIntent.getExtras().getInt("PID");
+        unit = getIntent.getExtras().getString("unit");
+        quantity = getIntent.getExtras().getFloat("quantity");
+        q = getIntent.getExtras().getInt("q");
+        changeable = getIntent.getExtras().getChar("changeable");
         itemName.setText(name);
         itemPrice.setText(String.valueOf(price));
-        final ItemDetailsClass item = new ItemDetailsClass(name,price,MRP,pID) ;
+        final ItemDetailsClass item = new ItemDetailsClass(name,price,MRP,pID,quantity,unit,changeable,q) ;
 
         //itemDescription.setText(getIntent.getExtras().getString("Description").toString());
 

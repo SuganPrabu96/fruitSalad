@@ -113,6 +113,7 @@ public class Master extends ActionBarActivity {
     private static final String orderHistoryURL = "http://thedreamstop.in/api/orderHistory.php";
     private static final String addOrderURL = "http://thedreamstop.in/api/addOrder.php";
     private static final String viewTransactionURL = "http://thedreamstop.in/api/viewTransaction.php";
+    private static final String areasURL = "http://thedreamstop.in/api/locList.php";
     public FragmentTransaction fragmentTransaction;
     public static Dialog locationDialog,addtocartDialog;
 
@@ -132,12 +133,12 @@ public class Master extends ActionBarActivity {
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
-    public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler;
+    public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler;
     public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
     String[] loc_city = {"Chennai"};
-    String[] loc_area = {"Adyar", "Ambattur", "Anna Nagar"};
+    public String[] loc_area = {"Adyar", "Ambattur", "Anna Nagar"};
     String[] loc_lat = {"13.0063","13.0983","13.0846"};
     String[] loc_long = {"80.2574","80.1622","80.2179"};
     private static int fragPos = -1;
@@ -169,6 +170,7 @@ public class Master extends ActionBarActivity {
         backPressedHandler = new Handler();
         orderHistoryHandler = new Handler();
         orderHistoryMoreHandler = new Handler();
+        areasHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -306,11 +308,11 @@ public class Master extends ActionBarActivity {
 
             //final RadioButton selectFromMap = (RadioButton) locationDialog.findViewById(R.id.radio_select_from_map);
 
-            ArrayAdapter<String> adapter_area = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, loc_area);
-            area.setAdapter(adapter_area);
-
             ArrayAdapter<String> adapter_city = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, loc_city);
             city.setAdapter(adapter_city);
+
+            final ArrayAdapter<String> adapter_area = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, loc_area);
+            area.setAdapter(adapter_area);
 
             for (int i = 0; i < city.getCount(); i++) {
                 if (city.getItemAtPosition(i).equals(location[0])) {
@@ -352,6 +354,7 @@ public class Master extends ActionBarActivity {
                         LoginActivity.prefs.edit().putString("city", String.valueOf(id)).commit();
 
                         LoginActivity.prefs.edit().putString("cityname", location[0]).apply();
+                        new GetAreas().execute(location[0]);
                     }
                     check=true;
                 }
@@ -361,6 +364,13 @@ public class Master extends ActionBarActivity {
 
                 }
             });
+
+            areasHandler = new Handler(){
+              public void handleMessage(Message msg){
+                  adapter_area.notifyDataSetChanged();
+                  area.setAdapter(adapter_area);
+              }
+            };
 
             area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 boolean check = false;
@@ -671,9 +681,9 @@ public class Master extends ActionBarActivity {
 
         else if (id == R.id.menu_master_location) {
 
-            String[] loc_city = {"Chennai"};
+            /*String[] loc_city = {"Chennai"};
             String[] loc_area = {"Adyar", "Ambattur", "Anna Nagar"};
-
+*/
             locationDialog = new Dialog(Master.this);
             locationDialog.setContentView(R.layout.choose_location);
             locationDialog.setCancelable(false);
@@ -686,11 +696,19 @@ public class Master extends ActionBarActivity {
 
             // final RadioButton selectFromMap = (RadioButton) locationDialog.findViewById(R.id.radio_select_from_map);
 
-            ArrayAdapter<String> adapter_area = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, loc_area);
-            area.setAdapter(adapter_area);
-
             ArrayAdapter<String> adapter_city = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, loc_city);
             city.setAdapter(adapter_city);
+
+            final ArrayAdapter<String> adapter_area = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, loc_area);
+            area.setAdapter(adapter_area);
+
+            areasHandler = new Handler(){
+                public void handleMessage(Message msg){
+                    if(msg.arg1==1)
+                        adapter_area.notifyDataSetChanged();
+                    area.setAdapter(adapter_area);
+                }
+            };
 
             for (int i = 0; i < city.getCount(); i++) {
                 if (city.getItemAtPosition(i).equals(location[0])) {
@@ -733,6 +751,8 @@ public class Master extends ActionBarActivity {
                         LoginActivity.prefs.edit().putString("city", String.valueOf(id)).commit();
 
                         LoginActivity.prefs.edit().putString("cityname", location[0]).apply();
+
+                        new GetAreas().execute(location[0]);
                     }
                     check = true;
                 }
@@ -1911,7 +1931,7 @@ public class Master extends ActionBarActivity {
                         String categName = msg.getData().getString("categoryName");
                         String subcategName = msg.getData().getString("categoryName");
                         if(categName.length()>10)
-                            subCategorySubCat.setText(categName.substring(0,10)+"...");
+                            subCategorySubCat.setText(categName.substring(0, 10)+"...");
                         else
                             subCategorySubCat.setText(categName);
                         if(subcategName.length()>10)
@@ -2301,6 +2321,52 @@ public class Master extends ActionBarActivity {
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             System.out.println(position);
             selectItem(position);
+        }
+    }
+
+    public class GetAreas extends AsyncTask<String, Void, Void>{
+
+        @Override
+        protected void onPreExecute(){
+
+            super.onPreExecute();
+            ProgressDialog p = new ProgressDialog(Master.this);
+            p.setTitle("Loading areas");
+            p.setCancelable(false);
+            p.show();
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+
+            List<NameValuePair> paramsItems = new ArrayList<NameValuePair>();
+
+            paramsItems.add(new BasicNameValuePair("city", params[0]));
+
+            ServiceHandler jsonParser = new ServiceHandler();
+            String areasReturnedJSON = jsonParser.makeServiceCall(areasURL, ServiceHandler.POST, paramsItems);
+            if (areasReturnedJSON != null) {
+                try {
+                    Log.i("areasReturnedJSON", areasReturnedJSON);
+                    JSONObject areasJSON = new JSONObject(areasReturnedJSON);
+                    if (areasJSON.getString("success").equals("true")) {
+                        int count = areasJSON.getInt("count");
+                        JSONArray tempArray = areasJSON.getJSONArray("list");
+                        for(int i =0; i<count; i++){
+                            loc_area[i] = tempArray.getString(i);
+                        }
+                        Message msg = new Message();
+                        msg.arg1 = 1;
+                        areasHandler.sendMessage(msg);
+                    } else {
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
         }
     }
 

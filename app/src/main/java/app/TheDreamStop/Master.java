@@ -85,6 +85,7 @@ import NavigationDrawer.NavDrawerListAdapter;
 import OrderHistory.OrderHistoryClass;
 import OrderHistory.OrderHistoryRecyclerViewAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
+import util.GetLatLong;
 import util.ServiceHandler;
 import util.data;
 
@@ -133,14 +134,15 @@ public class Master extends ActionBarActivity {
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
-    public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler;
+    public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler, latLongHandler;
     public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
-    String[] loc_city = {"Chennai"};
-    public String[] loc_area = {"Adyar", "Ambattur", "Anna Nagar"};
-    String[] loc_lat = {"13.0063","13.0983","13.0846"};
-    String[] loc_long = {"80.2574","80.1622","80.2179"};
+    String[] loc_city = {"Chennai", "Bangalore"};
+    public ArrayList<String> loc_area;
+    //String[] loc_lat = {"13.0063","13.0983","13.0846"};
+    //String[] loc_long = {"80.2574","80.1622","80.2179"};
+    public static String loc_lat, loc_long;
     private static int fragPos = -1;
     private int curFrag;
     public static double totalCost = 0.0;
@@ -162,8 +164,16 @@ public class Master extends ActionBarActivity {
 
         categoryName = new ArrayList();
         productsName = new ArrayList();
+        loc_area = new ArrayList<>();
+
+        loc_area.add("Adyar");
+        loc_area.add("Mandaveli");
+        loc_area.add("Velachery");
 
         cAdapter = new CartRecyclerViewAdapter(cartitems, getApplicationContext());
+
+        loc_lat = "13.0063";
+        loc_long = "80.2574";
 
         menuHandler = new Handler();
         itemDetailsHandler = new Handler();
@@ -171,6 +181,7 @@ public class Master extends ActionBarActivity {
         orderHistoryHandler = new Handler();
         orderHistoryMoreHandler = new Handler();
         areasHandler = new Handler();
+        latLongHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -293,6 +304,17 @@ public class Master extends ActionBarActivity {
                 }
             }
         };
+
+        Master.latLongHandler = new Handler(){
+            public void handleMessage(Message msg){
+                if(msg.arg1==1){
+                    Bundle b = msg.getData();
+                    Double lat = b.getDouble("lat");
+                    Double lng = b.getDouble("long");
+                    new LocationDetails().execute(String.valueOf(lat), String.valueOf(lng), LoginActivity.prefs.getString("session", ""));
+                }
+            }
+        };
     }
 
     private void getLocationForItems(){
@@ -389,7 +411,7 @@ public class Master extends ActionBarActivity {
                         locationDialog.hide();
                         locationDialog.dismiss();
 
-                        new LocationDetails().execute(loc_lat[position], loc_long[position], LoginActivity.prefs.getString("session",""));
+                        new GetLatLong().execute(location[1]);
                     }
                     check=true;
                 }
@@ -799,6 +821,7 @@ public class Master extends ActionBarActivity {
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    new GetLatLong().execute(location[1]);
                     locationDialog.dismiss();
                     locationDialog.cancel();
                     locationDialog.hide();
@@ -2326,11 +2349,11 @@ public class Master extends ActionBarActivity {
 
     public class GetAreas extends AsyncTask<String, Void, Void>{
 
+        ProgressDialog p = new ProgressDialog(Master.this);
         @Override
         protected void onPreExecute(){
 
             super.onPreExecute();
-            ProgressDialog p = new ProgressDialog(Master.this);
             p.setTitle("Loading areas");
             p.setCancelable(false);
             p.show();
@@ -2352,8 +2375,9 @@ public class Master extends ActionBarActivity {
                     if (areasJSON.getString("success").equals("true")) {
                         int count = areasJSON.getInt("count");
                         JSONArray tempArray = areasJSON.getJSONArray("list");
+                        loc_area.clear();
                         for(int i =0; i<count; i++){
-                            loc_area[i] = tempArray.getString(i);
+                            loc_area.add(i, tempArray.getString(i));
                         }
                         Message msg = new Message();
                         msg.arg1 = 1;
@@ -2367,6 +2391,16 @@ public class Master extends ActionBarActivity {
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void res){
+            super.onPostExecute(res);
+            if(p!=null && p.isShowing()){
+                p.cancel();
+                p.dismiss();
+                p.hide();
+            }
         }
     }
 

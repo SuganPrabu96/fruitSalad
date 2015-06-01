@@ -34,6 +34,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -149,7 +150,9 @@ public class Master extends ActionBarActivity {
     private static int fragPos = -1;
     private int curFrag;
     public static double totalCost = 0.0;
+    private DisplayMetrics displayMetrics;
     private static Dialog checkoutDialog;
+    private static double width, height;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -158,6 +161,10 @@ public class Master extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         addtocartDialog = new Dialog(Master.this);
         modeOfLogin = getIntent().getExtras().getString("loginMethod").toString();
+
+        displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        width = displayMetrics.widthPixels*0.9;
+        height = displayMetrics.heightPixels*0.75;
 
         setContentView(R.layout.nav_bar);
         ActionBar bar = getSupportActionBar();
@@ -599,7 +606,7 @@ public class Master extends ActionBarActivity {
 
         checkoutDialog.setCancelable(true);
         checkoutDialog.setContentView(R.layout.checkout_layout);
-        checkoutDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
+        checkoutDialog.getWindow().setLayout((int)width, (int)height);
         checkoutDialog.setTitle("Confirm your Details");
         checkoutDialog.show();
 
@@ -661,15 +668,15 @@ public class Master extends ActionBarActivity {
                 }
 
                 else if(cName.equals("")){
-                    Toast.makeText(context,"Please enter your name",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter your Name",Toast.LENGTH_SHORT).show();
                 }
 
                 else if(cPhone.equals("")){
-                    Toast.makeText(context,"Please enter your contact number",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter your Contact Number",Toast.LENGTH_SHORT).show();
                 }
 
                 else if(cAddress.equals("")){
-                    Toast.makeText(context,"Please enter shipping address",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter Shipping Address",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1379,6 +1386,7 @@ public class Master extends ActionBarActivity {
         private LinearLayout myAccountLayout;
         private ImageView checkoutButton;
         private TextView cartTotal;
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -2309,6 +2317,86 @@ public class Master extends ActionBarActivity {
 
         }
 
+//       public void checkoutDialog(){
+//
+//           checkoutDialog.setCancelable(true);
+//           checkoutDialog.setContentView(R.layout.checkout_layout);
+//           checkoutDialog.getWindow().setLayout(((int) width), (int)height);
+//           checkoutDialog.setTitle("Confirm your Details");
+//           checkoutDialog.show();
+//
+//
+//           final EditText name, phone, address;
+//           final TextView price;
+//           ImageView proceed;
+//
+//           name = (EditText) checkoutDialog.findViewById(R.id.checkout_name);
+//           phone = (EditText) checkoutDialog.findViewById(R.id.checkout_phone_number);
+//           address = (EditText) checkoutDialog.findViewById(R.id.checkout_shippingaddress);
+//           price = (TextView) checkoutDialog.findViewById(R.id.checkout_totalcost);
+//           proceed = (ImageView) checkoutDialog.findViewById(R.id.proceedtopayment_btn);
+//
+//           name.setText(LoginActivity.prefs.getString("Name",""));
+//           phone.setText(LoginActivity.prefs.getString("Phone",""));
+//           address.setText(LoginActivity.prefs.getString("Address",""));
+//           price.setText(String.valueOf(totalCost));
+//
+//           proceed.setOnClickListener(new View.OnClickListener() {
+//               @Override
+//               public void onClick(View v) {
+//
+//                   String cName, cPhone, cAddress, cPrice;
+//                   cName = String.valueOf(name.getText());
+//                   cPhone = String.valueOf(phone.getText());
+//                   cAddress = String.valueOf(address.getText());
+//                   cPrice = String.valueOf(price.getText());
+//
+//                   if(!cName.equals("")&&!cPhone.equals("")&&!cAddress.equals("")&&!cPrice.equals(""))
+//                   {
+//                       JSONObject checkoutJSON = new JSONObject();
+//                       try {
+//                           checkoutJSON.put("Name", cName);
+//                           checkoutJSON.put("Phone", cPhone);
+//                           checkoutJSON.put("Address", cAddress);
+//                           checkoutJSON.put("Total Cost", cPrice);
+//                       } catch (JSONException e) {
+//                           e.printStackTrace();
+//                       }
+//
+//                       JSONArray itemsArray = new JSONArray();
+//                       for(int i=0;i<cartitems.size();i++){
+//                           JSONObject tempJSON = new JSONObject();
+//                           CartItemsClass cItem = cartitems.get(i);
+//                           try {
+//                               tempJSON.put("PID", cItem.getProductId());
+//                               tempJSON.put("Name", cItem.getcartItemname());
+//                               tempJSON.put("Price", cItem.getCartitemprice());
+//                               tempJSON.put("Quantity", cItem.getQuantity());
+//                               tempJSON.put("Net Price", Double.parseDouble(cItem.getCartitemprice())*cItem.getQuantity());
+//
+//                               itemsArray.put(i, tempJSON);
+//                           }catch (Exception e){
+//                               e.printStackTrace();
+//                           }
+//                       }
+//                       new AddOrder().execute(checkoutJSON.toString(), itemsArray.toString());
+//                   }
+//
+//                   else if(cName.equals("")){
+//                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your name",Toast.LENGTH_SHORT).show();
+//                   }
+//
+//                   else if(cPhone.equals("")){
+//                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your contact number",Toast.LENGTH_SHORT).show();
+//                   }
+//
+//                   else if(cAddress.equals("")){
+//                       Toast.makeText(getActivity().getApplicationContext(),"Please enter shipping address",Toast.LENGTH_SHORT).show();
+//                   }
+//               }
+//           });
+//       }
+
        private void refreshItems() {
 
             new Handler().post(new Runnable() {
@@ -2468,6 +2556,7 @@ public class Master extends ActionBarActivity {
         protected void onPreExecute(){
 
             super.onPreExecute();
+            ProgressDialog p = new ProgressDialog(Master.this);
             p.setTitle("Loading areas");
             p.setCancelable(false);
             p.show();

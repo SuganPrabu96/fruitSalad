@@ -9,10 +9,14 @@ public class CategoryCardClass {
 
     private int categimg;
 
-    public CategoryCardClass(String categtitle, int categimg) {
+
+
+
+    public CategoryCardClass(String categtitle, int categim) {
 
         this.categtitle = categtitle;
         this.categimg = categimg;
+
     }
 
     //   public String getItemcateg(){ return itemcateg;}
@@ -23,6 +27,7 @@ public class CategoryCardClass {
     public int getCategimg() {
         return categimg;
     }
+
 
 }
 

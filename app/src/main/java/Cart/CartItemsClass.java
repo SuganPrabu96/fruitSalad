@@ -8,17 +8,15 @@ public class CartItemsClass {
 
     public String cartitemname;
     public String cartitemprice;
-    public int itemquantity;
     private int productId;
     private int q;
-    private float quantity;
+    public float quantity;
     private String unit;
     private Character changeable;
 
-    public CartItemsClass(String itemtitle, int cartquantity,String cartitemprice, int productId, int q, float quantity, String unit, Character changeable) {
+    public CartItemsClass(String itemtitle,String cartitemprice, int productId, int q, float quantity, String unit, Character changeable) {
 
         this.cartitemname = itemtitle;
-        this.itemquantity = cartquantity;
         this.cartitemprice = cartitemprice;
         this.productId = productId;
         this.q = q;
@@ -32,14 +30,12 @@ public class CartItemsClass {
     public String getcartItemname() {
         return cartitemname;
     }
-    public int getQuantity(){return itemquantity;
-    }
     public String getCartitemprice() {  return  cartitemprice; }
     public int getProductId() { return productId; }
     public int getQ() { return q; }
     public String getUnit() { return unit; }
     public Character getChangeable() { return changeable; }
-    public float getQty() { return quantity; }
+    public float getQuantity() { return quantity; }
 }
 
 

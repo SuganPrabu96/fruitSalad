@@ -21,7 +21,7 @@ import app.TheDreamStop.R;
 public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHolder> {
 
 
-    private ArrayList<CartItemsClass> listitems;
+    public static ArrayList<CartItemsClass> listitems;
     private Context context;
     private ImageButton removeFromCart;
     private ImageButton editCartItem;
@@ -45,8 +45,8 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
         final CartItemsClass item = listitems.get(position);
 
         viewHolder.itemname.setText(item.getcartItemname());
-        viewHolder.itemCost.setText(String.valueOf(item.getQty()*Float.parseFloat(item.getCartitemprice())));
-        viewHolder.itemQuantity.setText(String.valueOf(item.getQty()*item.getQ()));
+        viewHolder.itemCost.setText(String.valueOf(item.getQuantity()*Float.parseFloat(item.getCartitemprice())));
+        viewHolder.itemQuantity.setText(String.valueOf(item.getQuantity()*item.getQ()));
         viewHolder.itemUnit.setText(String.valueOf(item.getUnit()));
 //        editCartItem.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -55,20 +55,34 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 //            }
 //        });
 
+        /*Master.updateCartItemCostHandler = new Handler(){
+            public void handleMessage(Message msg){
+                if(msg.arg1 == 1){
+                    Bundle b = msg.getData();
+
+                    viewHolder.itemCost.setText(String.valueOf(Float.parseFloat(viewHolder.itemCost.getText().toString())+(b.getFloat("qty")*b.getFloat("price"))));
+                    viewHolder.itemQuantity.setText(String.valueOf(Float.parseFloat(viewHolder.itemQuantity.getText().toString())+(b.getFloat("qty")*b.getFloat("q"))));
+                }
+            }
+        };*/
+
+
         removeFromCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Master.removefrom_cart(position);
                 remove(position, Master.cAdapter);
-
+                Master.totalCost -= Double.parseDouble(String.valueOf(viewHolder.itemCost.getText()));
             }
         });
 
     }
 
     public void add(CartItemsClass item){
+
         listitems.add(item);
         notifyItemInserted(listitems.indexOf(item));
+
         Master.totalCost += item.getQuantity()*(Double.parseDouble(item.getCartitemprice()));
         Message msg = new Message();
         msg.arg1 = 1;
@@ -76,7 +90,6 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
     }
 
     public void remove(int position,CartRecyclerViewAdapter c){
-        Master.totalCost -= listitems.get(position).getQuantity()*(Double.parseDouble(listitems.get(position).getCartitemprice()));
         listitems.remove(position);
         Log.i("CartItems Length", String.valueOf(Master.cartitems.size()));
         Master.cAdapter = null;

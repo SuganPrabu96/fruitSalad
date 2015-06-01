@@ -138,6 +138,7 @@ public class Master extends ActionBarActivity {
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
     public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler, latLongHandler, updateCartCostHandler;
+    public static Handler updateCartItemCostHandler;
     public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
@@ -150,6 +151,8 @@ public class Master extends ActionBarActivity {
     private int curFrag;
     public static double totalCost = 0.0;
     private static Dialog checkoutDialog;
+    private static boolean addExistingItem = false;
+    private static int cartExistingItemPos = -1;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -190,6 +193,7 @@ public class Master extends ActionBarActivity {
         areasHandler = new Handler();
         latLongHandler = new Handler();
         updateCartCostHandler = new Handler();
+        updateCartItemCostHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -2392,11 +2396,44 @@ public class Master extends ActionBarActivity {
 
     }
 
-    public static void addtocart_fn(String name, int qty, String price, int productID, int q, float quantity, String unit, Character changeable){
+    public static void addtocart_fn(String name, float qty, String price, int productID, int q, String unit, Character changeable){
 
         Log.i("addtocart_fn_PID", String.valueOf(productID));
-        Master.cAdapter.add(new CartItemsClass(name,qty,price,productID,q,quantity,unit,changeable));
 
+        for(int i = 0;i<CartRecyclerViewAdapter.listitems.size();i++){
+            if(CartRecyclerViewAdapter.listitems.get(i).getProductId()==productID) {
+                addExistingItem = true;
+                cartExistingItemPos = i;
+                break;
+            }
+            else {
+                addExistingItem = false;
+                cartExistingItemPos = -1;
+            }
+        }
+
+        if(addExistingItem&&!(CartRecyclerViewAdapter.listitems.isEmpty())) {
+            //CartRecyclerViewAdapter.listitems.get(cartExistingItemPos).cartitemprice += String.valueOf(qty*(Double.parseDouble(price)));
+            CartRecyclerViewAdapter.listitems.get(cartExistingItemPos).quantity += qty;
+
+            cAdapter.notifyItemChanged(cartExistingItemPos);
+
+            /*Message msg1 = new Message();
+            msg1.arg1 = 1;
+            Bundle b = new Bundle();
+            b.putFloat("qty",qty);
+            b.putFloat("q",q);
+            b.putFloat("price", Float.parseFloat(price));
+            msg1.setData(b);
+            Master.updateCartItemCostHandler.sendMessage(msg1);*/
+
+            Master.totalCost += qty*(Double.parseDouble(price));
+            Message msg = new Message();
+            msg.arg1 = 1;
+            Master.updateCartCostHandler.sendMessage(msg);
+        }
+        else
+            Master.cAdapter.add(new CartItemsClass(name,price,productID,q,qty,unit,changeable));
         Log.i("CartItems Length", String.valueOf(cartitems.size()));
         Log.i("Cart Recycler View Size", String.valueOf(cAdapter.getItemCount()));
     }
@@ -2435,7 +2472,7 @@ public class Master extends ActionBarActivity {
               //  addtocart_fn(cartitem);
               //  Log.i("Value of Qty",String.valueOf(np.getValue()));
                 //Log.d("Value of Qty","check");
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid(),item.getQ(),item.getQty(),item.getUnit(),item.getChangeable());
+                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid(),item.getQ(),item.getUnit(),item.getChangeable());
                 Log.i("Value of Qty",String.valueOf(np.getValue()));
 
                 addtocartDialog.dismiss();

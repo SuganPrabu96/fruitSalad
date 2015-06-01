@@ -15,7 +15,6 @@ public class CartCardViewHolder extends RecyclerView.ViewHolder{
     public TextView itemname;
     private Context context;
 
-
     public CartCardViewHolder(Context context, View itemView) {
         super(itemView);
         this.context = context;

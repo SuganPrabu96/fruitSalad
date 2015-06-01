@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -136,7 +137,7 @@ public class Master extends ActionBarActivity {
     public static boolean logoutSuccess = false;
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
-    public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler, latLongHandler;
+    public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler, latLongHandler, updateCartCostHandler;
     public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
@@ -188,6 +189,7 @@ public class Master extends ActionBarActivity {
         orderHistoryMoreHandler = new Handler();
         areasHandler = new Handler();
         latLongHandler = new Handler();
+        updateCartCostHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -593,6 +595,87 @@ public class Master extends ActionBarActivity {
         }
     }
 
+    public static void checkoutDialog(final Context context){
+
+        checkoutDialog.setCancelable(true);
+        checkoutDialog.setContentView(R.layout.checkout_layout);
+        checkoutDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
+        checkoutDialog.setTitle("Confirm your Details");
+        checkoutDialog.show();
+
+
+        final EditText name, phone, address;
+        final TextView price;
+        ImageView proceed;
+
+        name = (EditText) checkoutDialog.findViewById(R.id.checkout_name);
+        phone = (EditText) checkoutDialog.findViewById(R.id.checkout_phone_number);
+        address = (EditText) checkoutDialog.findViewById(R.id.checkout_shippingaddress);
+        price = (TextView) checkoutDialog.findViewById(R.id.checkout_totalcost);
+        proceed = (ImageView) checkoutDialog.findViewById(R.id.proceedtopayment_btn);
+
+        name.setText(LoginActivity.prefs.getString("Name",""));
+        phone.setText(LoginActivity.prefs.getString("Phone",""));
+        address.setText(LoginActivity.prefs.getString("Address",""));
+        price.setText(String.valueOf(totalCost));
+
+        proceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String cName, cPhone, cAddress, cPrice;
+                cName = String.valueOf(name.getText());
+                cPhone = String.valueOf(phone.getText());
+                cAddress = String.valueOf(address.getText());
+                cPrice = String.valueOf(price.getText());
+
+                if(!cName.equals("")&&!cPhone.equals("")&&!cAddress.equals("")&&!cPrice.equals(""))
+                {
+                    JSONObject checkoutJSON = new JSONObject();
+                    try {
+                        checkoutJSON.put("Name", cName);
+                        checkoutJSON.put("Phone", cPhone);
+                        checkoutJSON.put("Address", cAddress);
+                        checkoutJSON.put("Total Cost", cPrice);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    JSONArray itemsArray = new JSONArray();
+                    for(int i=0;i<cartitems.size();i++){
+                        JSONObject tempJSON = new JSONObject();
+                        CartItemsClass cItem = cartitems.get(i);
+                        try {
+                            tempJSON.put("PID", cItem.getProductId());
+                            tempJSON.put("Name", cItem.getcartItemname());
+                            tempJSON.put("Price", cItem.getCartitemprice());
+                            tempJSON.put("Quantity", cItem.getQuantity());
+                            tempJSON.put("Net Price", Double.parseDouble(cItem.getCartitemprice())*cItem.getQuantity());
+
+                            itemsArray.put(i, tempJSON);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                    new AddOrder().execute(checkoutJSON.toString(), itemsArray.toString());
+                }
+
+                else if(cName.equals("")){
+                    Toast.makeText(context,"Please enter your name",Toast.LENGTH_SHORT).show();
+                }
+
+                else if(cPhone.equals("")){
+                    Toast.makeText(context,"Please enter your contact number",Toast.LENGTH_SHORT).show();
+                }
+
+                else if(cAddress.equals("")){
+                    Toast.makeText(context,"Please enter shipping address",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -923,6 +1006,8 @@ public class Master extends ActionBarActivity {
     public static class GeneralSettingsFragment extends Fragment {
 
         CheckBox Notifications, downloadImagesOverWifi;
+        private ImageView checkoutButton;
+        private TextView cartTotal;
 
         public GeneralSettingsFragment() {
         }
@@ -930,10 +1015,14 @@ public class Master extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_general_settings, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_general_settings, container, false);
 
             Notifications = (CheckBox) rootView.findViewById(R.id.checkboxNotifications);
             downloadImagesOverWifi = (CheckBox) rootView.findViewById(R.id.checkboxDownloadImagesOverWifi);
+            checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
+            cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
+
+            cartTotal.setText(String.valueOf(totalCost));
 
             if (LoginActivity.prefs.getString("Notification", "").equals("On")) {
                 Notifications.setChecked(true);
@@ -981,6 +1070,21 @@ public class Master extends ActionBarActivity {
             cartItemRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
             cartItemRecyclerView.setAdapter(cAdapter);
+
+            checkoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkoutDialog(rootView.getContext());
+                }
+            });
+
+            updateCartCostHandler = new Handler(){
+                public void handleMessage(Message msg){
+                    if(msg.arg1==1){
+                        cartTotal.setText(String.valueOf(totalCost));
+                    }
+                }
+            };
 
             return rootView;
         }
@@ -1109,10 +1213,18 @@ public class Master extends ActionBarActivity {
         public AboutFragment() {
         }
 
+        private ImageView checkoutButton;
+        private TextView cartTotal;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+
+            checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
+            cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
+
+            cartTotal.setText(String.valueOf(totalCost));
 
             cartItemRecyclerView = (RecyclerView) rootView.findViewById(R.id.cart_items_recyclerview);
             cartItemRecyclerView.setHasFixedSize(false);
@@ -1120,6 +1232,21 @@ public class Master extends ActionBarActivity {
             cartItemRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
             cartItemRecyclerView.setAdapter(cAdapter);
+
+            checkoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkoutDialog(rootView.getContext());
+                }
+            });
+
+            updateCartCostHandler = new Handler(){
+                public void handleMessage(Message msg){
+                    if(msg.arg1==1){
+                        cartTotal.setText(String.valueOf(totalCost));
+                    }
+                }
+            };
 
             return rootView;
         }
@@ -1178,11 +1305,18 @@ public class Master extends ActionBarActivity {
 
         public static OrderHistoryRecyclerViewAdapter ordersAdapter;
         RecyclerView ordersRecylerView;
+        private ImageView checkoutButton;
+        private TextView cartTotal;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_order_history, container, false);
+
+            checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
+            cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
+
+            cartTotal.setText(String.valueOf(totalCost));
 
             Master.orders = new ArrayList<>();
 
@@ -1210,6 +1344,22 @@ public class Master extends ActionBarActivity {
                     }
                 }
             };
+
+            checkoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkoutDialog(rootView.getContext());
+                }
+            });
+
+            updateCartCostHandler = new Handler(){
+                public void handleMessage(Message msg){
+                    if(msg.arg1==1){
+                        cartTotal.setText(String.valueOf(totalCost));
+                    }
+                }
+            };
+
             return rootView;
         }
     }
@@ -1227,7 +1377,8 @@ public class Master extends ActionBarActivity {
         private boolean confirmChangesAuth;
         private Handler confirmChangesMsgHandler;
         private LinearLayout myAccountLayout;
-
+        private ImageView checkoutButton;
+        private TextView cartTotal;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -1254,6 +1405,10 @@ public class Master extends ActionBarActivity {
             editNewPassword = (EditText) rootView.findViewById(R.id.accountEditTextPassword);
             password = (TextView) rootView.findViewById(R.id.accountTextViewPassword);
 
+            checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
+
+            cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
+
             editNewName.setVisibility(View.INVISIBLE);
             name.setVisibility(View.VISIBLE);
 
@@ -1271,6 +1426,8 @@ public class Master extends ActionBarActivity {
 
             submit.setVisibility(View.INVISIBLE);
             cancel.setVisibility(View.INVISIBLE);
+
+            cartTotal.setText(String.valueOf(totalCost));
 
             name.setText(LoginActivity.prefs.getString("Name", ""));
             email.setText(LoginActivity.prefs.getString("Email", ""));
@@ -1317,6 +1474,14 @@ public class Master extends ActionBarActivity {
 
                 }
             });
+
+            updateCartCostHandler = new Handler(){
+                public void handleMessage(Message msg){
+                    if(msg.arg1==1){
+                        cartTotal.setText(String.valueOf(totalCost));
+                    }
+                }
+            };
 
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1827,6 +1992,13 @@ public class Master extends ActionBarActivity {
 
             cartItemRecyclerView.setAdapter(cAdapter);
 
+            checkoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkoutDialog(rootView.getContext());
+                }
+            });
+
             return rootView;
         }
 
@@ -1874,6 +2046,7 @@ public class Master extends ActionBarActivity {
         private int[] categoryImageURL = {R.drawable.personalcare, R.drawable.brandedfoods, R.drawable.groceries, R.drawable.beverages, R.drawable.bread_dairy_eggs, R.drawable.imported_and_gourmet, R.drawable.household};  //TODO change this
         private static FragmentManager fragManag;
         private ImageView checkoutButton;
+        private TextView cartTotal;
 
         public ProductsFragment() {
         }
@@ -1886,6 +2059,9 @@ public class Master extends ActionBarActivity {
             fragManag = getFragmentManager();
 
             checkoutButton = (ImageView) rootView1.findViewById(R.id.checkoutbutton);
+            cartTotal = (TextView) rootView1.findViewById(R.id.cart_totalcost);
+
+            cartTotal.setText(String.valueOf(totalCost));
 
             /*if (savedInstanceState == null) {
                 fragManag
@@ -2117,93 +2293,21 @@ public class Master extends ActionBarActivity {
             checkoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    checkoutDialog();
+                    checkoutDialog(rootView1.getContext());
                 }
             });
+
+            updateCartCostHandler = new Handler(){
+                public void handleMessage(Message msg){
+                    if(msg.arg1==1){
+                        cartTotal.setText(String.valueOf(totalCost));
+                    }
+                }
+            };
 
             return rootView1;
 
         }
-
-       public void checkoutDialog(){
-
-           checkoutDialog.setCancelable(true);
-           checkoutDialog.setContentView(R.layout.checkout_layout);
-           checkoutDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
-           checkoutDialog.setTitle("Confirm your Details");
-           checkoutDialog.show();
-
-
-           final EditText name, phone, address;
-           final TextView price;
-           ImageView proceed;
-
-           name = (EditText) checkoutDialog.findViewById(R.id.checkout_name);
-           phone = (EditText) checkoutDialog.findViewById(R.id.checkout_phone_number);
-           address = (EditText) checkoutDialog.findViewById(R.id.checkout_shippingaddress);
-           price = (TextView) checkoutDialog.findViewById(R.id.checkout_totalcost);
-           proceed = (ImageView) checkoutDialog.findViewById(R.id.proceedtopayment_btn);
-
-           name.setText(LoginActivity.prefs.getString("Name",""));
-           phone.setText(LoginActivity.prefs.getString("Phone",""));
-           address.setText(LoginActivity.prefs.getString("Address",""));
-           price.setText(String.valueOf(totalCost));
-
-           proceed.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View v) {
-
-                   String cName, cPhone, cAddress, cPrice;
-                   cName = String.valueOf(name.getText());
-                   cPhone = String.valueOf(phone.getText());
-                   cAddress = String.valueOf(address.getText());
-                   cPrice = String.valueOf(price.getText());
-
-                   if(!cName.equals("")&&!cPhone.equals("")&&!cAddress.equals("")&&!cPrice.equals(""))
-                   {
-                       JSONObject checkoutJSON = new JSONObject();
-                       try {
-                           checkoutJSON.put("Name", cName);
-                           checkoutJSON.put("Phone", cPhone);
-                           checkoutJSON.put("Address", cAddress);
-                           checkoutJSON.put("Total Cost", cPrice);
-                       } catch (JSONException e) {
-                           e.printStackTrace();
-                       }
-
-                       JSONArray itemsArray = new JSONArray();
-                       for(int i=0;i<cartitems.size();i++){
-                           JSONObject tempJSON = new JSONObject();
-                           CartItemsClass cItem = cartitems.get(i);
-                           try {
-                               tempJSON.put("PID", cItem.getProductId());
-                               tempJSON.put("Name", cItem.getcartItemname());
-                               tempJSON.put("Price", cItem.getCartitemprice());
-                               tempJSON.put("Quantity", cItem.getQuantity());
-                               tempJSON.put("Net Price", Double.parseDouble(cItem.getCartitemprice())*cItem.getQuantity());
-
-                               itemsArray.put(i, tempJSON);
-                           }catch (Exception e){
-                               e.printStackTrace();
-                           }
-                       }
-                       new AddOrder().execute(checkoutJSON.toString(), itemsArray.toString());
-                   }
-
-                   else if(cName.equals("")){
-                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your name",Toast.LENGTH_SHORT).show();
-                   }
-
-                   else if(cPhone.equals("")){
-                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your contact number",Toast.LENGTH_SHORT).show();
-                   }
-
-                   else if(cAddress.equals("")){
-                       Toast.makeText(getActivity().getApplicationContext(),"Please enter shipping address",Toast.LENGTH_SHORT).show();
-                   }
-               }
-           });
-       }
 
        private void refreshItems() {
 

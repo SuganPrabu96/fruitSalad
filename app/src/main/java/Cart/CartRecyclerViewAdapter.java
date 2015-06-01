@@ -1,6 +1,7 @@
 package Cart;
 
 import android.content.Context;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,6 +67,9 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
         listitems.add(item);
         notifyItemInserted(listitems.indexOf(item));
         Master.totalCost += item.getQuantity()*(Double.parseDouble(item.getCartitemprice()));
+        Message msg = new Message();
+        msg.arg1 = 1;
+        Master.updateCartCostHandler.sendMessage(msg);
     }
 
     public void remove(int position,CartRecyclerViewAdapter c){
@@ -75,9 +79,12 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
         Master.cAdapter = null;
         Master.cAdapter = new CartRecyclerViewAdapter(listitems, context);
         Master.cartItemRecyclerView.setAdapter(Master.cAdapter);
+        Message msg = new Message();
+        msg.arg1 = 1;
+        Master.updateCartCostHandler.sendMessage(msg);
 //       c.notifyDataSetChanged();
 //        notifyItemRemoved(position);
-//        notifyItemRangeChanged(position, listitems.size()-position+1);//TODO have to modify this line
+//        notifyItemRangeChanged(position, listitems.size()-position+1);
 
     }
 

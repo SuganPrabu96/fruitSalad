@@ -2392,10 +2392,10 @@ public class Master extends ActionBarActivity {
 
     }
 
-    public static void addtocart_fn(String name, int qty, String price, int productID){
+    public static void addtocart_fn(String name, int qty, String price, int productID, int q, float quantity, String unit, Character changeable){
 
         Log.i("addtocart_fn_PID", String.valueOf(productID));
-        Master.cAdapter.add(new CartItemsClass(name,qty,price,productID));
+        Master.cAdapter.add(new CartItemsClass(name,qty,price,productID,q,quantity,unit,changeable));
 
         Log.i("CartItems Length", String.valueOf(cartitems.size()));
         Log.i("Cart Recycler View Size", String.valueOf(cAdapter.getItemCount()));
@@ -2435,7 +2435,7 @@ public class Master extends ActionBarActivity {
               //  addtocart_fn(cartitem);
               //  Log.i("Value of Qty",String.valueOf(np.getValue()));
                 //Log.d("Value of Qty","check");
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid());
+                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid(),item.getQ(),item.getQty(),item.getUnit(),item.getChangeable());
                 Log.i("Value of Qty",String.valueOf(np.getValue()));
 
                 addtocartDialog.dismiss();

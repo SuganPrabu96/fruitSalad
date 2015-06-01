@@ -12,12 +12,14 @@ import app.TheDreamStop.R;
  */
 public class CartCardViewHolder extends RecyclerView.ViewHolder{
 
-    public TextView itemname;
+    public TextView itemname, itemCost, itemQuantity, itemUnit;
     private Context context;
 
     public CartCardViewHolder(Context context, View itemView) {
         super(itemView);
         this.context = context;
         itemname = (TextView) itemView.findViewById(R.id.cart_itemname);
-
+        itemCost = (TextView) itemView.findViewById(R.id.cart_item_totprice);
+        itemQuantity = (TextView) itemView.findViewById(R.id.cart_item_quantity);
+        itemUnit = (TextView) itemView.findViewById(R.id.cart_item_unit);
     }}

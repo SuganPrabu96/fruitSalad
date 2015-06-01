@@ -129,7 +129,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
             @Override
             public void onClick(View v) {
 
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid(),item.getQ(),item.getQty(),item.getUnit(),item.getChangeable());
+                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid(),item.getQ(),item.getUnit(),item.getChangeable());
                 Log.e("Value of Qty", String.valueOf(np.getValue()));
 
                 addtocartD.dismiss();

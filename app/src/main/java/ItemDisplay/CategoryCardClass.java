@@ -12,7 +12,7 @@ public class CategoryCardClass {
 
 
 
-    public CategoryCardClass(String categtitle, int categim) {
+    public CategoryCardClass(String categtitle, int categimg) {
 
         this.categtitle = categtitle;
         this.categimg = categimg;

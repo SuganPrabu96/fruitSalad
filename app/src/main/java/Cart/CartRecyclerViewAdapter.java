@@ -55,34 +55,21 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 //            }
 //        });
 
-        /*Master.updateCartItemCostHandler = new Handler(){
-            public void handleMessage(Message msg){
-                if(msg.arg1 == 1){
-                    Bundle b = msg.getData();
-
-                    viewHolder.itemCost.setText(String.valueOf(Float.parseFloat(viewHolder.itemCost.getText().toString())+(b.getFloat("qty")*b.getFloat("price"))));
-                    viewHolder.itemQuantity.setText(String.valueOf(Float.parseFloat(viewHolder.itemQuantity.getText().toString())+(b.getFloat("qty")*b.getFloat("q"))));
-                }
-            }
-        };*/
-
-
         removeFromCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Master.removefrom_cart(position);
                 remove(position, Master.cAdapter);
                 Master.totalCost -= Double.parseDouble(String.valueOf(viewHolder.itemCost.getText()));
+
             }
         });
 
     }
 
     public void add(CartItemsClass item){
-
         listitems.add(item);
         notifyItemInserted(listitems.indexOf(item));
-
         Master.totalCost += item.getQuantity()*(Double.parseDouble(item.getCartitemprice()));
         Message msg = new Message();
         msg.arg1 = 1;

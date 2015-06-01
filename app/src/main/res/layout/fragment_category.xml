@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:text="HOME"
+
                 android:fontFamily="sans-serif-black"
                 android:id="@+id/category_cat"/>
 

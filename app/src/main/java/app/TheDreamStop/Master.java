@@ -34,6 +34,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -139,6 +140,7 @@ public class Master extends ActionBarActivity {
     public static RecyclerView cartItemRecyclerView;
     public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler, latLongHandler, updateCartCostHandler;
     public static Handler updateCartItemCostHandler;
+
     public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
@@ -150,9 +152,11 @@ public class Master extends ActionBarActivity {
     private static int fragPos = -1;
     private int curFrag;
     public static double totalCost = 0.0;
+    private DisplayMetrics displayMetrics;
     private static Dialog checkoutDialog;
     private static boolean addExistingItem = false;
     private static int cartExistingItemPos = -1;
+    private static double width, height;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -161,6 +165,10 @@ public class Master extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         addtocartDialog = new Dialog(Master.this);
         modeOfLogin = getIntent().getExtras().getString("loginMethod").toString();
+
+        displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        width = displayMetrics.widthPixels*0.9;
+        height = displayMetrics.heightPixels*0.75;
 
         setContentView(R.layout.nav_bar);
         ActionBar bar = getSupportActionBar();
@@ -606,7 +614,7 @@ public class Master extends ActionBarActivity {
 
         checkoutDialog.setCancelable(true);
         checkoutDialog.setContentView(R.layout.checkout_layout);
-        checkoutDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
+        checkoutDialog.getWindow().setLayout((int)width, (int)height);
         checkoutDialog.setTitle("Confirm your Details");
         checkoutDialog.show();
 
@@ -668,16 +676,18 @@ public class Master extends ActionBarActivity {
                 }
 
                 else if(cName.equals("")){
-                    Toast.makeText(context,"Please enter your name",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter your Name",Toast.LENGTH_SHORT).show();
                 }
 
                 else if(cPhone.equals("")){
-                    Toast.makeText(context,"Please enter your contact number",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter your Contact Number",Toast.LENGTH_SHORT).show();
                 }
 
                 else if(cAddress.equals("")){
-                    Toast.makeText(context,"Please enter shipping address",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Please enter Shipping Address",Toast.LENGTH_SHORT).show();
                 }
+
+                checkoutDialog.dismiss();
             }
         });
     }
@@ -1386,6 +1396,7 @@ public class Master extends ActionBarActivity {
         private LinearLayout myAccountLayout;
         private ImageView checkoutButton;
         private TextView cartTotal;
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -2317,6 +2328,86 @@ public class Master extends ActionBarActivity {
 
         }
 
+//       public void checkoutDialog(){
+//
+//           checkoutDialog.setCancelable(true);
+//           checkoutDialog.setContentView(R.layout.checkout_layout);
+//           checkoutDialog.getWindow().setLayout(((int) width), (int)height);
+//           checkoutDialog.setTitle("Confirm your Details");
+//           checkoutDialog.show();
+//
+//
+//           final EditText name, phone, address;
+//           final TextView price;
+//           ImageView proceed;
+//
+//           name = (EditText) checkoutDialog.findViewById(R.id.checkout_name);
+//           phone = (EditText) checkoutDialog.findViewById(R.id.checkout_phone_number);
+//           address = (EditText) checkoutDialog.findViewById(R.id.checkout_shippingaddress);
+//           price = (TextView) checkoutDialog.findViewById(R.id.checkout_totalcost);
+//           proceed = (ImageView) checkoutDialog.findViewById(R.id.proceedtopayment_btn);
+//
+//           name.setText(LoginActivity.prefs.getString("Name",""));
+//           phone.setText(LoginActivity.prefs.getString("Phone",""));
+//           address.setText(LoginActivity.prefs.getString("Address",""));
+//           price.setText(String.valueOf(totalCost));
+//
+//           proceed.setOnClickListener(new View.OnClickListener() {
+//               @Override
+//               public void onClick(View v) {
+//
+//                   String cName, cPhone, cAddress, cPrice;
+//                   cName = String.valueOf(name.getText());
+//                   cPhone = String.valueOf(phone.getText());
+//                   cAddress = String.valueOf(address.getText());
+//                   cPrice = String.valueOf(price.getText());
+//
+//                   if(!cName.equals("")&&!cPhone.equals("")&&!cAddress.equals("")&&!cPrice.equals(""))
+//                   {
+//                       JSONObject checkoutJSON = new JSONObject();
+//                       try {
+//                           checkoutJSON.put("Name", cName);
+//                           checkoutJSON.put("Phone", cPhone);
+//                           checkoutJSON.put("Address", cAddress);
+//                           checkoutJSON.put("Total Cost", cPrice);
+//                       } catch (JSONException e) {
+//                           e.printStackTrace();
+//                       }
+//
+//                       JSONArray itemsArray = new JSONArray();
+//                       for(int i=0;i<cartitems.size();i++){
+//                           JSONObject tempJSON = new JSONObject();
+//                           CartItemsClass cItem = cartitems.get(i);
+//                           try {
+//                               tempJSON.put("PID", cItem.getProductId());
+//                               tempJSON.put("Name", cItem.getcartItemname());
+//                               tempJSON.put("Price", cItem.getCartitemprice());
+//                               tempJSON.put("Quantity", cItem.getQuantity());
+//                               tempJSON.put("Net Price", Double.parseDouble(cItem.getCartitemprice())*cItem.getQuantity());
+//
+//                               itemsArray.put(i, tempJSON);
+//                           }catch (Exception e){
+//                               e.printStackTrace();
+//                           }
+//                       }
+//                       new AddOrder().execute(checkoutJSON.toString(), itemsArray.toString());
+//                   }
+//
+//                   else if(cName.equals("")){
+//                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your name",Toast.LENGTH_SHORT).show();
+//                   }
+//
+//                   else if(cPhone.equals("")){
+//                       Toast.makeText(getActivity().getApplicationContext(),"Please enter your contact number",Toast.LENGTH_SHORT).show();
+//                   }
+//
+//                   else if(cAddress.equals("")){
+//                       Toast.makeText(getActivity().getApplicationContext(),"Please enter shipping address",Toast.LENGTH_SHORT).show();
+//                   }
+//               }
+//           });
+//       }
+
        private void refreshItems() {
 
             new Handler().post(new Runnable() {
@@ -2401,28 +2492,28 @@ public class Master extends ActionBarActivity {
     }
 
     public static void addtocart_fn(String name, float qty, String price, int productID, int q, String unit, Character changeable){
-
         Log.i("addtocart_fn_PID", String.valueOf(productID));
+     //   Master.cAdapter.add(new CartItemsClass(name,qty,price,productID,q,quantity,unit,changeable));
 
         for(int i = 0;i<CartRecyclerViewAdapter.listitems.size();i++){
-            if(CartRecyclerViewAdapter.listitems.get(i).getProductId()==productID) {
-                addExistingItem = true;
-                cartExistingItemPos = i;
-                break;
-            }
-            else {
-                addExistingItem = false;
-                cartExistingItemPos = -1;
-            }
-        }
+                        if(CartRecyclerViewAdapter.listitems.get(i).getProductId()==productID) {
+                                addExistingItem = true;
+                                cartExistingItemPos = i;
+                                break;
+                            }
+                        else {
+                                addExistingItem = false;
+                                cartExistingItemPos = -1;
+                            }
+                    }
 
-        if(addExistingItem&&!(CartRecyclerViewAdapter.listitems.isEmpty())) {
-            //CartRecyclerViewAdapter.listitems.get(cartExistingItemPos).cartitemprice += String.valueOf(qty*(Double.parseDouble(price)));
-            CartRecyclerViewAdapter.listitems.get(cartExistingItemPos).quantity += qty;
+                        if(addExistingItem&&!(CartRecyclerViewAdapter.listitems.isEmpty())) {
+                        //CartRecyclerViewAdapter.listitems.get(cartExistingItemPos).cartitemprice += String.valueOf(qty*(Double.parseDouble(price)));
+                                CartRecyclerViewAdapter.listitems.get(cartExistingItemPos).quantity += qty;
 
-            cAdapter.notifyItemChanged(cartExistingItemPos);
+                                cAdapter.notifyItemChanged(cartExistingItemPos);
 
-            /*Message msg1 = new Message();
+                                /*Message msg1 = new Message();
             msg1.arg1 = 1;
             Bundle b = new Bundle();
             b.putFloat("qty",qty);
@@ -2431,13 +2522,14 @@ public class Master extends ActionBarActivity {
             msg1.setData(b);
             Master.updateCartItemCostHandler.sendMessage(msg1);*/
 
-            Master.totalCost += qty*(Double.parseDouble(price));
-            Message msg = new Message();
-            msg.arg1 = 1;
-            Master.updateCartCostHandler.sendMessage(msg);
-        }
-        else
-            Master.cAdapter.add(new CartItemsClass(name,price,productID,q,qty,unit,changeable));
+                                                Master.totalCost += qty*(Double.parseDouble(price));
+                        Message msg = new Message();
+                        msg.arg1 = 1;
+                        Master.updateCartCostHandler.sendMessage(msg);
+                    }
+                else
+                    Master.cAdapter.add(new CartItemsClass(name,price,productID,q,qty,unit,changeable));
+
         Log.i("CartItems Length", String.valueOf(cartitems.size()));
         Log.i("Cart Recycler View Size", String.valueOf(cAdapter.getItemCount()));
     }
@@ -2453,17 +2545,41 @@ public class Master extends ActionBarActivity {
     {
         final ItemDetailsClass item = item1;
 
+
         Log.d("item1 PID", String.valueOf(item1.getProductid()));
 
         addtocartDialog.setTitle("Select Quantity");
         addtocartDialog.setContentView(R.layout.add_dialog);
         addtocartDialog.show();
-        final CartItemsClass cartitem;
+        final String[] floatitems={"0.5","1","1.5","2","2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10"};
+        final String[] intitems={"1","2","3","4","5","6","7","8","9","10"};
         final NumberPicker np = (NumberPicker) addtocartDialog.findViewById(R.id.numberPicker1);
         np.setMaxValue(10);
-        np.setMinValue(1);
+              np.setMinValue(1);
         np.setWrapSelectorWheel(false);
+        if(item.getChangeable()=='n'){
+            np.setDisplayedValues(intitems);
+            Log.i("value of cb ","cb is n");}
+        else if(item.getChangeable()=='y')
+        {
+            np.setDisplayedValues(floatitems);
+            Log.i("value of cb","cb is y");
 
+        }
+
+     //   final int i = np.getValue()-1;
+        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.i("qty",intitems[np.getValue()-1]);
+                Log.i("value check",String.valueOf(np.getValue()));
+            }
+        });
+
+
+    //    Log.i("qty",num[i]);
+
+   //     np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         Button btn1 = (Button) addtocartDialog.findViewById(R.id.btn_to_add);
         Button btn2 = (Button) addtocartDialog.findViewById(R.id.btn_to_cancel);
@@ -2474,10 +2590,17 @@ public class Master extends ActionBarActivity {
             public void onClick(View v) {
           //      Master.addtocart_fn(item);
               //  addtocart_fn(cartitem);
-              //  Log.i("Value of Qty",String.valueOf(np.getValue()));
                 //Log.d("Value of Qty","check");
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid(),item.getQ(),item.getUnit(),item.getChangeable());
-                Log.i("Value of Qty",String.valueOf(np.getValue()));
+            //    Log.i("qty",num[i]);
+                Log.i("qty inside ",floatitems[np.getValue()-1]);
+                if(item.getChangeable()=='y') {
+                    Master.addtocart_fn(item.getItemtitle(),  Float.parseFloat(floatitems[np.getValue() - 1]), item.getItemprice().toString(), item.getProductid(), item.getQ(), item.getUnit(), item.getChangeable());
+                }
+                else if(item.getChangeable()=='n') {
+                    Master.addtocart_fn(item.getItemtitle(),Float.parseFloat(intitems[np.getValue()-1]) , item.getItemprice().toString(), item.getProductid(), item.getQ() , item.getUnit(), item.getChangeable());
+
+                }
+
 
                 addtocartDialog.dismiss();
             }

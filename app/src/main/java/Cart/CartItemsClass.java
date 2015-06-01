@@ -8,6 +8,7 @@ public class CartItemsClass {
 
     public String cartitemname;
     public String cartitemprice;
+    public int itemquantity;
     private int productId;
     private int q;
     public float quantity;
@@ -15,8 +16,8 @@ public class CartItemsClass {
     private Character changeable;
 
     public CartItemsClass(String itemtitle,String cartitemprice, int productId, int q, float quantity, String unit, Character changeable) {
-
         this.cartitemname = itemtitle;
+
         this.cartitemprice = cartitemprice;
         this.productId = productId;
         this.q = q;

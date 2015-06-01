@@ -12,7 +12,7 @@ public class data {
             new NavDrawerItem("My Account", R.drawable.my_account),
             new NavDrawerItem("General Settings", R.drawable.settings),
             new NavDrawerItem("Order History", R.drawable.orders),
-            new NavDrawerItem("About", R.drawable.ic_launcher),
+            new NavDrawerItem("About", R.drawable.about),
             new NavDrawerItem("Help", R.drawable.help),
             new NavDrawerItem("Logout", R.drawable.logout)
     };

@@ -99,8 +99,8 @@ public class Master extends ActionBarActivity {
     public static ImageView profileIcon;
     public static CircleImageView googleProfileIcon;
     public static String modeOfLogin;
-    public static int numCategories, numSubCategories[], numProducts,
-                  newProductsID[], newProductsCatId[], newProductsSubCatId[];
+    public static int numCategories, numSubCategories[], numProducts;
+    public static ArrayList<Integer> newProductsID, newProductsCatId, newProductsSubCatId;
     public static ArrayList<Double> productsPrice, productsMRP;
     public static ArrayList<String> categoryName, productsName, productDesc, itemUnit;
     public static ArrayList<int[]> subcategoryID;
@@ -175,6 +175,9 @@ public class Master extends ActionBarActivity {
         itemChangeable = new ArrayList<>();
         itemQuantity = new ArrayList<>();
         itemUnit = new ArrayList<>();
+        newProductsCatId = new ArrayList<>();
+        newProductsID = new ArrayList<>();
+        newProductsSubCatId = new ArrayList<>();
 
         loc_area.add("Adyar");
         loc_area.add("Mandaveli");
@@ -2206,6 +2209,7 @@ public class Master extends ActionBarActivity {
 
                         Log.i("numProducts", String.valueOf(numProducts));
                         Log.i("productsNameLength", String.valueOf(productsName.size()));
+                        Log.i("newProducts", String.valueOf(newProductsID.size()));
                         if(numProducts!=0)
                             for(int i=0;i<numProducts;i++)
                                 listOfItems.add(i, new ItemDetailsClass(productsName.get(i), productsPrice.get(i), productsMRP.get(i), pID.get(i), itemQuantity.get(i), itemUnit.get(i), itemChangeable.get(i), item_q.get(i)));
@@ -2581,6 +2585,20 @@ public class Master extends ActionBarActivity {
                     JSONObject newItemsJSON = new JSONObject(newItemsReturnedJSON);
                     if (newItemsJSON.getString("success").equals("true")) {
                         //TODO store the catID, subcatID, prodID here
+                        int count = newItemsJSON.getInt("itemCount");
+                        if(count>0) {
+                            JSONArray tempArray = newItemsJSON.getJSONArray("items");
+                            newProductsSubCatId = new ArrayList<>();
+                            newProductsCatId = new ArrayList<>();
+                            newProductsID = new ArrayList<>();
+
+                            for (int i = 0; i < tempArray.length(); i++) {
+                                JSONObject tempJSON = tempArray.getJSONObject(i);
+                                newProductsCatId.add(i, tempJSON.getInt("catID"));
+                                newProductsSubCatId.add(i, tempJSON.getInt("subCatID"));
+                                newProductsID.add(i, tempJSON.getInt("PID"));
+                            }
+                        }
                     } else {
 
                     }
@@ -2929,8 +2947,8 @@ public class Master extends ActionBarActivity {
                             tempProductsChangeable = tempItemJSON.getString("cb").charAt(0);
 
                         if(newProductsCatId!=null)
-                            for(int j=0;j<newProductsCatId.length;j++){
-                                if(Integer.parseInt(params[0])==newProductsCatId[j]){
+                            for(int j=0;j<newProductsCatId.size();j++){
+                                if(Integer.parseInt(params[0])==newProductsCatId.get(j)){
                                     newItemCatSuccess = true;
                                     break;
                                 }
@@ -2940,8 +2958,8 @@ public class Master extends ActionBarActivity {
 
                         if(newProductsSubCatId!=null)
                             if(newItemCatSuccess){
-                                for(int j=0;j<newProductsSubCatId.length;j++){
-                                    if(Integer.parseInt(params[1])==newProductsSubCatId[j]){
+                                for(int j=0;j<newProductsSubCatId.size();j++){
+                                    if(Integer.parseInt(params[1])==newProductsSubCatId.get(j)){
                                         newItemSubCatSuccess = true;
                                         break;
                                     }
@@ -2951,8 +2969,8 @@ public class Master extends ActionBarActivity {
                             }
 
                             if(newItemSubCatSuccess && newItemCatSuccess){
-                                for(int j=0;j<newProductsID.length;j++){
-                                    if(tempProductsId==newProductsID[j]){
+                                for(int j=0;j<newProductsID.size();j++){
+                                    if(tempProductsId==newProductsID.get(j)){
                                         newItemProductSuccess = true;
                                         break;
                                     }
@@ -2986,10 +3004,6 @@ public class Master extends ActionBarActivity {
                             }
 
                         }
-
-                        Log.i("oldItemsNames",oldItemsNames[0]);
-                        Log.i("productsIdLength", String.valueOf(productsID.size()));
-                        Log.i("oldIDLength", String.valueOf(oldItemsIDs.length));
 
                         for(int i=0;i<newID;i++){
                             productsID.add(i,newItemsIDs[i]);

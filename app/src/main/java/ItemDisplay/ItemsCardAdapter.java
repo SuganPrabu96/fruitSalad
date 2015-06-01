@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,7 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
     private Context context;
     private Button addBtn;
     private FrameLayout itemCardFrame;
+    private ImageView newItemTag;
 
     public ItemsCardAdapter(ArrayList<ItemDetailsClass> items, Context context) {
         this.items = items;
@@ -39,6 +41,7 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
 
         itemCardFrame = (FrameLayout) v.findViewById(R.id.item_card_frame);
         addBtn = (Button) v.findViewById(R.id.buttonAdd);
+        newItemTag = (ImageView) v.findViewById(R.id.new_item_tag);
 
         return vH;
     }
@@ -79,6 +82,10 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
             }
         });
 
+        if(Master.newProductsID.contains(item.getProductid()))
+            newItemTag.setVisibility(View.VISIBLE);
+        else
+            newItemTag.setVisibility(View.INVISIBLE);
     }
 
     @Override

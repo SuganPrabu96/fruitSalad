@@ -46,7 +46,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 
         viewHolder.itemname.setText(item.getcartItemname());
         viewHolder.itemCost.setText(String.valueOf(item.getQuantity()*Float.parseFloat(item.getCartitemprice())));
-        viewHolder.itemQuantity.setText(String.valueOf(item.getQuantity()*item.getQ()));
+        viewHolder.itemQuantity.setText(String.valueOf(item.getQuantity())+" * "+String.valueOf(item.getQ()));
         viewHolder.itemUnit.setText(String.valueOf(item.getUnit()));
 //        editCartItem.setOnClickListener(new View.OnClickListener() {
 //            @Override

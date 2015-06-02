@@ -50,7 +50,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -59,6 +58,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -1022,7 +1022,7 @@ public class Master extends ActionBarActivity {
 
     public static class GeneralSettingsFragment extends Fragment {
 
-        CheckBox Notifications, downloadImagesOverWifi;
+        Switch Notifications, downloadImagesOverWifi;
         private ImageView checkoutButton;
         private TextView cartTotal;
 
@@ -1034,8 +1034,8 @@ public class Master extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_general_settings, container, false);
 
-            Notifications = (CheckBox) rootView.findViewById(R.id.checkboxNotifications);
-            downloadImagesOverWifi = (CheckBox) rootView.findViewById(R.id.checkboxDownloadImagesOverWifi);
+            Notifications = (Switch) rootView.findViewById(R.id.switchNotifications);
+            downloadImagesOverWifi = (Switch) rootView.findViewById(R.id.switchDownloadImagesOverWifi);
             checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
             cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
 
@@ -1045,6 +1045,11 @@ public class Master extends ActionBarActivity {
                 Notifications.setChecked(true);
             } else
                 Notifications.setChecked(false);
+
+            if (LoginActivity.prefs.getString("downloadImagesOverWifi", "").equals("Y")){
+                downloadImagesOverWifi.setChecked(true);
+            } else
+                downloadImagesOverWifi.setChecked(false);
 
             if (Notifications.isChecked())
                 Master.Notifications = true;
@@ -1059,10 +1064,16 @@ public class Master extends ActionBarActivity {
             downloadImagesOverWifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked)
+                    if (isChecked) {
                         Master.downloadImagesOverWifi = true;
-                    else
+                        LoginActivity.prefs.edit().putString("downloadImagesOverWifi", "Y").apply();
+                        LoginActivity.prefs.edit().putString("downloadImagesOverWifi", "Y").commit();
+                    }
+                    else {
                         Master.downloadImagesOverWifi = false;
+                        LoginActivity.prefs.edit().putString("downloadImagesOverWifi", "N").apply();
+                        LoginActivity.prefs.edit().putString("downloadImagesOverWifi", "N").commit();
+                    }
                 }
             });
 

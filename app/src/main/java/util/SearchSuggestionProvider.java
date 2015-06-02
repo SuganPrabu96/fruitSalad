@@ -7,7 +7,7 @@ import android.content.SearchRecentSuggestionsProvider;
  */
 public class SearchSuggestionProvider extends SearchRecentSuggestionsProvider {
 
-    public final static String AUTHORITY = "e_commerce.e_commerce.SearchSuggestionProvider";
+    public final static String AUTHORITY = "app.TheDreamStop.SearchSuggestionProvider";
     public final static int MODE = DATABASE_MODE_QUERIES;
 
     public SearchSuggestionProvider() {

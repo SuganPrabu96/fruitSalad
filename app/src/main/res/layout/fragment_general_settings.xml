@@ -50,13 +50,12 @@
             android:paddingLeft="10dp"
             />
 
-        <CheckBox
+        <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkboxDownloadImagesOverWifi"
+            android:id="@+id/switchDownloadImagesOverWifi"
             android:layout_marginRight="5dp"
-            android:paddingLeft="10dp"
-            />
+            android:paddingLeft="10dp"/>
 
         </LinearLayout>
 
@@ -73,10 +72,10 @@
             android:paddingLeft="10dp"
             android:textSize="20sp"/>
 
-        <CheckBox
+        <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkboxNotifications"
+            android:id="@+id/switchNotifications"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="178dp"
             />

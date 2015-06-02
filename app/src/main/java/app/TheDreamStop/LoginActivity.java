@@ -876,6 +876,10 @@ public class LoginActivity extends FragmentActivity implements
                         prefs.edit().putString("session",session).commit();
                         prefs.edit().putString("ID",sessionId).apply();
                         prefs.edit().putString("ID",sessionId).commit();
+                        prefs.edit().putString("Notification","On").apply();
+                        prefs.edit().putString("Notification","On").commit();
+                        prefs.edit().putString("downloadImagesOverWifi","N").apply();
+                        prefs.edit().putString("downloadImagesOverWifi","Y").apply();
 
                         registerSuccess = true;
                     }

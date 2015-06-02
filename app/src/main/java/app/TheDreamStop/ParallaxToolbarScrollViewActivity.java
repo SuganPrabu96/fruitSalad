@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -54,6 +55,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     private static float width, height;
     private static String itemsURLReturnedJSON;
     private static final String itemsImagesURL = "http://thedreamstop.in/api/prodImage.php";
+    private WifiManager wifiManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
 
         //mImageView = findViewById(R.id.image);
 
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
         width = displayMetrics.widthPixels / 2;
         height = displayMetrics.heightPixels / 4;
@@ -96,7 +99,12 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
 
         //itemDescription.setText(getIntent.getExtras().getString("Description").toString());
 
-        new LoadProductImages().execute(String.valueOf(pID));
+        if(LoginActivity.prefs.getString("downloadImagesOverWifi","").equals("Y")){
+            if(wifiManager.isWifiEnabled())
+                new LoadProductImages().execute(String.valueOf(pID));
+        }
+        else
+            new LoadProductImages().execute(String.valueOf(pID));
 
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override

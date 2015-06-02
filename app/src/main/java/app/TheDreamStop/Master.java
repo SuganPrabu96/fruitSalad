@@ -1458,6 +1458,8 @@ public class Master extends ActionBarActivity {
 
             cartTotal.setText(String.valueOf(totalCost));
 
+            Log.i("email",LoginActivity.prefs.getString("Email",""));
+
             name.setText(LoginActivity.prefs.getString("Name", ""));
             email.setText(LoginActivity.prefs.getString("Email", ""));
             phone.setText(LoginActivity.prefs.getString("Phone", ""));
@@ -1935,7 +1937,7 @@ public class Master extends ActionBarActivity {
                             }
                     if (confirmChangesAuth == true) {
 
-                        if (LoginActivity.prefs.getString("Password", "").equals(editNewPassword.getText().toString()))
+                        if (!LoginActivity.prefs.getString("Password", "").equals(editNewPassword.getText().toString()))
                             new ChangeDetailsTask().execute(name.getText().toString(), email.getText().toString(),
                                     password.getText().toString(), address.getText().toString(), phone.getText().toString());
                         else
@@ -1998,6 +2000,7 @@ public class Master extends ActionBarActivity {
                 public void handleMessage(Message msg) {
                     if (msg.arg1 == 0)
                         Toast.makeText(rootView.getContext(), (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
+                        confirmChangesDialog.dismiss();
                     if (msg.obj.equals("Updated details successfully")) {
                         editNewName.setVisibility(View.INVISIBLE);
                         editNewEmail.setVisibility(View.INVISIBLE);
@@ -2010,6 +2013,9 @@ public class Master extends ActionBarActivity {
                         address.setVisibility(View.VISIBLE);
                         phone.setVisibility(View.VISIBLE);
                         password.setVisibility(View.VISIBLE);
+
+                        submit.setVisibility(View.INVISIBLE);
+                        cancel.setVisibility(View.INVISIBLE);
                     }
                 }
             };
@@ -2884,10 +2890,10 @@ public class Master extends ActionBarActivity {
 
                         LoginActivity.prefs.edit().putString("Name", name).apply();
                         LoginActivity.prefs.edit().putString("Name", name).commit();
-                        LoginActivity.prefs.edit().putString("Email", LoginActivity.user).apply();
-                        LoginActivity.prefs.edit().putString("Password", LoginActivity.pass).apply();
-                        LoginActivity.prefs.edit().putString("Email", LoginActivity.user).commit();
-                        LoginActivity.prefs.edit().putString("Password", LoginActivity.pass).commit();
+                        LoginActivity.prefs.edit().putString("Email", email).apply();
+                        LoginActivity.prefs.edit().putString("Password", password).apply();
+                        LoginActivity.prefs.edit().putString("Email", email).commit();
+                        LoginActivity.prefs.edit().putString("Password", password).commit();
                         LoginActivity.prefs.edit().putString("Phone", phone).apply();
                         LoginActivity.prefs.edit().putString("Address", address).apply();
                         LoginActivity.prefs.edit().putString("Phone", phone).commit();

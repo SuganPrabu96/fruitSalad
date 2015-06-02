@@ -4,20 +4,27 @@ package app.TheDreamStop;
  * Created by Suganprabu on 17-04-2015.
  */
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -32,6 +39,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -53,6 +61,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -157,6 +166,8 @@ public class Master extends ActionBarActivity {
     private static boolean addExistingItem = false;
     private static int cartExistingItemPos = -1;
     private static double width, height;
+    public static String inviteName, invitePhone, inviteSMSMessage, inviteWhatsappMessage;
+    private static final int contactKey = 1;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -190,6 +201,9 @@ public class Master extends ActionBarActivity {
         loc_area.add("Adyar");
         loc_area.add("Mandaveli");
         loc_area.add("Velachery");
+
+        inviteSMSMessage = "Hi Adarsh, coding deivame"; //TODO change this
+        inviteWhatsappMessage = "Hi Adarsh, coding deivame"; //TODO change this
 
         cAdapter = new CartRecyclerViewAdapter(cartitems, getApplicationContext());
 
@@ -501,6 +515,8 @@ public class Master extends ActionBarActivity {
         } else if (position == 5) {
             fragmentTransaction.replace(R.id.frame_container, new HelpFragment(), "HelpFragment");
         } else if (position == 6) {
+            fragmentTransaction.replace(R.id.frame_container, new InviteFragment(), "InviteFragment");
+        } else if (position == 7) {
             final AlertDialog.Builder logoutAlert = new AlertDialog.Builder(Master.this);
 
             logoutAlert.setCancelable(false);
@@ -565,6 +581,9 @@ public class Master extends ActionBarActivity {
 
             } else if (f instanceof AboutFragment) {
                 fragmentTransaction.replace(R.id.frame_container, new AboutFragment());
+
+            } else if (f instanceof InviteFragment) {
+                fragmentTransaction.replace(R.id.frame_container, new InviteFragment());
 
             }
         }
@@ -1234,6 +1253,136 @@ public class Master extends ActionBarActivity {
             return rootView;
         }
 
+    }
+
+    public static class InviteFragment extends Fragment {
+
+        public InviteFragment() {
+        }
+
+        private CircleImageView whatsappButton, smsButton;
+        private ImageView facebookButton;
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            final View rootView = inflater.inflate(R.layout.fragment_invite, container, false);
+
+            facebookButton = (ImageView) rootView.findViewById(R.id.facebook_invite);
+            whatsappButton = (CircleImageView) rootView.findViewById(R.id.whatsapp_invite);
+            smsButton = (CircleImageView) rootView.findViewById(R.id.sms_invite);
+
+            facebookButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    facebookInvite();
+                }
+            });
+
+            whatsappButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    whatsappInvite(rootView.getContext());
+                }
+            });
+
+            smsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    smsInvite();
+                }
+            });
+
+            return rootView;
+        }
+
+        private void facebookInvite(){
+
+        }
+
+        private void whatsappInvite(Context context){
+            if(MainActivity.internetConnection.isConnectingToInternet()){
+                PackageManager pm=getActivity().getPackageManager();
+                try {
+
+                    Intent waIntent = new Intent(Intent.ACTION_SEND);
+                    waIntent.setType("text/plain");
+
+                    PackageInfo info=pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
+                    waIntent.setPackage("com.whatsapp");
+
+                    waIntent.putExtra(Intent.EXTRA_TEXT, inviteWhatsappMessage);
+                    startActivity(Intent.createChooser(waIntent, "Share with"));
+
+                } catch (PackageManager.NameNotFoundException e) {
+                    Toast.makeText(context, "WhatsApp is not Installed", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            else
+                Toast.makeText(context, "No network available", Toast.LENGTH_SHORT).show();
+        }
+
+        private void smsInvite(){
+            final Intent contactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            getActivity().startActivityForResult(contactIntent, contactKey);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            Uri contactData = data.getData();
+            ContentResolver cr = getContentResolver();
+            Cursor c = managedQuery(contactData, null, null, null, null);
+            if (c.moveToFirst()) {
+                inviteName = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                String id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+                if (Integer.parseInt(c.getString(
+                        c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
+                    while (pCur.moveToNext()) {
+                        invitePhone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    }
+                    pCur.close();
+                }
+                Log.i("inviteName", inviteName);
+                Log.i("invitePhone", invitePhone);
+            }
+            Log.i("reqCode", String.valueOf(reqCode));
+            Log.i("cont", String.valueOf(contactKey));
+
+            switch (reqCode) {
+                case (contactKey):
+
+                    if (invitePhone != null && inviteName != null) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(Master.this);
+                        alert.setTitle("Do you wish to invite " + inviteName + " ?");
+                        alert.setMessage("You will incur message charges as per your plan");
+                        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SmsManager sms = SmsManager.getDefault();
+                                sms.sendTextMessage(invitePhone, null, inviteSMSMessage, null, null);
+                            }
+                        });
+                        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.create().show();
+                    }
+                    break;
+
+            }
+
+        }
     }
 
     public static class AboutFragment extends Fragment {

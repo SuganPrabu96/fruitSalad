@@ -14,6 +14,7 @@ public class data {
             new NavDrawerItem("Order History", R.drawable.orders),
             new NavDrawerItem("About", R.drawable.about),
             new NavDrawerItem("Help", R.drawable.help),
+            new NavDrawerItem("Invite a friend", R.drawable.ic_launcher),
             new NavDrawerItem("Logout", R.drawable.logout)
     };
     public static List<NavDrawerItem> getNavDrawerItems(){

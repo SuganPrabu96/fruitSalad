@@ -40,5 +40,6 @@
     <string name="title_activity_items_search">ItemsSearchActivity</string>
     <string name="sampleadd">Flat C-6,Rams Vedasreni Apartments,Velachery Main Road , Velachery, Chennai, Pincode - 600042 </string>
     <string name="title_activity_transaction_details">TransactionDetails</string>
+    <string name="title_activity_invite_fragment">InviteFragment</string>
 
 </resources>

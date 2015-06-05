@@ -61,7 +61,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -71,6 +70,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ToxicBakery.viewpager.transforms.ForegroundToBackgroundTransformer;
 import com.facebook.widget.ProfilePictureView;
 
 import org.apache.http.NameValuePair;
@@ -604,7 +604,7 @@ public class Master extends ActionBarActivity {
         } else
             for (int i = 0; i < drawerList.getChildCount(); i++)
                 drawerList.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.NavigationBarUnselectedItem));
-        drawerLayout.closeDrawer(Gravity.START);
+        drawerLayout.closeDrawer(Gravity.LEFT);
     }
 
     @Override
@@ -1195,6 +1195,7 @@ public class Master extends ActionBarActivity {
 
             mViewPager.setAdapter(customAdapter);
             mViewPager.setCurrentItem(0);
+            mViewPager.setPageTransformer(true, new ForegroundToBackgroundTransformer());
 
             selectedParams = new LinearLayout.LayoutParams(35,35);
             unselectedParams = new LinearLayout.LayoutParams(25,25);
@@ -1260,8 +1261,8 @@ public class Master extends ActionBarActivity {
         public InviteFragment() {
         }
 
-        private CircleImageView whatsappButton, smsButton;
-        private ImageView facebookButton;
+        private CircleImageView whatsappButton;
+        private ImageView facebookButton, smsButton;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -1270,12 +1271,12 @@ public class Master extends ActionBarActivity {
 
             facebookButton = (ImageView) rootView.findViewById(R.id.facebook_invite);
             whatsappButton = (CircleImageView) rootView.findViewById(R.id.whatsapp_invite);
-            smsButton = (CircleImageView) rootView.findViewById(R.id.sms_invite);
+            smsButton = (ImageView) rootView.findViewById(R.id.sms_invite);
 
             facebookButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    facebookInvite();
+                    facebookInvite(rootView.getContext());
                 }
             });
 
@@ -1296,8 +1297,21 @@ public class Master extends ActionBarActivity {
             return rootView;
         }
 
-        private void facebookInvite(){
-
+        private void facebookInvite(Context context){
+            if(MainActivity.internetConnection.isConnectingToInternet()){
+                PackageManager pm = getActivity().getPackageManager();
+                try{
+                    Intent facebookIntent = new Intent(Intent.ACTION_SEND);
+                    facebookIntent.setPackage("com.facebook.orca");
+                    facebookIntent.setType("text/plain");
+                    PackageInfo info=pm.getPackageInfo("com.facebook.orca", PackageManager.GET_META_DATA);
+                    facebookIntent.putExtra(Intent.EXTRA_STREAM, inviteWhatsappMessage);
+                    startActivity(Intent.createChooser(facebookIntent, "Share with"));
+                } catch (PackageManager.NameNotFoundException e) {
+                    Toast.makeText(context, "Messenger is not installed", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
         }
 
         private void whatsappInvite(Context context){
@@ -1315,7 +1329,7 @@ public class Master extends ActionBarActivity {
                     startActivity(Intent.createChooser(waIntent, "Share with"));
 
                 } catch (PackageManager.NameNotFoundException e) {
-                    Toast.makeText(context, "WhatsApp is not Installed", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "WhatsApp is not installed", Toast.LENGTH_SHORT)
                             .show();
                 }
             }
@@ -2592,7 +2606,7 @@ public class Master extends ActionBarActivity {
             });
         }
 
-        private static void flipCards(String s){
+        /*private static void flipCards(String s){
             if(s.equals("cur_front"))
                 fragManag.beginTransaction().setCustomAnimations(R.animator.card_flip_right_in,R.animator.card_flip_right_out,
                         R.animator.card_flip_left_in,R.animator.card_flip_left_out)
@@ -2604,9 +2618,9 @@ public class Master extends ActionBarActivity {
                         R.animator.card_flip_right_in,R.animator.card_flip_right_out)
                         .replace(R.id.item_container, new CardFrontFragment())
                         .commit();
-        }
+        }*/
 
-        public static class CardFrontFragment extends Fragment {
+        /*public static class CardFrontFragment extends Fragment {
             private Button btnAdd;
             private FrameLayout itemCardFrame;
 
@@ -2653,7 +2667,7 @@ public class Master extends ActionBarActivity {
 
                 return rootView;
             }
-        }
+        }*/
 
     }
 
@@ -2974,7 +2988,6 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             newItemsHandler = new Handler() {
                 public void handleMessage(Message msg) {
                     if (msg.arg1 == 1) {

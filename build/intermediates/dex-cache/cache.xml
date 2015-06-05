@@ -30,6 +30,13 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\library-2.4.0-619f8098cfdb9526e0c04c8181e0fb7ed453c4e8.jar" />
     </item>
     <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.romainpiel.shimmer\library\1.4.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="605019d3e4be636f5dd74c83d05198994e3a2ce9">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-18cee38f914355f04ffbbcde8cc29724003d8150.jar" />
+    </item>
+    <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.sothree.slidinguppanel\library\3.0.0\classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -70,6 +77,13 @@
         revision="22.0.1"
         sha1="010ee9e87a286afcaeaed368dcf829e42d0aa2a0">
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-96ecd00377fc45e14857323371b92dedd667a43f.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.ToxicBakery.viewpager.transforms\view-pager-transforms\1.2.32\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="392c97a8270ccf3cc7fe6e0a5d97a5e97a61e65c">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-134b8558e0001f5d3e5da49bcd13003305f9f199.jar" />
     </item>
     <item
         jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"

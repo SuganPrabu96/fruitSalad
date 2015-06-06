@@ -22,7 +22,6 @@ public class MainActivity extends ActionBarActivity{
         setContentView(R.layout.activity_main);
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
-
         internetConnection = new ConnectionDetector(getApplicationContext());
 
         if(true){

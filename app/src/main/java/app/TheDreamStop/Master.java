@@ -168,7 +168,6 @@ public class Master extends ActionBarActivity {
     private static double width, height;
     public static String inviteName, invitePhone, inviteSMSMessage, inviteWhatsappMessage;
     private static final int contactKey = 1;
-
     // TODO change the initial value of location based on Shared prefs
 
     @Override

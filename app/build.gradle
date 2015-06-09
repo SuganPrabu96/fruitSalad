@@ -34,5 +34,7 @@ dependencies {
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.0'
     compile 'com.romainpiel.shimmer:library:1.4.0@aar'
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
+    compile 'com.kogitune:pre-lollipop-activity-transition:1.0.0'
+
 
 }

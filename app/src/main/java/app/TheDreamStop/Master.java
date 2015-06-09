@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,6 +54,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -72,6 +76,9 @@ import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.ForegroundToBackgroundTransformer;
 import com.facebook.widget.ProfilePictureView;
+import com.kogitune.activity_transition.ActivityTransitionLauncher;
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -149,7 +156,8 @@ public class Master extends ActionBarActivity {
     public static RecyclerView cartItemRecyclerView;
     public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler, latLongHandler, updateCartCostHandler;
     public static Handler updateCartItemCostHandler;
-
+    public static Dialog mDialog;
+    public ImageView iv;
     public static ArrayList<OrderHistoryClass> orders;
     public static CartRecyclerViewAdapter cAdapter;
     public static ArrayList<CartItemsClass> cartitems = new ArrayList<>();
@@ -168,6 +176,9 @@ public class Master extends ActionBarActivity {
     private static double width, height;
     public static String inviteName, invitePhone, inviteSMSMessage, inviteWhatsappMessage;
     private static final int contactKey = 1;
+    private static Shimmer shimmer;
+    private static ShimmerTextView tv;
+
     // TODO change the initial value of location based on Shared prefs
 
     @Override
@@ -227,6 +238,8 @@ public class Master extends ActionBarActivity {
         loadNewItemsProgress = new ProgressDialog(Master.this);
         orderHistoryProgress = new ProgressDialog(Master.this);
         addorderProgress = new ProgressDialog(Master.this);
+
+        mDialog = new Dialog(Master.this, android.R.style.Theme_Translucent_NoTitleBar);
 
         checkoutDialog = new Dialog(this);
 
@@ -2164,6 +2177,7 @@ public class Master extends ActionBarActivity {
                         Toast.makeText(rootView.getContext(), (CharSequence) msg.obj, Toast.LENGTH_SHORT).show();
                         confirmChangesDialog.dismiss();
                     if (msg.obj.equals("Updated details successfully")) {
+                        confirmChangesDialog.dismiss();
                         editNewName.setVisibility(View.INVISIBLE);
                         editNewEmail.setVisibility(View.INVISIBLE);
                         editNewAddress.setVisibility(View.INVISIBLE);
@@ -2929,10 +2943,21 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            mDialog.setContentView(R.layout.loading_layout);
+            shimmer = new Shimmer();
+            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
+            mDialog.setCancelable(true);
+            mDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT,WindowManager.LayoutParams.FILL_PARENT);
+            Drawable d = new ColorDrawable(Color.BLACK);
+            d.setAlpha(100);
+            mDialog.getWindow().setBackgroundDrawable(d);
+            mDialog.show();
+            shimmer.setDuration(1000);
+            shimmer.start(tv);
 
             loadCatSubCatProgress.setTitle("Loading Products List...");
             loadCatSubCatProgress.setCancelable(false);
-            loadCatSubCatProgress.show();
+         //   loadCatSubCatProgress.show();
 
         }
 
@@ -2987,13 +3012,19 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+
             newItemsHandler = new Handler() {
                 public void handleMessage(Message msg) {
                     if (msg.arg1 == 1) {
                         if (loadCatSubCatProgress != null && loadCatSubCatProgress.isShowing()) {
                             loadCatSubCatProgress.hide();
-                            loadCatSubCatProgress.dismiss();
-                        }
+                            loadCatSubCatProgress.dismiss();}
+                            if (mDialog != null && mDialog.isShowing()) {
+
+                                   if(shimmer  != null && shimmer.isAnimating())
+                        { shimmer.cancel();}
+                                mDialog.dismiss();}
+
                         selectItem(0);
                     }
 
@@ -3012,9 +3043,20 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             Log.i("Inside PreExecute", "True");
+            shimmer = new Shimmer();
+            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
+            mDialog.setContentView(R.layout.loading_layout);
+            mDialog.setCancelable(true);
+            Drawable d = new ColorDrawable(Color.BLACK);
+            d.setAlpha(100);
+            mDialog.getWindow().setBackgroundDrawable(d);
+            mDialog.show();
+
+            shimmer.setDuration(1000);
+            shimmer.start(tv);
             updateProgress.setTitle("Updating");
             updateProgress.setCancelable(false);
-            updateProgress.show();
+            //updateProgress.show();
         }
 
         @Override
@@ -3082,11 +3124,20 @@ public class Master extends ActionBarActivity {
                 updateProgress.hide();
                 updateProgress.cancel();
             }
+            if(mDialog != null && mDialog.isShowing()==true)
+            {
+                shimmer.cancel();
+                mDialog.dismiss();
+
+
+            }
 
             Message msg = new Message();
             msg.arg1 = 0;
-            if (updateSuccess)
+            if (updateSuccess) {
                 msg.obj = "Updated details successfully";
+
+            }
             else
                 msg.obj = "Error in updating details";
             MyAccountFragment.msgHandler.sendMessage(msg);
@@ -3099,9 +3150,20 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             Log.i("Inside PreExecute", "True");
+            shimmer = new Shimmer();
+            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
+            mDialog.setContentView(R.layout.loading_layout);
+            mDialog.setCancelable(true);
+            Drawable d = new ColorDrawable(Color.BLACK);
+            d.setAlpha(100);
+            mDialog.getWindow().setBackgroundDrawable(d);
+            mDialog.show();
+
+            shimmer.setDuration(1000);
+            shimmer.start(tv);
             locationProgress.setTitle("Updating");
             locationProgress.setCancelable(false);
-            locationProgress.show();
+            //locationProgress.show();
         }
 
         @Override
@@ -3141,6 +3203,11 @@ public class Master extends ActionBarActivity {
                 locationProgress.hide();
                 locationProgress.dismiss();
             }
+            if(mDialog !=null && mDialog.isShowing()==true)
+            {
+             shimmer.cancel();
+                mDialog.dismiss();
+            }
 
             if(!locationDetailsSuccess)
                 Toast.makeText(getApplicationContext(),"Unable to load products",Toast.LENGTH_SHORT).show();
@@ -3172,9 +3239,22 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             Log.i("Inside PreExecute", "True");
+            shimmer = new Shimmer();
+            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
+            mDialog.setContentView(R.layout.loading_layout);
+            mDialog.setCancelable(true);
+            Drawable d = new ColorDrawable(Color.BLACK);
+            d.setAlpha(100);
+            mDialog.getWindow().setBackgroundDrawable(d);
+            mDialog.show();
+
+            shimmer.setDuration(1000);
+            shimmer.start(tv);
+
+
             loadItemsProgress.setTitle("Loading items list...");
             loadItemsProgress.setCancelable(true);
-            loadItemsProgress.show();
+       //     loadItemsProgress.show();
         }
 
         @Override
@@ -3361,6 +3441,12 @@ public class Master extends ActionBarActivity {
         protected void onPostExecute(String result) {
             Log.i("Inside PostExecute", "True");
             super.onPostExecute(result);
+            if(mDialog!=null && mDialog.isShowing())
+            {
+                mDialog.dismiss();
+            }
+            if(shimmer != null && shimmer.isAnimating())
+            {  shimmer.cancel(); }
 
             if(loadItemsProgress!=null && loadItemsProgress.isShowing()) {
                 loadItemsProgress.hide();
@@ -3396,9 +3482,20 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPreExecute(){
             Log.i("Add Order","Inside PreExceute");
+            shimmer = new Shimmer();
+            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
+            mDialog.setContentView(R.layout.loading_layout);
+            mDialog.setCancelable(true);
+            Drawable d = new ColorDrawable(Color.BLACK);
+            d.setAlpha(100);
+            mDialog.getWindow().setBackgroundDrawable(d);
+            mDialog.show();
+
+            shimmer.setDuration(1000);
+            shimmer.start(tv);
             addorderProgress.setTitle("Preparing to submit your order...");
             addorderProgress.setCancelable(false);
-            addorderProgress.show();
+          //  addorderProgress.show();
         }
         @Override
         protected String doInBackground(String... params) {
@@ -3440,6 +3537,11 @@ public class Master extends ActionBarActivity {
                 addorderProgress.hide();
                 addorderProgress.cancel();
             }
+            if(mDialog !=null && mDialog.isShowing()==true)
+            {
+                shimmer.cancel();
+                mDialog.dismiss();
+            }
             Master.cAdapter.emptyCart();
        }
     }
@@ -3451,9 +3553,20 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPreExecute(){
             Log.i("Order History", "Inside PreExecute");
+            shimmer = new Shimmer();
+            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
+            mDialog.setContentView(R.layout.loading_layout);
+            mDialog.setCancelable(true);
+            Drawable d = new ColorDrawable(Color.BLACK);
+            d.setAlpha(100);
+            mDialog.getWindow().setBackgroundDrawable(d);
+            mDialog.show();
+
+            shimmer.setDuration(1000);
+            shimmer.start(tv);
             orderHistoryProgress.setTitle("Loading your order history...");
             orderHistoryProgress.setCancelable(false);
-            orderHistoryProgress.show();
+           // orderHistoryProgress.show();
         }
 
         @Override
@@ -3507,6 +3620,12 @@ public class Master extends ActionBarActivity {
                 orderHistoryProgress.hide();
                 orderHistoryProgress.cancel();
             }
+            if(mDialog !=null && mDialog.isShowing()==true)
+            {
+                shimmer.cancel();
+                mDialog.dismiss();
+
+            }
 
             if(orderHistorySuccess){
                 Message msg = new Message();
@@ -3525,9 +3644,20 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPreExecute(){
             Log.i("Order History", "Inside PreExecute");
+            shimmer = new Shimmer();
+            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
+            mDialog.setContentView(R.layout.loading_layout);
+            mDialog.setCancelable(true);
+            Drawable d = new ColorDrawable(Color.BLACK);
+            d.setAlpha(100);
+            mDialog.getWindow().setBackgroundDrawable(d);
+            mDialog.show();
+
+            shimmer.setDuration(1000);
+            shimmer.start(tv);
             orderHistoryProgress.setTitle("Loading your order list...");
             orderHistoryProgress.setCancelable(false);
-            orderHistoryProgress.show();
+          //  orderHistoryProgress.show();
         }
 
         @Override
@@ -3566,6 +3696,12 @@ public class Master extends ActionBarActivity {
                 orderHistoryProgress.hide();
                 orderHistoryProgress.cancel();
             }
+            if(mDialog !=null && mDialog.isShowing()==true)
+            {
+                shimmer.cancel();
+                mDialog.dismiss();
+
+            }
 
             if(orderHistorySuccess){
                 Message msg = new Message();
@@ -3585,9 +3721,20 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             Log.i("Inside PreExecute", "True");
+            shimmer = new Shimmer();
+            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
+            mDialog.setContentView(R.layout.loading_layout);
+            mDialog.setCancelable(true);
+            Drawable d = new ColorDrawable(Color.BLACK);
+            d.setAlpha(100);
+            mDialog.getWindow().setBackgroundDrawable(d);
+            mDialog.show();
+
+            shimmer.setDuration(1000);
+            shimmer.start(tv);
             logoutProgress.setTitle("Logging out...");
             logoutProgress.setCancelable(false);
-            logoutProgress.show();
+           // logoutProgress.show();
         }
 
         @Override
@@ -3626,6 +3773,11 @@ public class Master extends ActionBarActivity {
             if ( logoutProgress != null && logoutProgress.isShowing()) {
                 logoutProgress.hide();
                 logoutProgress.dismiss();
+            }
+            if(mDialog !=null && mDialog.isShowing()==true)
+            {
+                shimmer.cancel();
+                mDialog.dismiss();
             }
 
             if(logoutSuccess) {

@@ -14,8 +14,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -26,6 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import Cart.CartRecyclerViewAdapter;
 import ItemDisplay.ItemDetailsClass;
 import ItemDisplay.ItemsCardAdapter;
 import util.SearchSuggestionProvider;
@@ -47,6 +52,9 @@ public class ItemsSearchActivity extends ActionBarActivity {
     ItemsCardAdapter mAdapter;
     RecyclerView mRecyclerView;
     static Handler searchHandler;
+    private ImageView checkoutButton;
+    private TextView cartTotal;
+    private RecyclerView cartItemRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +63,35 @@ public class ItemsSearchActivity extends ActionBarActivity {
         ActionBar bar = getSupportActionBar();
         bar.setTitle("The Dream Stop");
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
+
+        checkoutButton = (ImageView) findViewById(R.id.checkoutbutton);
+        cartTotal = (TextView) findViewById(R.id.cart_totalcost);
+
+        cartTotal.setText(String.valueOf(Master.totalCost));
+
+        cartItemRecyclerView = (RecyclerView) findViewById(R.id.cart_items_recyclerview);
+        cartItemRecyclerView.setHasFixedSize(false);
+        cartItemRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cartItemRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        Master.cAdapter = new CartRecyclerViewAdapter(Master.cartitems, getApplicationContext());
+
+        cartItemRecyclerView.setAdapter(Master.cAdapter);
+
+        checkoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Master.checkoutDialog(getApplicationContext());
+            }
+        });
+
+        Master.updateCartCostHandler = new Handler(){
+            public void handleMessage(Message msg){
+                if(msg.arg1==1){
+                    cartTotal.setText(String.valueOf(Master.totalCost));
+                }
+            }
+        };
 
         Intent intent = getIntent();
         if(Intent.ACTION_SEARCH.equals(intent.getAction())){

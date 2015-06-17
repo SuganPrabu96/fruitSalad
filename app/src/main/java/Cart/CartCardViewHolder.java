@@ -24,4 +24,5 @@ public class CartCardViewHolder extends RecyclerView.ViewHolder{
         itemUnit = (TextView) itemView.findViewById(R.id.cart_item_unit);
         itemTotalCost = (TextView) itemView.findViewById(R.id.cart_item_totprice);
         itemMultiplier = (TextView) itemView.findViewById(R.id.cart_item_multiplier);
+
     }}

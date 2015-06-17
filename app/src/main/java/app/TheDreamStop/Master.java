@@ -18,8 +18,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,9 +54,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -76,7 +73,6 @@ import android.widget.Toast;
 
 import com.ToxicBakery.viewpager.transforms.ForegroundToBackgroundTransformer;
 import com.facebook.widget.ProfilePictureView;
-import com.kogitune.activity_transition.ActivityTransitionLauncher;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 
@@ -929,7 +925,6 @@ public class Master extends ActionBarActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (check) {
                         location[1] = area.getSelectedItem().toString();
-                        actionBar.setTitle(location[1]);
                         LoginActivity.prefs.edit().putString("area", String.valueOf(id)).apply();
                         LoginActivity.prefs.edit().putString("area", String.valueOf(id)).commit();
 
@@ -3212,6 +3207,7 @@ public class Master extends ActionBarActivity {
             if(!locationDetailsSuccess)
                 Toast.makeText(getApplicationContext(),"Unable to load products",Toast.LENGTH_SHORT).show();
             else {
+                getSupportActionBar().setTitle(location[1]);
                 new LoadCatSubCat().execute();
                 new NewItems().execute(LoginActivity.prefs.getString("session",""), String.valueOf(System.currentTimeMillis()));
             }

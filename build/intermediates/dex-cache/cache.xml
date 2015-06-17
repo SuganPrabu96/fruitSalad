@@ -4,20 +4,6 @@
     <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.github.ksoichiro\android-observablescrollview\1.5.0\classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="010ee9e87a286afcaeaed368dcf829e42d0aa2a0">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-96ecd00377fc45e14857323371b92dedd667a43f.jar" />
-    </item>
-    <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.0.0\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c6d79137693d494dee16372d3921f919eb724ced">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-771bd1ffee9368b1df4c99c6e14b01a1f672dfc4.jar" />
-    </item>
-    <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.github.ksoichiro\android-observablescrollview\1.5.0\classes.jar"
-        jumboMode="false"
         revision="21.1.2"
         sha1="010ee9e87a286afcaeaed368dcf829e42d0aa2a0">
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-96ecd00377fc45e14857323371b92dedd667a43f.jar" />
@@ -30,20 +16,6 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-ceb334577116a38252e5e3946282167f3d5f7361.jar" />
     </item>
     <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.ToxicBakery.viewpager.transforms\view-pager-transforms\1.2.32\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="392c97a8270ccf3cc7fe6e0a5d97a5e97a61e65c">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-134b8558e0001f5d3e5da49bcd13003305f9f199.jar" />
-    </item>
-    <item
-        jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="129874135e6081269ace2312092031558865de12">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-95806c94368a37b9fcaf0ee4428786893156e5b9.jar" />
-    </item>
-    <item
         jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -51,11 +23,102 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\library-2.4.0-619f8098cfdb9526e0c04c8181e0fb7ed453c4e8.jar" />
     </item>
     <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.kogitune\pre-lollipop-activity-transition\1.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a13dd7e1dc3bbea4b78077711b2327bde99d6c94">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-0e9bed6cacb53eb6e7ec697d4129261d091e90b6.jar" />
+    </item>
+    <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.romainpiel.shimmer\library\1.4.0\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="605019d3e4be636f5dd74c83d05198994e3a2ce9">
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-18cee38f914355f04ffbbcde8cc29724003d8150.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-cbadfbb21e0b3f8878051b5d5077ff181148eedc.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.sothree.slidinguppanel\library\3.0.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c1200ab3b93b8f42c0878b00eb79a84c1f112cf7">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-547f128868761337a431b6c237b1659299ed5bff.jar" />
+    </item>
+    <item
+        jar="C:\Users\Suganprabu\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-430e2ac1137a22646ac2678e728e7e98af77ae71.jar" />
+    </item>
+    <item
+        jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\library-2.4.0-619f8098cfdb9526e0c04c8181e0fb7ed453c4e8.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.2.1\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b868b833b0887aa48c4e581558eef4f1196f6a2">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-b5cf99e5ae5568dedbbb29edc99abd28d3b8d74e.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.facebook.android\facebook-android-sdk\3.23.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="96a08acffc0d3cf8425107b82bc4009a1f82a66c">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-657e0c898266568307529d8a226f08fabc6c1cf1.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-7d95a186f706c24fb79992f6a7ed73618fbfd64f.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.github.ksoichiro\android-observablescrollview\1.5.0\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="010ee9e87a286afcaeaed368dcf829e42d0aa2a0">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-96ecd00377fc45e14857323371b92dedd667a43f.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.github.manuelpeinado.glassactionbar\glassactionbar\0.3.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="018e6aaefbe75797b879b21274fb2e022c15882e">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-93b779be6620c9edae9a28e944b34f12158263ec.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.ToxicBakery.viewpager.transforms\view-pager-transforms\1.2.32\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="392c97a8270ccf3cc7fe6e0a5d97a5e97a61e65c">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-134b8558e0001f5d3e5da49bcd13003305f9f199.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-ceb334577116a38252e5e3946282167f3d5f7361.jar" />
+    </item>
+    <item
+        jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="129874135e6081269ace2312092031558865de12">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-95806c94368a37b9fcaf0ee4428786893156e5b9.jar" />
     </item>
     <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\classes.jar"
@@ -79,6 +142,13 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-657e0c898266568307529d8a226f08fabc6c1cf1.jar" />
     </item>
     <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-a819831ca84fe3867d4f4b31351278d1d14a404b.jar" />
+    </item>
+    <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.2.1\classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -100,13 +170,6 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-93b779be6620c9edae9a28e944b34f12158263ec.jar" />
     </item>
     <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.sothree.slidinguppanel\library\3.0.0\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c1200ab3b93b8f42c0878b00eb79a84c1f112cf7">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-547f128868761337a431b6c237b1659299ed5bff.jar" />
-    </item>
-    <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -114,25 +177,25 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-3b4fa47f03d9738f5ec709178a18ca55dd437a8e.jar" />
     </item>
     <item
-        jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\library-2.4.0-619f8098cfdb9526e0c04c8181e0fb7ed453c4e8.jar" />
+        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-69c0e4535aa9b3b639822505df39e016f7d3ef2a.jar" />
     </item>
     <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\classes.jar"
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.romainpiel.shimmer\library\1.4.0\classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-85248286cfd402561b46846aa588461a82f0a6fe.jar" />
+        revision="21.1.2"
+        sha1="605019d3e4be636f5dd74c83d05198994e3a2ce9">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-18cee38f914355f04ffbbcde8cc29724003d8150.jar" />
     </item>
     <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.0.0\classes.jar"
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.ToxicBakery.viewpager.transforms\view-pager-transforms\1.2.32\classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="11842de6a309c447b3a3d60d73ad637a87c58994">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-c83c9ae930f60762d5b5f646c641527cf2575838.jar" />
+        revision="21.1.2"
+        sha1="392c97a8270ccf3cc7fe6e0a5d97a5e97a61e65c">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-134b8558e0001f5d3e5da49bcd13003305f9f199.jar" />
     </item>
     <item
         jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"
@@ -142,25 +205,11 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-95806c94368a37b9fcaf0ee4428786893156e5b9.jar" />
     </item>
     <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.2.1\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b868b833b0887aa48c4e581558eef4f1196f6a2">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-b5cf99e5ae5568dedbbb29edc99abd28d3b8d74e.jar" />
-    </item>
-    <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.sothree.slidinguppanel\library\3.0.0\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="c1200ab3b93b8f42c0878b00eb79a84c1f112cf7">
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-547f128868761337a431b6c237b1659299ed5bff.jar" />
-    </item>
-    <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.facebook.android\facebook-android-sdk\3.23.0\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="96a08acffc0d3cf8425107b82bc4009a1f82a66c">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-657e0c898266568307529d8a226f08fabc6c1cf1.jar" />
     </item>
 
 </items>

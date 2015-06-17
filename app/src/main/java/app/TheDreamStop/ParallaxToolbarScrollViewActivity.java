@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -63,7 +64,9 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         setContentView(R.layout.activity_parallaxtoolbarscrollview);
         addtocartD = new Dialog(ParallaxToolbarScrollViewActivity.this);
 
-        getSupportActionBar().setCustomView(findViewById(R.id.toolbar));
+        ActionBar bar = getSupportActionBar();
+        bar.setCustomView(findViewById(R.id.toolbar));
+        //bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
         //setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         //mImageView = findViewById(R.id.image);

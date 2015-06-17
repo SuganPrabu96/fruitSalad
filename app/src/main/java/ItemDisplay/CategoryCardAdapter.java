@@ -38,8 +38,13 @@ public class CategoryCardAdapter extends RecyclerView.Adapter<ViewHoldercateg> {
     public void onBindViewHolder(final ViewHoldercateg viewHolder, final int position) {
         final CategoryCardClass item = items.get(position);
 
-
-        viewHolder.categname.setText(item.getCategtitle());
+        String name = item.getCategtitle();
+        if(name.length()>10){
+            viewHolder.categname.setText(name.substring(0, 10)+"...");
+        }
+        else{
+            viewHolder.categname.setText(name);
+        }
         viewHolder.categimg.setImageResource(item.getCategimg());
 
         viewHolder.itemView.findViewById(R.id.card_view2).setOnClickListener(new View.OnClickListener() {

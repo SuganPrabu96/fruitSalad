@@ -69,6 +69,11 @@ public class GetLatLong extends AsyncTask<String,Void,String>{
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lat");
 
+            double conv = 3.1416/180;
+
+            lat*=conv;
+            lng*=conv;
+
             Log.d("latitude", "" + lat);
             Log.d("longitude", "" + lng);
 

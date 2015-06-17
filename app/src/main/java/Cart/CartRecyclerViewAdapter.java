@@ -4,10 +4,11 @@ import android.content.Context;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,8 +24,8 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 
     public static ArrayList<CartItemsClass> listitems;
     private Context context;
-    private ImageButton removeFromCart;
-    private ImageButton editCartItem;
+    //private ImageButton removeFromCart;
+    //private ImageButton editCartItem;
 
     public CartRecyclerViewAdapter(ArrayList<CartItemsClass> items,Context context){
         this.listitems = items;
@@ -35,8 +36,8 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
         View v = LayoutInflater.from(context).inflate(R.layout.cart_card, parent, false);
         CartCardViewHolder vH = new CartCardViewHolder(context, v);
 
-        removeFromCart = (ImageButton) v.findViewById(R.id.cart_removebutton);
-        editCartItem = (ImageButton) v.findViewById(R.id.cart_editbutton);
+        //removeFromCart = (ImageButton) v.findViewById(R.id.cart_removebutton);
+        //editCartItem = (ImageButton) v.findViewById(R.id.cart_editbutton);
 
         return vH;
     }
@@ -44,9 +45,23 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
     public void onBindViewHolder(final CartCardViewHolder viewHolder,final int position) {
         final CartItemsClass item = listitems.get(position);
 
-        viewHolder.itemname.setText(item.getcartItemname());
-        viewHolder.itemCost.setText(String.valueOf(item.getQuantity()*Float.parseFloat(item.getCartitemprice())));
-        viewHolder.itemQuantity.setText(String.valueOf(item.getQuantity())+" * "+String.valueOf(item.getQ()));
+        final String name = item.getcartItemname();
+        if(name.length()>10)
+            viewHolder.itemname.setText(name.substring(0,10)+"...");
+        else
+            viewHolder.itemname.setText(name);
+        viewHolder.itemname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast t = Toast.makeText(context, name, Toast.LENGTH_SHORT);
+                t.setGravity(Gravity.CENTER,0,0);
+                t.show();
+            }
+        });
+        viewHolder.itemCost.setText(item.getCartitemprice());
+        viewHolder.itemTotalCost.setText("Rs. " + String.valueOf(item.getQuantity()*Float.parseFloat(item.getCartitemprice())));
+        viewHolder.itemQuantity.setText(String.valueOf(item.getQ()));
+        viewHolder.itemMultiplier.setText("X " + String.valueOf(item.getQuantity()));
         viewHolder.itemUnit.setText(String.valueOf(item.getUnit()));
 //        editCartItem.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -55,7 +70,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 //            }
 //        });
 
-        removeFromCart.setOnClickListener(new View.OnClickListener() {
+        /*removeFromCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Master.removefrom_cart(position);
@@ -63,7 +78,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
                 Master.totalCost -= Double.parseDouble(String.valueOf(viewHolder.itemCost.getText()));
 
             }
-        });
+        });*/
 
     }
 

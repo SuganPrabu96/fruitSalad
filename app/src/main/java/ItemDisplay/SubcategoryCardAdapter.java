@@ -38,8 +38,14 @@ public class SubcategoryCardAdapter extends RecyclerView.Adapter<ViewHolderSubca
     public void onBindViewHolder(final ViewHolderSubcateg viewHolder, final int position) {
         final SubcategoryCardClass item = items.get(position);
 
+        String name = item.getSubcategtitle();
 
-        viewHolder.subcategname.setText(item.getSubcategtitle());
+        if(name.length()>10){
+            viewHolder.subcategname.setText(name.substring(0, 10)+"...");
+        }
+        else{
+            viewHolder.subcategname.setText(name);
+        }
         viewHolder.subcategimg.setImageResource(item.getSubcategimg());
 
         viewHolder.itemView.findViewById(R.id.card_view3).setOnClickListener(new View.OnClickListener() {

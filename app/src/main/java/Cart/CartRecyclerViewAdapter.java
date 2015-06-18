@@ -1,6 +1,8 @@
 package Cart;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -8,6 +10,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 
     public static ArrayList<CartItemsClass> listitems;
     private Context context;
+    private static Handler editHandler;
     //private ImageButton removeFromCart;
     //private ImageButton editCartItem;
 
@@ -35,6 +40,8 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
     public CartCardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.cart_card, parent, false);
         CartCardViewHolder vH = new CartCardViewHolder(context, v);
+
+        editHandler = new Handler();
 
         //removeFromCart = (ImageButton) v.findViewById(R.id.cart_removebutton);
         //editCartItem = (ImageButton) v.findViewById(R.id.cart_editbutton);
@@ -80,6 +87,103 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
             }
         });*/
 
+        viewHolder.itemMultiplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editDialog(position);
+            }
+        });
+
+        editHandler = new Handler(){
+            public void handleMessage(Message msg){
+                if(msg.arg1==1){
+                    Bundle b = msg.getData();
+                    String qua = b.getString("qua");
+                    Integer pos = b.getInt("pos");
+
+                    CartItemsClass itemTemp = listitems.get(pos);
+
+                    Master.totalCost -= itemTemp.getQuantity()*Float.parseFloat(itemTemp.getCartitemprice());
+
+                    itemTemp.quantity = Float.parseFloat(qua);
+
+                    //viewHolder.itemMultiplier.setText("X " + String.valueOf(itemTemp.getQuantity()));
+                    //viewHolder.itemTotalCost.setText("Rs. " + String.valueOf(itemTemp.getQuantity()*Float.parseFloat(itemTemp.getCartitemprice())));
+
+                    Master.cAdapter.notifyItemChanged(pos);
+
+                    Master.totalCost += Double.parseDouble(String.valueOf(itemTemp.getQuantity()*Float.parseFloat(itemTemp.getCartitemprice())));
+
+                    Message msg1 = new Message();
+                    msg1.arg1 = 1;
+                    Master.updateCartCostHandler.sendMessage(msg1);
+                }
+            }
+        };
+
+    }
+
+    public static void editDialog(final int position){
+        Master.editDialog.setTitle("Select Quantity");
+        Master.editDialog.setContentView(R.layout.edit_dialog);
+        Master.editDialog.setCancelable(true);
+        Master.editDialog.show();
+        Log.d("pos", String.valueOf(position));
+        CartItemsClass item = listitems.get(position);
+
+        final String[] floatitems={"0.5","1","1.5","2","2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10"};
+        final String[] intitems={"1","2","3","4","5","6","7","8","9","10"};
+        final NumberPicker np = (NumberPicker) Master.editDialog.findViewById(R.id.numberPickerEdit);
+        np.setMaxValue(10);
+        np.setMinValue(1);
+        np.setWrapSelectorWheel(false);
+        if(item.getChangeable()=='n'){
+            np.setDisplayedValues(intitems);
+            Log.i("value of cb ","cb is n");}
+        else if(item.getChangeable()=='y')
+        {
+            np.setDisplayedValues(floatitems);
+            Log.i("value of cb","cb is y");
+
+        }
+
+        //   final int i = np.getValue()-1;
+        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.i("qty",intitems[np.getValue()-1]);
+                Log.i("value check",String.valueOf(np.getValue()));
+            }
+        });
+
+
+        //    Log.i("qty",num[i]);
+
+        //     np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        Button btn1 = (Button) Master.editDialog.findViewById(R.id.cart_item_quan_edit_btn);
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //      Master.addtocart_fn(item);
+                //  addtocart_fn(cartitem);
+                //Log.d("Value of Qty","check");
+                //    Log.i("qty",num[i]);
+                Log.i("qty inside ", floatitems[np.getValue() - 1]);
+
+                Bundle b = new Bundle();
+                b.putString("qua", String.valueOf(np.getValue()));
+                b.putInt("pos",position);
+                Message msg = new Message();
+                msg.arg1 = 1;
+                msg.setData(b);
+                editHandler.sendMessage(msg);
+
+                Master.editDialog.dismiss();
+            }
+        });
+
     }
 
     public void add(CartItemsClass item){
@@ -109,6 +213,9 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
     public void emptyCart(){
         Master.totalCost = 0;
         listitems.clear();
+        Message msg = new Message();
+        msg.arg1 = 1;
+        Master.updateCartCostHandler.sendMessage(msg);
         Master.cAdapter = null;
         Master.cAdapter = new CartRecyclerViewAdapter(listitems, context);
         Master.cartItemRecyclerView.setAdapter(Master.cAdapter);

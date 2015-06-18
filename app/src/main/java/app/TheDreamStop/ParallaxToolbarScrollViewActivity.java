@@ -7,9 +7,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
@@ -28,6 +32,7 @@ import com.nineoldandroids.view.ViewHelper;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -54,9 +59,11 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     private Character changeable;
     private DisplayMetrics displayMetrics;
     private static float width, height;
-    private static String itemsURLReturnedJSON;
+    private static String itemsURLReturnedJSON, itemDescReturnedJSON;
     private static final String itemsImagesURL = "http://thedreamstop.in/api/prodImage.php";
+    private static final String itemsDescURL = "http://thedreamstop.in/api/productInfo.php";
     private WifiManager wifiManager;
+    private Handler itemDescHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +73,12 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
 
         ActionBar bar = getSupportActionBar();
         bar.setCustomView(findViewById(R.id.toolbar));
-        //bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
         //setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         //mImageView = findViewById(R.id.image);
+
+        itemDescHandler = new Handler();
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
@@ -96,6 +105,17 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         quantity = getIntent.getExtras().getFloat("quantity");
         q = getIntent.getExtras().getInt("q");
         changeable = getIntent.getExtras().getChar("changeable");
+
+        new ItemsDesc().execute(String.valueOf(pID));
+
+        itemDescHandler = new Handler(){
+            public void handleMessage(Message msg){
+                if(msg.arg1==1){
+                    itemDescription.setText(msg.getData().getString("desc"));
+                }
+            }
+        };
+
         itemName.setText(name);
         itemPrice.setText(String.valueOf(price));
         final ItemDetailsClass item = new ItemDetailsClass(name,price,MRP,pID,quantity,unit,changeable,q) ;
@@ -112,7 +132,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               ParallaxToolbarScrollViewActivity.addDialog(item);
+                ParallaxToolbarScrollViewActivity.addDialog(item);
             }
         });
 
@@ -178,6 +198,62 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
     }
+
+    private class ItemsDesc extends AsyncTask<String,Void,Void>{
+
+        private String desc;
+        private boolean success = false;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(String...params){
+
+            Log.i("Inside Background", "True");
+
+            List<NameValuePair> paramsItems = new ArrayList<NameValuePair>();
+
+            paramsItems.add(new BasicNameValuePair("PID", params[0]));
+
+            ServiceHandler jsonParser = new ServiceHandler();
+            itemDescReturnedJSON = jsonParser.makeServiceCall(itemsDescURL, ServiceHandler.POST, paramsItems);
+            if (itemDescReturnedJSON != null) {
+                try {
+                    Log.i("itemDescReturnedJSON", itemDescReturnedJSON);
+                    JSONObject itemsJSON = new JSONObject(itemDescReturnedJSON);
+                    if (itemsJSON.getString("success").equals("true")) {
+                        desc = itemsJSON.getString("description");
+                        success = true;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result){
+            super.onPostExecute(result);
+
+            if(success){
+                Message msg = new Message();
+                msg.arg1=1;
+                Bundle b = new Bundle();
+                b.putString("desc",desc);
+                msg.setData(b);
+                itemDescHandler.sendMessage(msg);
+            }
+
+        }
+    }
+
 
     private static class LoadProductImages extends AsyncTask<String, String, Bitmap> {
 

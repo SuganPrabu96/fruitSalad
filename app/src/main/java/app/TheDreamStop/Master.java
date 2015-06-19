@@ -132,7 +132,7 @@ public class Master extends ActionBarActivity {
     private static final String viewTransactionURL = "http://thedreamstop.in/api/viewTransaction.php";
     private static final String areasURL = "http://thedreamstop.in/api/locList.php";
     public FragmentTransaction fragmentTransaction;
-    public static Dialog locationDialog,addtocartDialog, editDialog;
+    public static Dialog locationDialog,addtocartDialog, editDialog, editDeleteDialog;
 
     public String[] location = {"Chennai", "Adyar"}; // location[0] is city and location[1] is area
     ActionBar actionBar;
@@ -182,6 +182,7 @@ public class Master extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         addtocartDialog = new Dialog(Master.this);
         editDialog = new Dialog(Master.this);
+        editDeleteDialog = new Dialog(Master.this);
         modeOfLogin = getIntent().getExtras().getString("loginMethod").toString();
 
         displayMetrics = getApplicationContext().getResources().getDisplayMetrics();

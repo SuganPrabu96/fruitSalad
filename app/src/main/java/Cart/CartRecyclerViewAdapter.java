@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
 
     public static ArrayList<CartItemsClass> listitems;
     private Context context;
-    private static Handler editHandler;
+    private static Handler editHandler, deleteHandler;
     //private ImageButton removeFromCart;
     //private ImageButton editCartItem;
 
@@ -42,6 +43,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
         CartCardViewHolder vH = new CartCardViewHolder(context, v);
 
         editHandler = new Handler();
+        deleteHandler = new Handler();
 
         //removeFromCart = (ImageButton) v.findViewById(R.id.cart_removebutton);
         //editCartItem = (ImageButton) v.findViewById(R.id.cart_editbutton);
@@ -87,12 +89,29 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
             }
         });*/
 
-        viewHolder.itemMultiplier.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                editDialog(position);
+            public boolean onLongClick(View v) {
+                Log.d("longClick","True");
+                editDeleteDialog(position);
+                return false;
             }
         });
+
+        deleteHandler = new Handler(){
+            public void handleMessage(Message msg){
+                int pos = msg.arg1;
+
+                CartItemsClass itemTemp = listitems.get(pos);
+
+                Master.totalCost -= itemTemp.getQuantity()*Float.parseFloat(itemTemp.getCartitemprice());
+                Master.cAdapter.remove(pos, Master.cAdapter);
+
+                Message msg1 = new Message();
+                msg1.arg1 = 1;
+                Master.updateCartCostHandler.sendMessage(msg1);
+            }
+        };
 
         editHandler = new Handler(){
             public void handleMessage(Message msg){
@@ -121,6 +140,35 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
             }
         };
 
+    }
+
+    public static void editDeleteDialog(final int pos){
+        Master.editDeleteDialog.setContentView(R.layout.cart_item_edit_del_dialog);
+        Master.editDeleteDialog.setCancelable(true);
+        Master.editDeleteDialog.setTitle(listitems.get(pos).getcartItemname());
+        Master.editDeleteDialog.show();
+
+        TextView edit, delete;
+        edit = (TextView) Master.editDeleteDialog.findViewById(R.id.edit_cart_item);
+        delete = (TextView) Master.editDeleteDialog.findViewById(R.id.delete_cart_item);
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editDialog(pos);
+                Master.editDeleteDialog.dismiss();
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Master.editDeleteDialog.dismiss();
+                Message msg = new Message();
+                msg.arg1 = pos;
+                deleteHandler.sendMessage(msg);
+            }
+        });
     }
 
     public static void editDialog(final int position){

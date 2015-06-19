@@ -1,5 +1,6 @@
 package app.TheDreamStop;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -18,7 +19,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
@@ -55,6 +58,7 @@ public class ItemsSearchActivity extends ActionBarActivity {
     private ImageView checkoutButton;
     private TextView cartTotal;
     private RecyclerView cartItemRecyclerView;
+    private static Dialog addtocartDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,8 @@ public class ItemsSearchActivity extends ActionBarActivity {
         ActionBar bar = getSupportActionBar();
         bar.setTitle("The Dream Stop");
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
+
+        addtocartDialog = new Dialog(ItemsSearchActivity.this);
 
         checkoutButton = (ImageView) findViewById(R.id.checkoutbutton);
         cartTotal = (TextView) findViewById(R.id.cart_totalcost);
@@ -115,7 +121,7 @@ public class ItemsSearchActivity extends ActionBarActivity {
 
                     Log.i("listOfItems", listOfItems.toString());
 
-                    mAdapter = new ItemsCardAdapter(listOfItems,getApplicationContext());
+                    mAdapter = new ItemsCardAdapter(listOfItems,getApplicationContext(),"search");
                     mRecyclerView.setAdapter(mAdapter);
                 }
             }
@@ -219,6 +225,82 @@ public class ItemsSearchActivity extends ActionBarActivity {
 
         }
     }
+
+    public static void addDialog(ItemDetailsClass item1)
+    {
+        final ItemDetailsClass item = item1;
+
+
+        Log.d("item1 PID", String.valueOf(item1.getProductid()));
+
+        addtocartDialog.setTitle("Select Quantity");
+        addtocartDialog.setContentView(R.layout.add_dialog);
+        addtocartDialog.show();
+        final String[] floatitems={"0.5","1","1.5","2","2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10"};
+        final String[] intitems={"1","2","3","4","5","6","7","8","9","10"};
+        final NumberPicker np = (NumberPicker) addtocartDialog.findViewById(R.id.numberPicker1);
+        np.setMaxValue(10);
+        np.setMinValue(1);
+        np.setWrapSelectorWheel(false);
+        if(item.getChangeable()=='n'){
+            np.setDisplayedValues(intitems);
+            Log.i("value of cb ","cb is n");}
+        else if(item.getChangeable()=='y')
+        {
+            np.setDisplayedValues(floatitems);
+            Log.i("value of cb","cb is y");
+
+        }
+
+        //   final int i = np.getValue()-1;
+        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.i("qty",intitems[np.getValue()-1]);
+                Log.i("value check",String.valueOf(np.getValue()));
+            }
+        });
+
+
+        //    Log.i("qty",num[i]);
+
+        //     np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        Button btn1 = (Button) addtocartDialog.findViewById(R.id.btn_to_add);
+        Button btn2 = (Button) addtocartDialog.findViewById(R.id.btn_to_cancel);
+
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //      Master.addtocart_fn(item);
+                //  addtocart_fn(cartitem);
+                //Log.d("Value of Qty","check");
+                //    Log.i("qty",num[i]);
+                Log.i("qty inside ",floatitems[np.getValue()-1]);
+                if(item.getChangeable()=='y') {
+                    Master.addtocart_fn(item.getItemtitle(),  Float.parseFloat(floatitems[np.getValue() - 1]), item.getItemprice().toString(), item.getProductid(), item.getQ(), item.getUnit(), item.getChangeable());
+                }
+                else if(item.getChangeable()=='n') {
+                    Master.addtocart_fn(item.getItemtitle(),Float.parseFloat(intitems[np.getValue()-1]) , item.getItemprice().toString(), item.getProductid(), item.getQ() , item.getUnit(), item.getChangeable());
+
+                }
+
+
+                addtocartDialog.dismiss();
+            }
+        });
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //  addtocartDialog.hide();
+                addtocartDialog.dismiss();
+            }
+        });
+
+
+    }
+
 
     @Override
     public void onBackPressed(){

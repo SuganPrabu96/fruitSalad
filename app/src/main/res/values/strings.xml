@@ -44,4 +44,83 @@
     <string name="title_activity_transaction_details">TransactionDetails</string>
     <string name="title_activity_invite_fragment">InviteFragment</string>
 
+    <string name="about_us">Thedreamstop is a mobile grocery application that makes your shopping experience easier and
+
+hassle-free were we create the best online buying experience for you by brining you the best
+
+offers and products from trusted local stores. We know how big a pain grocery shopping can be,
+
+and how we all dislike going to the store now the products you orders are delivered in less than 6
+
+hours, you pay only when you are satisfied with the product ordered and a no question asked
+
+return policy. Isn’t it great!!!!</string>
+
+    <string name="faq">What are our service areas?\n
+
+We serve in Nagpur and Chennai. Follow us on Facebook and Twitter to be updated about our
+
+services.
+
+\nWhat is the minimum order value?\n
+
+There is no minimum order value.
+
+\nAre there any Delivery Costs?\n
+
+We deem to provide great service, and good things always come with a cost (and they should).
+
+Only here in our case it\’s quite minimal. Free delivery on orders above Rs 250. Rs 50 for orders
+
+below that.
+
+\nHow fast can you deliver?\n
+
+Keeping the fast paced lives today and emergencies in mind, we wish to deliver your order
+
+ASAP. In our case the maximum time limit would be 2 hours, but we would want to reach your
+
+doorstep sooner.
+
+\nCan I change the delivery address of my order?\n
+
+You cannot change the delivery address once the order is placed. You can cancel the previous
+
+order and place a new one.
+
+\nHow can I pay you?\n
+
+Right now we only accept payments via \'Cash on Delivery\', but soon we will make other methods
+
+available (Credit/Debit Card on Delivery, online payment).
+
+\nI had an issue with your service, who do I get in touch with?\n
+
+We take pride not only in our service but also of the fact that we can make our customers happy
+
+and satisfied. We will revert back almost instantly and resolve the issue in the least possible time.
+
+Click here to view our contact details.
+
+\nWhat if I want to cancel my order?\n
+
+You can cancel your order any time before the order is out for delivery.
+
+\nI want to reschedule my order what should I do?\n
+
+At the moment you cannot reschedule your order once it\’s placed. You can cancel your existing
+
+order and place a new order with the required delivery time.
+
+\nWhat if I have some complaint regarding my order?\n
+
+You can contact us within 24 hrs from the time of order delivery, if you have any.
+
+\nWhat if I want to return something?\n
+
+At the time of delivery, return what you think is unacceptable.</string>
+
+
+    <string name="title_activity_faq">FAQ</string>
+
 </resources>

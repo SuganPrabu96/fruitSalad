@@ -522,11 +522,13 @@ public class Master extends ActionBarActivity {
             fragmentTransaction.replace(R.id.frame_container, new OrderHistoryFragment(), "OrderHistoryFragment");
         } else if (position == 4) {
             fragmentTransaction.replace(R.id.frame_container, new AboutFragment(), "AboutFragment");
-        } else if (position == 5) {
-            fragmentTransaction.replace(R.id.frame_container, new HelpFragment(), "HelpFragment");
+        } else if(position == 5) {
+            fragmentTransaction.replace(R.id.frame_container, new FAQFragment(), "FAQFragment");
         } else if (position == 6) {
-            fragmentTransaction.replace(R.id.frame_container, new InviteFragment(), "InviteFragment");
+            fragmentTransaction.replace(R.id.frame_container, new HelpFragment(), "HelpFragment");
         } else if (position == 7) {
+            fragmentTransaction.replace(R.id.frame_container, new InviteFragment(), "InviteFragment");
+        } else if (position == 8) {
             final AlertDialog.Builder logoutAlert = new AlertDialog.Builder(Master.this);
 
             logoutAlert.setCancelable(false);
@@ -591,6 +593,9 @@ public class Master extends ActionBarActivity {
 
             } else if (f instanceof AboutFragment) {
                 fragmentTransaction.replace(R.id.frame_container, new AboutFragment());
+
+            } else if (f instanceof FAQFragment) {
+                fragmentTransaction.replace(R.id.frame_container, new FAQFragment());
 
             } else if (f instanceof InviteFragment) {
                 fragmentTransaction.replace(R.id.frame_container, new InviteFragment());
@@ -1421,6 +1426,51 @@ public class Master extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+
+            checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
+            cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
+
+            cartTotal.setText(String.valueOf(totalCost));
+
+            cartItemRecyclerView = (RecyclerView) rootView.findViewById(R.id.cart_items_recyclerview);
+            cartItemRecyclerView.setHasFixedSize(false);
+            cartItemRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+            cartItemRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            cartItemRecyclerView.setAdapter(cAdapter);
+
+            checkoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkoutDialog(rootView.getContext());
+                }
+            });
+
+            updateCartCostHandler = new Handler(){
+                public void handleMessage(Message msg){
+                    if(msg.arg1==1){
+                        cartTotal.setText(String.valueOf(totalCost));
+                    }
+                }
+            };
+
+
+            return rootView;
+        }
+    }
+
+    public static class FAQFragment extends Fragment {
+
+        public FAQFragment() {
+        }
+
+        private ImageView checkoutButton;
+        private TextView cartTotal;
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            final View rootView = inflater.inflate(R.layout.fragment_faq, container, false);
 
             checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
             cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
@@ -2426,8 +2476,7 @@ public class Master extends ActionBarActivity {
                         else
                             listOfItems = null;
 
-                        mAdapter1 = new ItemsCardAdapter(listOfItems, rootView1.getContext());
-                        mAdapter1 = new ItemsCardAdapter(listOfItems, rootView1.getContext());
+                        mAdapter1 = new ItemsCardAdapter(listOfItems, rootView1.getContext(), "master");
                         productsRecyclerView.setAdapter(mAdapter1);
 
                         rootView1.findViewById(R.id.category).setVisibility(View.INVISIBLE);

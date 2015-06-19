@@ -91,12 +91,13 @@
             android:label="@string/title_activity_transaction_details" >
         </activity>
 
-
-        <supports-screens android:smallScreens="true"
-            android:normalScreens="true"
+        <supports-screens
+            android:anyDensity="true"
             android:largeScreens="true"
-            android:xlargeScreens="true"
-            android:anyDensity="true" />
+            android:normalScreens="true"
+            android:smallScreens="true"
+            android:xlargeScreens="true" />
+
     </application>
 
 </manifest>

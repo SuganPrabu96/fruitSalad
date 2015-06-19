@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:paddingTop="25dp"
     android:orientation="vertical"
-    tools:context="e_commerce.e_commerce.MyAccount$PlaceholderFragment"
+    tools:context="e_commerce.e_commerce.FAQ$PlaceholderFragment"
     android:background="@drawable/concrete_seamless">
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -16,17 +16,22 @@
         sothree:umanoPanelHeight="35dp"
         sothree:umanoShadowHeight="4dp">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:text="@string/faq"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="@string/about_us"
             android:lineSpacingExtra="15dp"
             android:textColor="#000"
             android:fontFamily="sans-serif-bold"/>
-    <LinearLayout
+        </ScrollView>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -35,6 +40,6 @@
             <include layout="@layout/cart"></include>
 
         </LinearLayout>
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </LinearLayout>

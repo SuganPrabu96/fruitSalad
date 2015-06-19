@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
+import app.TheDreamStop.ItemsSearchActivity;
 import app.TheDreamStop.Master;
 import app.TheDreamStop.R;
 
@@ -27,10 +27,11 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
     private Button addBtn;
     private FrameLayout itemCardFrame;
     private ImageView newItemTag;
+    private String callingActivity;
 
-    public ItemsCardAdapter(ArrayList<ItemDetailsClass> items, Context context) {
+    public ItemsCardAdapter(ArrayList<ItemDetailsClass> items, Context context, String callingActivity) {
         this.items = items;
-
+        this.callingActivity = callingActivity;
         this.context = context;
     }
 
@@ -58,8 +59,10 @@ public class ItemsCardAdapter extends RecyclerView.Adapter<ViewHolderItems>{
             @Override
             public void onClick(View v) {
 
-                Log.d("item PID", String.valueOf(item.getProductid()));
-                Master.addDialog(item);
+                if (callingActivity.equals("master"))
+                    Master.addDialog(item);
+                else if (callingActivity.equals("search"))
+                    ItemsSearchActivity.addDialog(item);
             }
         });
 

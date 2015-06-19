@@ -35,5 +35,6 @@ dependencies {
     compile 'com.romainpiel.shimmer:library:1.4.0@aar'
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
     compile 'com.kogitune:pre-lollipop-activity-transition:1.0.0'
+    compile 'com.intuit.sdp:sdp-android:1.0.0'
 
 }

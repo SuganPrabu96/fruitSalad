@@ -90,10 +90,13 @@
             android:name=".TransactionDetails"
             android:label="@string/title_activity_transaction_details" >
         </activity>
-        <activity
-            android:name=".InviteFragment"
-            android:label="@string/title_activity_invite_fragment" >
-        </activity>
+
+
+        <supports-screens android:smallScreens="true"
+            android:normalScreens="true"
+            android:largeScreens="true"
+            android:xlargeScreens="true"
+            android:anyDensity="true" />
     </application>
 
 </manifest>

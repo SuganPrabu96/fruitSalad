@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_marginTop="16dp"
 
     android:orientation="vertical"
     tools:context="e_commerce.e_commerce.GeneralSettings$PlaceholderFragment"
@@ -31,57 +31,61 @@
             android:layout_height="wrap_content"
             android:text="General Settings"
             android:fontFamily="sans-serif-black"
-            android:textSize="30sp"
+            android:textSize="@dimen/_30sdp"
             android:layout_gravity="center"
             android:gravity="center"/>
         </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="80dp">
+        android:layout_marginTop="@dimen/_80sdp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_200sdp"
             android:layout_height="wrap_content"
             android:text="Download Images over Wi-Fi only"
-            android:textSize="20sp"
-            android:paddingLeft="10dp"
+            android:singleLine="false"
+            android:textSize="@dimen/_20sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
             />
 
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:id="@+id/switchDownloadImagesOverWifi"
-            android:layout_marginRight="5dp"
-            android:paddingLeft="10dp"/>
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_25sdp"
+            android:layout_gravity="right|center_vertical" />
 
-        </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="@dimen/_30sdp">
 
         <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Notifications"
-            android:paddingLeft="10dp"
-            android:textSize="20sp"/>
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:textSize="@dimen/_20sdp"/>
 
         <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/switchNotifications"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="178dp"
-            />
+
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_120sdp"
+            android:layout_gravity="right|center_vertical" />
 
 
-        </LinearLayout>
+    </FrameLayout>
 
             </LinearLayout>
         <LinearLayout

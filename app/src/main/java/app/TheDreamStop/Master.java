@@ -82,7 +82,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import Cart.CartItemsClass;
@@ -679,7 +681,9 @@ public class Master extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                String cName, cPhone, cAddress, cPrice;
+                String cName, cPhone, cAddress, cPrice, date;
+
+                date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
                 cName = String.valueOf(name.getText());
                 cPhone = String.valueOf(phone.getText());
                 cAddress = String.valueOf(address.getText());
@@ -692,7 +696,9 @@ public class Master extends ActionBarActivity {
                         checkoutJSON.put("Name", cName);
                         checkoutJSON.put("Phone", cPhone);
                         checkoutJSON.put("Address", cAddress);
+                        checkoutJSON.put("Date", date);
                         checkoutJSON.put("Total Cost", cPrice);
+                        checkoutJSON.put("Total Items", cartitems.size());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -705,6 +711,7 @@ public class Master extends ActionBarActivity {
                             tempJSON.put("PID", cItem.getProductId());
                             tempJSON.put("Name", cItem.getcartItemname());
                             tempJSON.put("Price", cItem.getCartitemprice());
+                            tempJSON.put("Unit", cItem.getUnit());
                             tempJSON.put("Quantity", cItem.getQuantity());
                             tempJSON.put("Net Price", Double.parseDouble(cItem.getCartitemprice())*cItem.getQuantity());
 
@@ -3651,7 +3658,7 @@ public class Master extends ActionBarActivity {
                     if(orderHistoryJSON.getString("success").equals("true")){
                         int count = orderHistoryJSON.getInt("count");
                         JSONArray history = orderHistoryJSON.getJSONArray("history");
-                        String name, phone, address, price, id;
+                        String name, phone, address, price, id, date;
 
                         Master.orders = new ArrayList();
 
@@ -3662,8 +3669,9 @@ public class Master extends ActionBarActivity {
                             address = tempJSON.getString("Address");
                             price = tempJSON.getString("Total Cost");
                             id = tempJSON.getString("TID");
+                            date = tempJSON.getString("Date");
 
-                            Master.orders.add(new OrderHistoryClass(id, name, phone, address, price));
+                            Master.orders.add(new OrderHistoryClass(id, name, phone, address, price, date));
                         }
                         orderHistorySuccess = true;
                     }

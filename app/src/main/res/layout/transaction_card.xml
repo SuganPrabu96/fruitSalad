@@ -80,12 +80,26 @@
                     android:layout_weight="1"
                     android:text="Quantity : "/>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text=""
                     android:id="@+id/transaction_details_quantity"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text=""
+                    android:id="@+id/transaction_details_unit"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

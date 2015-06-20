@@ -47,6 +47,7 @@ public class OrderHistoryRecyclerViewAdapter extends RecyclerView.Adapter<OrderH
         holder.orderPhone.setText(order.getOrderHsitoryPhone());
         holder.orderPrice.setText(order.getOrderHistoryPrice());
         holder.orderAddress.setText(order.getOrderHistoryAddress());
+        holder.orderDate.setText(order.getOrderHistoryDate());
 
         tv.setOnClickListener(new View.OnClickListener() {
             @Override

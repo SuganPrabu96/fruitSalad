@@ -41,6 +41,7 @@ public class TransactionDetailsRecyclerViewAdapter extends RecyclerView.Adapter<
         holder.name.setText(transaction.getName());
         holder.price.setText(transaction.getPrice());
         holder.quantity.setText(transaction.getQuantity());
+        holder.unit.setText(transaction.getUnit());
         holder.total.setText(transaction.getTotal());
     }
 

@@ -59,16 +59,17 @@ public class TransactionDetails extends ActionBarActivity {
 
             JSONArray tempArray = tempJSON.getJSONArray("transaction");
 
-            String name, price, quantity, totalPrice;
+            String name, price, quantity, unit, totalPrice;
 
             for(int i=0;i<tempArray.length();i++) {
                 JSONObject transaction = tempArray.getJSONObject(i);
                 name = transaction.getString("Name");
                 price = transaction.getString("Price");
                 quantity = transaction.getString("Quantity");
+                unit = transaction.getString("Unit");
                 totalPrice = transaction.getString("Net Price");
 
-                transactionDetailsClass.add(new TransactionDetailsClass(name, price, quantity, totalPrice));
+                transactionDetailsClass.add(new TransactionDetailsClass(name, price, quantity, unit, totalPrice));
             }
 
             adapter = new TransactionDetailsRecyclerViewAdapter(transactionDetailsClass, TransactionDetails.this);

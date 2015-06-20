@@ -12,7 +12,7 @@ import app.TheDreamStop.R;
  */
 public class OrderHistoryViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView orderNo, orderName, orderPrice, orderAddress, orderPhone;
+    public TextView orderNo, orderName, orderPrice, orderAddress, orderPhone, orderDate;
     private Context context;
 
     public OrderHistoryViewHolder(Context context, View itemView) {
@@ -23,6 +23,6 @@ public class OrderHistoryViewHolder extends RecyclerView.ViewHolder {
         orderAddress = (TextView) itemView.findViewById(R.id.order_history_address);
         orderPhone = (TextView) itemView.findViewById(R.id.order_history_phone);
         orderPrice = (TextView) itemView.findViewById(R.id.order_history_price);
-
+        orderDate = (TextView) itemView.findViewById(R.id.order_history_date);
     }
 }

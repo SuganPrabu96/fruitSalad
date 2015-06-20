@@ -14,6 +14,7 @@ import android.view.View;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 
+import util.ActivityAnimator;
 import util.ConnectionDetector;
 
 public class MainActivity extends ActionBarActivity{
@@ -42,6 +43,7 @@ public class MainActivity extends ActionBarActivity{
                 @Override
                 public void run() {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    new ActivityAnimator().fadeAnimation(MainActivity.this);
                     finish();
                 }
             }, 2000);

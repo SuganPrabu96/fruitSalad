@@ -101,6 +101,7 @@ import NavigationDrawer.NavDrawerListAdapter;
 import OrderHistory.OrderHistoryClass;
 import OrderHistory.OrderHistoryRecyclerViewAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
+import util.ActivityAnimator;
 import util.GetLatLong;
 import util.ServiceHandler;
 import util.data;
@@ -351,6 +352,7 @@ public class Master extends ActionBarActivity {
                     Bundle b = msg.getData();
                     i.putExtra("JSON", b.getString("JSON"));
                     startActivity(i);
+                    new ActivityAnimator().fadeAnimation(Master.this);
                 }
             }
         };
@@ -559,16 +561,19 @@ public class Master extends ActionBarActivity {
                                         if (modeOfLogin.equals("App")) {
                                             //TODO edit Shared prefs
                                             startActivity(new Intent(Master.this, LoginActivity.class));
+                                            new ActivityAnimator().fadeAnimation(Master.this);
                                             finish();
                                             dialog.dismiss();
                                         } else if (modeOfLogin.equals("Facebook")) {
                                             LoginActivity.facebookLoginFragment.callFacebookLogout(Master.this);
                                             startActivity(new Intent(Master.this, LoginActivity.class));
+                                            new ActivityAnimator().fadeAnimation(Master.this);
                                             finish();
                                             dialog.dismiss();
                                         } else if (modeOfLogin.equals("Google")) {
                                             LoginActivity.callGoogleLogout();
                                             startActivity(new Intent(Master.this, LoginActivity.class));
+                                            new ActivityAnimator().fadeAnimation(Master.this);
                                             finish();
                                             dialog.dismiss();
                                         }
@@ -1066,6 +1071,7 @@ public class Master extends ActionBarActivity {
 */
         Intent locationIntent = new Intent(Master.this, LocationFromMap.class);
         startActivity(locationIntent);
+        new ActivityAnimator().fadeAnimation(Master.this);
     }
 
     public static class GeneralSettingsFragment extends Fragment {
@@ -2407,6 +2413,7 @@ public class Master extends ActionBarActivity {
                         i.putExtra("changeable", b.getChar("changeable"));
                         i.putExtra("q", b.getInt("q"));
                         startActivity(i);
+                        new ActivityAnimator().fadeAnimation(getActivity());
                     }
                 }
             };

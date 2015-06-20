@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import util.ActivityAnimator;
 import util.ServiceHandler;
 
 /*
@@ -140,6 +141,7 @@ public class LoginActivity extends FragmentActivity implements
             loginIntent.putExtra("loginMethod",prefs.getString("LoginMode",""));
             loginIntent.putExtra("userStatus","Already registered");
             startActivity(loginIntent);
+            new ActivityAnimator().fadeAnimation(LoginActivity.this);
             finish();
         }
 
@@ -299,6 +301,7 @@ public class LoginActivity extends FragmentActivity implements
                                     loginIntent.putExtra("loginMethod", "App");
                                     loginIntent.putExtra("userStatus","Just registered");
                                     startActivity(loginIntent);
+                                    new ActivityAnimator().fadeAnimation(LoginActivity.this);
                                     finish();
                                     myDialog.dismiss();
                                     myDialog.cancel();
@@ -480,6 +483,7 @@ public class LoginActivity extends FragmentActivity implements
                 Intent loginIntent = new Intent(getActivity(),Master.class);
                 loginIntent.putExtra("loginMethod","Facebook");
                 startActivity(loginIntent);
+                new ActivityAnimator().fadeAnimation(getActivity());
                 makeMeRequest(session);
             }
             else if(state.isClosed()) {
@@ -634,6 +638,7 @@ public class LoginActivity extends FragmentActivity implements
                         LoginActivity.prefs.edit().putString("LoginMode","Google").commit();
                         LoginActivity.prefs.edit().putString("LoginStatus","Logged in").commit();
                         startActivity(loginIntent);
+                        new ActivityAnimator().fadeAnimation(LoginActivity.this);
                         profileText = personName;
                     }
                 });
@@ -924,6 +929,7 @@ public class LoginActivity extends FragmentActivity implements
                         Intent loginIntent = new Intent(LoginActivity.this, Master.class);
                         loginIntent.putExtra("loginMethod", "App");
                         startActivity(loginIntent);
+                        new ActivityAnimator().fadeAnimation(LoginActivity.this);
                         finish();
                         myDialog.dismiss();
                         myDialog.cancel();
@@ -1094,6 +1100,7 @@ public class LoginActivity extends FragmentActivity implements
                 Intent loginIntent = new Intent(LoginActivity.this, Master.class);
                 loginIntent.putExtra("loginMethod", "App");
                 startActivity(loginIntent);
+                new ActivityAnimator().fadeAnimation(LoginActivity.this);
                 finish();
             }
 

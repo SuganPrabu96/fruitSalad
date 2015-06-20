@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import Cart.CartItemsClass;
 import Cart.CartRecyclerViewAdapter;
 import ItemDisplay.ItemDetailsClass;
 import ItemDisplay.ItemsCardAdapter;
@@ -59,6 +60,8 @@ public class ItemsSearchActivity extends ActionBarActivity {
     private TextView cartTotal;
     private RecyclerView cartItemRecyclerView;
     private static Dialog addtocartDialog;
+    private static boolean addExistingItem = false;
+    private static int cartExistingItemPos = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +122,7 @@ public class ItemsSearchActivity extends ActionBarActivity {
             public void handleMessage(Message msg) {
                 if (msg.arg1 == 1) {
 
-                    Log.i("listOfItems", listOfItems.toString());
+                    Log.i("listOfItems", String.valueOf(listOfItems.get(0).getItemprice()));
 
                     mAdapter = new ItemsCardAdapter(listOfItems,getApplicationContext(),"search");
                     mRecyclerView.setAdapter(mAdapter);
@@ -226,6 +229,50 @@ public class ItemsSearchActivity extends ActionBarActivity {
         }
     }
 
+    public static void addtocart_fn(String name, float qty, String price, int productID, int q, String unit, Character changeable){
+        Log.i("addtocart_fn_PID", String.valueOf(productID));
+        //   Master.cAdapter.add(new CartItemsClass(name,qty,price,productID,q,quantity,unit,changeable));
+
+        for(int i = 0;i<CartRecyclerViewAdapter.listitems.size();i++){
+            if(CartRecyclerViewAdapter.listitems.get(i).getProductId()==productID) {
+                addExistingItem = true;
+                cartExistingItemPos = i;
+                break;
+            }
+            else {
+                addExistingItem = false;
+                cartExistingItemPos = -1;
+            }
+        }
+
+        if(addExistingItem&&!(CartRecyclerViewAdapter.listitems.isEmpty())) {
+            //CartRecyclerViewAdapter.listitems.get(cartExistingItemPos).cartitemprice += String.valueOf(qty*(Double.parseDouble(price)));
+            CartRecyclerViewAdapter.listitems.get(cartExistingItemPos).quantity += qty;
+
+            Master.cAdapter.notifyItemChanged(cartExistingItemPos);
+
+                                /*Message msg1 = new Message();
+            msg1.arg1 = 1;
+            Bundle b = new Bundle();
+            b.putFloat("qty",qty);
+            b.putFloat("q",q);
+            b.putFloat("price", Float.parseFloat(price));
+            msg1.setData(b);
+            Master.updateCartItemCostHandler.sendMessage(msg1);*/
+
+            Master.totalCost += qty*(Double.parseDouble(price));
+            Message msg = new Message();
+            msg.arg1 = 1;
+            Master.updateCartCostHandler.sendMessage(msg);
+        }
+        else {
+            Master.cAdapter.add(new CartItemsClass(name, price, productID, q, qty, unit, changeable));
+            Master.cAdapter.notifyItemInserted(Master.cAdapter.getItemCount());
+        }
+
+    }
+
+
     public static void addDialog(ItemDetailsClass item1)
     {
         final ItemDetailsClass item = item1;
@@ -279,10 +326,10 @@ public class ItemsSearchActivity extends ActionBarActivity {
                 //    Log.i("qty",num[i]);
                 Log.i("qty inside ",floatitems[np.getValue()-1]);
                 if(item.getChangeable()=='y') {
-                    Master.addtocart_fn(item.getItemtitle(),  Float.parseFloat(floatitems[np.getValue() - 1]), item.getItemprice().toString(), item.getProductid(), item.getQ(), item.getUnit(), item.getChangeable());
+                    addtocart_fn(item.getItemtitle(),  Float.parseFloat(floatitems[np.getValue() - 1]), item.getItemprice().toString(), item.getProductid(), item.getQ(), item.getUnit(), item.getChangeable());
                 }
                 else if(item.getChangeable()=='n') {
-                    Master.addtocart_fn(item.getItemtitle(),Float.parseFloat(intitems[np.getValue()-1]) , item.getItemprice().toString(), item.getProductid(), item.getQ() , item.getUnit(), item.getChangeable());
+                    addtocart_fn(item.getItemtitle(),Float.parseFloat(intitems[np.getValue()-1]) , item.getItemprice().toString(), item.getProductid(), item.getQ() , item.getUnit(), item.getChangeable());
 
                 }
 
@@ -305,6 +352,9 @@ public class ItemsSearchActivity extends ActionBarActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        Message msg = new Message();
+        msg.arg1 = 0;
+        Master.selectItemHandler.sendMessage(msg);
     }
 
     /*@Override

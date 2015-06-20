@@ -151,7 +151,7 @@ public class Master extends ActionBarActivity {
     public static InputMethodManager inputMethodManager;
     public static RecyclerView cartItemRecyclerView;
     public static Handler backPressedHandler, orderHistoryHandler, orderHistoryMoreHandler, areasHandler, latLongHandler, updateCartCostHandler;
-    public static Handler updateCartItemCostHandler;
+    public static Handler updateCartItemCostHandler, selectItemHandler;
     public static Dialog mDialog;
     public ImageView iv;
     public static ArrayList<OrderHistoryClass> orders;
@@ -227,6 +227,7 @@ public class Master extends ActionBarActivity {
         latLongHandler = new Handler();
         updateCartCostHandler = new Handler();
         updateCartItemCostHandler = new Handler();
+        selectItemHandler = new Handler();
 
         updateProgress = new ProgressDialog(Master.this);
         locationProgress = new ProgressDialog(Master.this);
@@ -360,6 +361,12 @@ public class Master extends ActionBarActivity {
                     Double lng = b.getDouble("long");
                     new LocationDetails().execute(String.valueOf(lat), String.valueOf(lng), LoginActivity.prefs.getString("session", ""));
                 }
+            }
+        };
+
+        Master.selectItemHandler = new Handler(){
+            public void handleMessage(Message msg){
+                selectItem(msg.arg1);
             }
         };
     }

@@ -1397,7 +1397,7 @@ public class Master extends ActionBarActivity {
                     if (invitePhone != null && inviteName != null) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(Master.this);
                         alert.setTitle("Do you wish to invite " + inviteName + " ?");
-                        alert.setMessage("You will incur message charges as per your plan");
+                        alert.setMessage("You will incur SMS charges as per your plan");
                         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

@@ -13,7 +13,7 @@
         android:paddingTop="0dp"
         card_view:cardBackgroundColor="#FFFFFF"
         android:scrollbars="vertical"
-        card_view:cardCornerRadius="10dp"
+        card_view:cardCornerRadius="0dp"
         card_view:cardElevation="5dp"
         card_view:contentPadding="0dp">
 

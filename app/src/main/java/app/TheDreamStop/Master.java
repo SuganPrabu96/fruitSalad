@@ -76,6 +76,8 @@ import com.facebook.widget.ProfilePictureView;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 
+import net.steamcrafted.loadtoast.LoadToast;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -177,6 +179,7 @@ public class Master extends ActionBarActivity {
     private static final int contactKey = 1;
     private static Shimmer shimmer;
     private static ShimmerTextView tv;
+    private static LoadToast lt;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -189,14 +192,16 @@ public class Master extends ActionBarActivity {
         modeOfLogin = getIntent().getExtras().getString("loginMethod").toString();
 
         displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
-        width = displayMetrics.widthPixels*0.9;
-        height = displayMetrics.heightPixels*0.75;
+        width = displayMetrics.widthPixels;
+        height = displayMetrics.heightPixels;
 
         setContentView(R.layout.nav_bar);
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
 
         inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+        lt = new LoadToast(Master.this);
 
         categoryName = new ArrayList();
         productsName = new ArrayList();
@@ -662,7 +667,7 @@ public class Master extends ActionBarActivity {
 
         checkoutDialog.setCancelable(true);
         checkoutDialog.setContentView(R.layout.checkout_layout);
-        checkoutDialog.getWindow().setLayout((int)width, (int)height);
+        checkoutDialog.getWindow().setLayout((int)(width*0.9), (int)(height*0.75));
         checkoutDialog.setTitle("Confirm your Details");
         checkoutDialog.show();
 
@@ -3559,20 +3564,11 @@ public class Master extends ActionBarActivity {
 
         @Override
         protected void onPreExecute(){
-            Log.i("Add Order","Inside PreExceute");
-            shimmer = new Shimmer();
-            ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
-            mDialog.setContentView(R.layout.loading_layout);
-            mDialog.setCancelable(false);
-            Drawable d = new ColorDrawable(Color.BLACK);
-            d.setAlpha(100);
-            mDialog.getWindow().setBackgroundDrawable(d);
-            mDialog.show();
+            Log.i("Add Order", "Inside PreExceute");
 
-            shimmer.setDuration(500);
-            shimmer.start(tv);
             addorderProgress.setTitle("Preparing to submit your order...");
             addorderProgress.setCancelable(false);
+            lt.setText("Placing order...").setProgressColor(Color.BLUE).setTranslationY((int) (Master.height*0.68)).show();
           //  addorderProgress.show();
         }
         @Override
@@ -3596,7 +3592,6 @@ public class Master extends ActionBarActivity {
 
                     if(addOrderJSON.getString("success").equals("true")){
                         addOrderSuccess = true;
-                        //TODO Proceed to payment gateway from here
                     }
                     else
                         addOrderSuccess = false;
@@ -3611,14 +3606,11 @@ public class Master extends ActionBarActivity {
         @Override
         protected void onPostExecute(String res){
             super.onPostExecute(res);
-            if(addorderProgress!=null&&addorderProgress.isShowing()) {
-                addorderProgress.hide();
-                addorderProgress.cancel();
+            if(addOrderSuccess){
+                lt.success();
             }
-            if(mDialog !=null && mDialog.isShowing()==true)
-            {
-              //  shimmer.cancel();
-                mDialog.dismiss();
+            else{
+                lt.error();
             }
             Master.cAdapter.emptyCart();
        }

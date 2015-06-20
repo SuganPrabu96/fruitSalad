@@ -9,6 +9,13 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-96ecd00377fc45e14857323371b92dedd667a43f.jar" />
     </item>
     <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\net.steamcrafted\load-toast\1.0.6\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="f0b653f07052064570b06767e9b4b0b6a29397af">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-e1be9d6432c0b6b0e9fb00a1a72d0df7d8bb2268.jar" />
+    </item>
+    <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -107,18 +114,18 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-134b8558e0001f5d3e5da49bcd13003305f9f199.jar" />
     </item>
     <item
-        jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="129874135e6081269ace2312092031558865de12">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-95806c94368a37b9fcaf0ee4428786893156e5b9.jar" />
-    </item>
-    <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-ceb334577116a38252e5e3946282167f3d5f7361.jar" />
+    </item>
+    <item
+        jar="C:\Users\Suganprabu\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-android\1.1.4\129874135e6081269ace2312092031558865de12\bolts-android-1.1.4.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="129874135e6081269ace2312092031558865de12">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\bolts-android-1.1.4-95806c94368a37b9fcaf0ee4428786893156e5b9.jar" />
     </item>
     <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\me.relex\circleindicator\1.1.4\classes.jar"
@@ -142,18 +149,18 @@
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-a819831ca84fe3867d4f4b31351278d1d14a404b.jar" />
     </item>
     <item
-        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\libs\internal_impl-22.2.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-a819831ca84fe3867d4f4b31351278d1d14a404b.jar" />
-    </item>
-    <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.facebook.android\facebook-android-sdk\3.23.0\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="96a08acffc0d3cf8425107b82bc4009a1f82a66c">
         <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\classes-657e0c898266568307529d8a226f08fabc6c1cf1.jar" />
+    </item>
+    <item
+        jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="E:\Projects\fruitSalad\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-a819831ca84fe3867d4f4b31351278d1d14a404b.jar" />
     </item>
     <item
         jar="E:\Projects\fruitSalad\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.2.1\classes.jar"

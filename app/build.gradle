@@ -37,5 +37,6 @@ dependencies {
     compile 'com.kogitune:pre-lollipop-activity-transition:1.0.0'
     compile 'com.intuit.sdp:sdp-android:1.0.0'
     compile 'me.relex:circleindicator:1.1.4@aar'
+    compile 'net.steamcrafted:load-toast:1.0.6'
 
 }

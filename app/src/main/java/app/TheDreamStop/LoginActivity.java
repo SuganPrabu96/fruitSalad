@@ -263,7 +263,7 @@ public class LoginActivity extends FragmentActivity implements
                     if ((!name.equals("")) && user.contains("@") && pass.equals(cpass) && pass.length() >= 8 && cpass.length() >= 8) {
 
                         new RegisterTask().execute(name, user, pass, tempAddress, tempPhone);
-                        if(LoginActivity.registerSuccess==true) {
+                        /*if(LoginActivity.registerSuccess==true) {
                             LoginActivity.customerEmail = user;
                             LoginActivity.customerName = name;
                             LoginActivity.customerPassword = pass;
@@ -315,10 +315,10 @@ public class LoginActivity extends FragmentActivity implements
                         }
 
 
-                        else if(registerSuccess==false){
+                        else if(!LoginActivity.registerSuccess){
                             Toast.makeText(getApplicationContext(),"The Email ID you have entered has already been registered",Toast.LENGTH_SHORT).show();
                         }
-
+*/
                     } else if(name.equals("")) {
                         Toast.makeText(getApplicationContext(),"Please enter your name",Toast.LENGTH_SHORT).show();
                     } else if (!pass.equals(cpass)) {
@@ -928,6 +928,7 @@ public class LoginActivity extends FragmentActivity implements
                         a.cancel();
                         Intent loginIntent = new Intent(LoginActivity.this, Master.class);
                         loginIntent.putExtra("loginMethod", "App");
+                        loginIntent.putExtra("userStatus","Just registered");
                         startActivity(loginIntent);
                         new ActivityAnimator().fadeAnimation(LoginActivity.this);
                         finish();

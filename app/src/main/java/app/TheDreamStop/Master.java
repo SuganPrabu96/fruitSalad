@@ -116,7 +116,7 @@ public class Master extends ActionBarActivity {
     public static TextView profileIconText;
     public static ImageView profileIcon;
     public static CircleImageView googleProfileIcon;
-    public static String modeOfLogin;
+    public static String modeOfLogin, userStatus;
     public static int numCategories, numSubCategories[], numProducts;
     public static ArrayList<Integer> newProductsID, newProductsCatId, newProductsSubCatId;
     public static ArrayList<Double> productsPrice, productsMRP;
@@ -190,6 +190,7 @@ public class Master extends ActionBarActivity {
         editDialog = new Dialog(Master.this);
         editDeleteDialog = new Dialog(Master.this);
         modeOfLogin = getIntent().getExtras().getString("loginMethod").toString();
+        userStatus = getIntent().getExtras().getString("userStatus").toString();
 
         displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
         width = displayMetrics.widthPixels;
@@ -277,7 +278,8 @@ public class Master extends ActionBarActivity {
         actionBar = getSupportActionBar();
         actionBar.setTitle(LoginActivity.prefs.getString("areaname",""));
 
-        if(LoginActivity.prefs.getString("userStatus","").equals("Just registered"))
+        Log.d("stat",userStatus);
+        if(userStatus.equals("Just registered"))
             getLocationForItems();
 
         else{
@@ -391,6 +393,8 @@ public class Master extends ActionBarActivity {
             final Spinner city = (Spinner) locationDialog.findViewById(R.id.spinnerLocationCity);
             final Spinner area = (Spinner) locationDialog.findViewById(R.id.spinnerLocationArea);
 
+            final LinearLayout areaLayout = (LinearLayout) locationDialog.findViewById(R.id.location_area_layout);
+
             //final RadioButton selectFromMap = (RadioButton) locationDialog.findViewById(R.id.radio_select_from_map);
 
             ArrayAdapter<String> adapter_city = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, loc_city);
@@ -440,6 +444,7 @@ public class Master extends ActionBarActivity {
 
                         LoginActivity.prefs.edit().putString("cityname", location[0]).apply();
                         new GetAreas().execute(location[0]);
+                        areaLayout.setVisibility(View.VISIBLE);
                     }
                     check=true;
                 }
@@ -879,6 +884,7 @@ public class Master extends ActionBarActivity {
 
             final Spinner city = (Spinner) locationDialog.findViewById(R.id.spinnerLocationCity);
             final Spinner area = (Spinner) locationDialog.findViewById(R.id.spinnerLocationArea);
+            final LinearLayout areaLayout = (LinearLayout) locationDialog.findViewById(R.id.location_area_layout);
             Button save = (Button) locationDialog.findViewById(R.id.buttonChooseLocation);
 
             // final RadioButton selectFromMap = (RadioButton) locationDialog.findViewById(R.id.radio_select_from_map);
@@ -940,6 +946,7 @@ public class Master extends ActionBarActivity {
                         LoginActivity.prefs.edit().putString("cityname", location[0]).apply();
 
                         new GetAreas().execute(location[0]);
+                        areaLayout.setVisibility(View.VISIBLE);
                     }
                     check = true;
                 }
@@ -3029,12 +3036,11 @@ public class Master extends ActionBarActivity {
             shimmer = new Shimmer();
             ShimmerTextView tv = (ShimmerTextView) mDialog.findViewById(R.id.shimmer_loading);
             mDialog.setCancelable(false);
-            mDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT,WindowManager.LayoutParams.FILL_PARENT);
+            mDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT);
             Drawable d = new ColorDrawable(Color.BLACK);
             d.setAlpha(100);
             mDialog.getWindow().setBackgroundDrawable(d);
             mDialog.show();
-            shimmer.setDuration(500);
             shimmer.start(tv);
 
             loadCatSubCatProgress.setTitle("Loading Products List...");
@@ -3135,7 +3141,6 @@ public class Master extends ActionBarActivity {
             mDialog.getWindow().setBackgroundDrawable(d);
             mDialog.show();
 
-            shimmer.setDuration(500);
             shimmer.start(tv);
             updateProgress.setTitle("Updating");
             updateProgress.setCancelable(false);
@@ -3240,8 +3245,7 @@ public class Master extends ActionBarActivity {
             mDialog.getWindow().setBackgroundDrawable(d);
             mDialog.show();
 
-            shimmer.setDuration(500);
-            shimmer.start(tv);
+//            shimmer.start(tv);
             locationProgress.setTitle("Updating");
             locationProgress.setCancelable(false);
             //locationProgress.show();
@@ -3330,7 +3334,6 @@ public class Master extends ActionBarActivity {
             mDialog.getWindow().setBackgroundDrawable(d);
             mDialog.show();
 
-            shimmer.setDuration(500);
             shimmer.start(tv);
 
 
@@ -3632,7 +3635,6 @@ public class Master extends ActionBarActivity {
             mDialog.getWindow().setBackgroundDrawable(d);
             mDialog.show();
 
-            shimmer.setDuration(500);
             shimmer.start(tv);
             orderHistoryProgress.setTitle("Loading your order history...");
             orderHistoryProgress.setCancelable(false);
@@ -3724,7 +3726,6 @@ public class Master extends ActionBarActivity {
             mDialog.getWindow().setBackgroundDrawable(d);
             mDialog.show();
 
-            shimmer.setDuration(500);
             shimmer.start(tv);
             orderHistoryProgress.setTitle("Loading your order list...");
             orderHistoryProgress.setCancelable(false);
@@ -3801,7 +3802,6 @@ public class Master extends ActionBarActivity {
             mDialog.getWindow().setBackgroundDrawable(d);
             mDialog.show();
 
-            shimmer.setDuration(500);
             shimmer.start(tv);
             logoutProgress.setTitle("Logging out...");
             logoutProgress.setCancelable(false);

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import OrderHistory.TransactionDetailsClass;
 import OrderHistory.TransactionDetailsRecyclerViewAdapter;
+import util.ActivityAnimator;
 
 
 public class TransactionDetails extends ActionBarActivity {
@@ -80,6 +81,11 @@ public class TransactionDetails extends ActionBarActivity {
 
     }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        new ActivityAnimator().fadeAnimation(TransactionDetails.this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

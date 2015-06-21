@@ -38,5 +38,6 @@ dependencies {
     compile 'com.intuit.sdp:sdp-android:1.0.0'
     compile 'me.relex:circleindicator:1.1.4@aar'
     compile 'net.steamcrafted:load-toast:1.0.6'
+    compile 'com.ms-square:etsyblur:0.1.1'
 
 }

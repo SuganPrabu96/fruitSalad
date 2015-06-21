@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.MapFragment;
 
+import util.ActivityAnimator;
+
 public class LocationFromMap extends FragmentActivity{
      //   implements OnMapReadyCallback, LocationListener {
 
@@ -308,7 +310,7 @@ public class LocationFromMap extends FragmentActivity{
             Master.locationDialog.hide();
             Master.locationDialog.dismiss();
         }
-
+        new ActivityAnimator().fadeAnimation(LocationFromMap.this);
     }
 
     public IBinder onBind(Intent intent) {

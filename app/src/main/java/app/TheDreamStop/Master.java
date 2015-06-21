@@ -3568,7 +3568,7 @@ public class Master extends ActionBarActivity {
 
             addorderProgress.setTitle("Preparing to submit your order...");
             addorderProgress.setCancelable(false);
-            lt.setText("Placing order...").setProgressColor(Color.BLUE).setTranslationY((int) (Master.height*0.68)).show();
+            lt.setText("Placing order...").setProgressColor(Color.BLUE).setTranslationY((int) (Master.height * 0.68)).show();
           //  addorderProgress.show();
         }
         @Override

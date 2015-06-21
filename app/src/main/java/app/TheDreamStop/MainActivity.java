@@ -9,10 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
-
-import com.romainpiel.shimmer.Shimmer;
-import com.romainpiel.shimmer.ShimmerTextView;
 
 import util.ActivityAnimator;
 import util.ConnectionDetector;
@@ -21,18 +17,11 @@ public class MainActivity extends ActionBarActivity{
 
     public static ConnectionDetector internetConnection;
     ConnectivityManager conman;
-    ShimmerTextView tv;
-    Shimmer shimmer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar bar = getSupportActionBar();
-        tv = (ShimmerTextView) findViewById(R.id.shimmer_tv);
-        shimmer = new Shimmer();
-        shimmer.setDuration(500).setRepeatCount(4);
-        shimmer.start(tv);
-
 
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
         internetConnection = new ConnectionDetector(getApplicationContext());
@@ -62,14 +51,6 @@ public class MainActivity extends ActionBarActivity{
                     a.dismiss();
                 }
             }, 2000);
-        }
-    }
-    public void toggleAnimation(View target) {
-        if (shimmer != null && shimmer.isAnimating()) {
-            shimmer.cancel();
-        } else {
-            shimmer = new Shimmer();
-            shimmer.start(tv);
         }
     }
 

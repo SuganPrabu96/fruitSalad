@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ItemDisplay.ItemDetailsClass;
+import util.ActivityAnimator;
 import util.ServiceHandler;
 
 public class ParallaxToolbarScrollViewActivity extends ActionBarActivity implements ObservableScrollViewCallbacks {
@@ -294,6 +295,12 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
             itemImage.setImageBitmap(image);
         }
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        new ActivityAnimator().fadeAnimation(ParallaxToolbarScrollViewActivity.this);
     }
 
 

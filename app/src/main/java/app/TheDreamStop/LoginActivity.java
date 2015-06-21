@@ -344,7 +344,7 @@ public class LoginActivity extends FragmentActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
+        finish();
     }
 
     /*@Override

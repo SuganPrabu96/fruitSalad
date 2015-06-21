@@ -37,6 +37,7 @@ import Cart.CartItemsClass;
 import Cart.CartRecyclerViewAdapter;
 import ItemDisplay.ItemDetailsClass;
 import ItemDisplay.ItemsCardAdapter;
+import util.ActivityAnimator;
 import util.SearchSuggestionProvider;
 import util.ServiceHandler;
 
@@ -355,6 +356,7 @@ public class ItemsSearchActivity extends ActionBarActivity {
         Message msg = new Message();
         msg.arg1 = 0;
         Master.selectItemHandler.sendMessage(msg);
+        new ActivityAnimator().fadeAnimation(ItemsSearchActivity.this);
     }
 
     /*@Override

@@ -65,6 +65,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     private static final String itemsDescURL = "http://thedreamstop.in/api/productInfo.php";
     private WifiManager wifiManager;
     private Handler itemDescHandler;
+    ActionBar bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +73,11 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         setContentView(R.layout.activity_parallaxtoolbarscrollview);
         addtocartD = new Dialog(ParallaxToolbarScrollViewActivity.this);
 
-        ActionBar bar = getSupportActionBar();
-        bar.setCustomView(findViewById(R.id.toolbar));
+        bar = getSupportActionBar();
+      //  bar.setCustomView(findViewById(R.id.toolbar));
+
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4caf50")));
+
         //setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         //mImageView = findViewById(R.id.image);
@@ -87,13 +90,13 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         height = displayMetrics.heightPixels / 4;
         getIntent = getIntent();
         mImageView = findViewById(R.id.itemdetail_name);
-        mToolbarView = findViewById(R.id.toolbar);
+ //       mToolbarView = findViewById(R.id.toolbar);
         itemDescription = (TextView) findViewById(R.id.parallaxItemDescription);
         itemName = (TextView) findViewById(R.id.itemdetail_name);
         itemPrice = (TextView) findViewById(R.id.itemdetail_price);
         itemImage = (ImageView) findViewById(R.id.itemdetail_image);
         addToCart = (Button) findViewById(R.id.itemdetail_addbutton);
-        mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
+//        mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
 
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
@@ -106,6 +109,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         quantity = getIntent.getExtras().getFloat("quantity");
         q = getIntent.getExtras().getInt("q");
         changeable = getIntent.getExtras().getChar("changeable");
+        bar.setTitle(name);
 
         new ItemsDesc().execute(String.valueOf(pID));
 
@@ -117,7 +121,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
             }
         };
 
-        itemName.setText(name);
+     //   itemName.setText(name);
         itemPrice.setText(String.valueOf(price));
         final ItemDetailsClass item = new ItemDetailsClass(name,price,MRP,pID,quantity,unit,changeable,q) ;
 
@@ -133,6 +137,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ParallaxToolbarScrollViewActivity.addDialog(item);
             }
         });
@@ -143,15 +148,41 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     {
         final ItemDetailsClass item = item1;
 
+
+        Log.d("item1 PID", String.valueOf(item1.getProductid()));
+
         addtocartD.setTitle("Select Quantity");
         addtocartD.setContentView(R.layout.add_dialog);
         addtocartD.show();
-
+        final String[] floatitems={"0.5","1","1.5","2","2.5","3","3.5","4","4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10"};
+        final String[] intitems={"1","2","3","4","5","6","7","8","9","10"};
         final NumberPicker np = (NumberPicker) addtocartD.findViewById(R.id.numberPicker1);
         np.setMaxValue(10);
         np.setMinValue(1);
         np.setWrapSelectorWheel(false);
+        if(item.getChangeable()=='n'){
+            np.setDisplayedValues(intitems);
+            Log.i("value of cb ","cb is n");}
+        else if(item.getChangeable()=='y')
+        {
+            np.setDisplayedValues(floatitems);
+            Log.i("value of cb","cb is y");
 
+        }
+
+        //   final int i = np.getValue()-1;
+        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.i("qty",intitems[np.getValue()-1]);
+                Log.i("value check",String.valueOf(np.getValue()));
+            }
+        });
+
+
+        //    Log.i("qty",num[i]);
+
+        //     np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
         Button btn1 = (Button) addtocartD.findViewById(R.id.btn_to_add);
         Button btn2 = (Button) addtocartD.findViewById(R.id.btn_to_cancel);
@@ -160,9 +191,19 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //      Master.addtocart_fn(item);
+                //  addtocart_fn(cartitem);
+                //Log.d("Value of Qty","check");
+                //    Log.i("qty",num[i]);
+                Log.i("qty inside ",floatitems[np.getValue()-1]);
+                if(item.getChangeable()=='y') {
+                    Master.addtocart_fn(item.getItemtitle(),  Float.parseFloat(floatitems[np.getValue() - 1]), item.getItemprice().toString(), item.getProductid(), item.getQ(), item.getUnit(), item.getChangeable());
+                }
+                else if(item.getChangeable()=='n') {
+                    Master.addtocart_fn(item.getItemtitle(),Float.parseFloat(intitems[np.getValue()-1]) , item.getItemprice().toString(), item.getProductid(), item.getQ() , item.getUnit(), item.getChangeable());
 
-                Master.addtocart_fn(item.getItemtitle(),np.getValue(),item.getItemprice().toString(),item.getProductid(),item.getQ(),item.getUnit(),item.getChangeable());
-                Log.e("Value of Qty", String.valueOf(np.getValue()));
+                }
+
 
                 addtocartD.dismiss();
             }
@@ -178,6 +219,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
 
     }
 
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -188,7 +230,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
         int baseColor = getResources().getColor(R.color.primary);
         float alpha = 1 - (float) Math.max(0, mParallaxImageHeight - scrollY) / mParallaxImageHeight;
-        mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, baseColor));
+//        mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, baseColor));
         ViewHelper.setTranslationY(mImageView, scrollY / 2);
     }
 
@@ -198,6 +240,12 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+
+        if (scrollState == ScrollState.UP) {
+           if(bar.isShowing()){bar.hide();}
+        } else if (scrollState == ScrollState.DOWN) {
+            if(!bar.isShowing()){bar.show();}
+        }
     }
 
     private class ItemsDesc extends AsyncTask<String,Void,Void>{
@@ -277,7 +325,7 @@ public class ParallaxToolbarScrollViewActivity extends ActionBarActivity impleme
             itemsURLReturnedJSON = jsonParser.makeServiceCall(itemsImagesURL, ServiceHandler.GET, paramsItems);
             if (itemsURLReturnedJSON != null) {
                 try{
-                    Log.i("itemsURLReturnedJSON",itemsURLReturnedJSON);
+                  //  Log.i("itemsURLReturnedJSON",itemsURLReturnedJSON);
                     URL url = new URL("http://thedreamstop.in/api/prodImage.php?PID="+params[0]+"&width="+String.valueOf(width)+"&height="+String.valueOf(height));
                     image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 }catch (Exception e){

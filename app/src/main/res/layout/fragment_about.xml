@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="15dp"
     android:orientation="vertical"
+    android:layout_marginTop="16dp"
     tools:context="e_commerce.e_commerce.MyAccount$PlaceholderFragment"
     android:background="@drawable/concrete_seamless">
 
@@ -26,24 +26,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingLeft="16dp"
+            android:paddingTop="10dp"
             android:paddingRight="16dp"
-            android:layout_marginTop="15dp"
             android:text="@string/about_us"
             android:lineSpacingExtra="10dp"
             android:textColor="#000"
             android:textSize="20sp"
             android:fontFamily="sans-serif-light"/>
+
         </ScrollView>
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
 
             <include layout="@layout/cart"></include>
 
-        </LinearLayout>
+
+
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </LinearLayout>

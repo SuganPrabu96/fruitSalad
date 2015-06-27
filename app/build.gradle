@@ -6,10 +6,11 @@ android {
 
     defaultConfig {
         applicationId "app.TheDreamStop"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+
     }
     buildTypes {
         release {
@@ -38,6 +39,5 @@ dependencies {
     compile 'com.intuit.sdp:sdp-android:1.0.0'
     compile 'me.relex:circleindicator:1.1.4@aar'
     compile 'net.steamcrafted:load-toast:1.0.6'
-    compile 'com.ms-square:etsyblur:0.1.1'
 
 }

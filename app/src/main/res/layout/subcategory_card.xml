@@ -20,7 +20,7 @@
         android:paddingTop="0dp"
 
         android:scrollbars="vertical"
-        card_view:cardCornerRadius="5dp"
+        card_view:cardCornerRadius="10dp"
         card_view:cardElevation="2dp"
         card_view:contentPadding="0dp">
 
@@ -34,7 +34,7 @@
 
             <ImageView
                 android:id="@+id/subcatimg"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
@@ -42,7 +42,7 @@
 
             <TextView
                 android:id="@+id/subcatname"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:paddingLeft="5dp"

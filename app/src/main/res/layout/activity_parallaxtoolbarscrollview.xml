@@ -24,6 +24,7 @@
              <ImageView
                 android:id="@+id/itemdetail_image"
                 android:layout_width="match_parent"
+                android:paddingTop="10dp"
                 android:layout_height="match_parent"
                 android:scaleType="fitCenter"/>
             </FrameLayout>
@@ -47,14 +48,18 @@
                     android:paddingLeft="@dimen/activity_horizontal_margin"
                     android:paddingRight="@dimen/activity_horizontal_margin"
                     android:paddingTop="@dimen/activity_vertical_margin"
-                    android:text="Item's Name goes here"></TextView>
+                    >
+
+                    </TextView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="125dp"
+                    android:layout_marginTop="60dp"
                     android:weightSum="2">
+
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -65,21 +70,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"
-
                             android:paddingLeft="@dimen/activity_horizontal_margin"
                             android:paddingRight="@dimen/activity_horizontal_margin"
-                            android:paddingTop="@dimen/activity_vertical_margin"
-
-                            android:fontFamily="sans-serif-bold"
+                            android:paddingTop="0dp"
+                            android:gravity="center"
+                            android:fontFamily="sans-serif-light"
+                            android:textColor="#000"
                             android:text="Price :"
-                            android:paddingBottom="20dp"
-                            android:layout_gravity="left|center_vertical" />
-
+                            android:paddingBottom="0dp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/itemdetail_price"
                             android:textSize="20sp"
+                            android:textColor="#E53935"
                             android:layout_marginRight="20dp"
                             android:layout_gravity="center" />
 
@@ -89,18 +93,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/itemdetail_addbutton"
-                            android:paddingTop="20dp"
-                            android:text="Add To Cart"
-                            android:layout_marginRight="20dp"
 
-                            android:layout_gravity="right|center" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/itemdetail_addbutton"
+                        android:paddingTop="20dp"
+                        android:text="Add To Cart"
+                        android:layout_marginRight="20dp"
+
+                        android:layout_gravity="right|center" />
 
                     </LinearLayout>
                 </LinearLayout>
+
 
 
             </FrameLayout>
@@ -112,19 +119,12 @@
                 android:id="@+id/parallaxItemDescription"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"/>
+                android:paddingTop="0dp"/>
         </LinearLayout>
 
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
-    <include layout="@layout/gradient_header" />
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
-        />
+
+
 </FrameLayout>

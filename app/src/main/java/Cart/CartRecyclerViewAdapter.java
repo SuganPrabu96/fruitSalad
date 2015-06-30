@@ -67,7 +67,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartCardViewHo
                 t.show();
             }
         });
-        viewHolder.itemCost.setText(item.getCartitemprice());
+        viewHolder.itemCost.setText("Rs." + item.getCartitemprice());
         viewHolder.itemTotalCost.setText("Rs. " + String.valueOf(item.getQuantity()*Float.parseFloat(item.getCartitemprice())));
         viewHolder.itemQuantity.setText(String.valueOf(item.getQ()));
         viewHolder.itemMultiplier.setText("X " + String.valueOf(item.getQuantity()));

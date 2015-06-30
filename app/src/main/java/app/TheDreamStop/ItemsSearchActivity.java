@@ -77,7 +77,7 @@ public class ItemsSearchActivity extends ActionBarActivity {
         checkoutButton = (ImageView) findViewById(R.id.checkoutbutton);
         cartTotal = (TextView) findViewById(R.id.cart_totalcost);
 
-        cartTotal.setText(String.valueOf(Master.totalCost));
+        cartTotal.setText("Rs." + String.valueOf(Master.totalCost));
 
         cartItemRecyclerView = (RecyclerView) findViewById(R.id.cart_items_recyclerview);
         cartItemRecyclerView.setHasFixedSize(false);

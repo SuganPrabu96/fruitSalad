@@ -20,7 +20,7 @@
         android:paddingTop="0dp"
         card_view:cardBackgroundColor="#FFFFFF"
         android:scrollbars="vertical"
-        card_view:cardCornerRadius="15dp"
+        card_view:cardCornerRadius="5dp"
         card_view:cardElevation="0dp"
         >
 
@@ -58,7 +58,7 @@
                     android:textSize="18sp"
                     android:maxLength="20"
                     android:ellipsize="end"
-                    android:fontFamily="sans-serif-black"
+                    android:fontFamily="sans-serif-light"
                     android:textColor="#FFFFFF" />
                     <ImageView
                         android:layout_width="45dp"

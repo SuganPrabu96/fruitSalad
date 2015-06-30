@@ -1105,7 +1105,7 @@ public class Master extends ActionBarActivity {
             checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
             cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
 
-            cartTotal.setText(String.valueOf(totalCost));
+            cartTotal.setText("Rs."+String.valueOf(totalCost));
 
             if (LoginActivity.prefs.getString("Notification", "").equals("On")) {
                 Notifications.setChecked(true);
@@ -1175,7 +1175,7 @@ public class Master extends ActionBarActivity {
             updateCartCostHandler = new Handler(){
                 public void handleMessage(Message msg){
                     if(msg.arg1==1){
-                        cartTotal.setText(String.valueOf(totalCost));
+                        cartTotal.setText("Rs."+String.valueOf(totalCost));
                     }
                 }
             };
@@ -1462,7 +1462,7 @@ public class Master extends ActionBarActivity {
             checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
             cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
 
-            cartTotal.setText(String.valueOf(totalCost));
+            cartTotal.setText("Rs."+String.valueOf(totalCost));
 
             cartItemRecyclerView = (RecyclerView) rootView.findViewById(R.id.cart_items_recyclerview);
             cartItemRecyclerView.setHasFixedSize(false);
@@ -1481,7 +1481,7 @@ public class Master extends ActionBarActivity {
             updateCartCostHandler = new Handler(){
                 public void handleMessage(Message msg){
                     if(msg.arg1==1){
-                        cartTotal.setText(String.valueOf(totalCost));
+                        cartTotal.setText("Rs."+ String.valueOf(totalCost));
                     }
                 }
             };
@@ -1507,7 +1507,7 @@ public class Master extends ActionBarActivity {
             checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
             cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
 
-            cartTotal.setText(String.valueOf(totalCost));
+            cartTotal.setText("Rs."+ String.valueOf(totalCost));
 
             cartItemRecyclerView = (RecyclerView) rootView.findViewById(R.id.cart_items_recyclerview);
             cartItemRecyclerView.setHasFixedSize(false);
@@ -1526,7 +1526,7 @@ public class Master extends ActionBarActivity {
             updateCartCostHandler = new Handler(){
                 public void handleMessage(Message msg){
                     if(msg.arg1==1){
-                        cartTotal.setText(String.valueOf(totalCost));
+                        cartTotal.setText("Rs."+String.valueOf(totalCost));
                     }
                 }
             };
@@ -1601,7 +1601,7 @@ public class Master extends ActionBarActivity {
             checkoutButton = (ImageView) rootView.findViewById(R.id.checkoutbutton);
             cartTotal = (TextView) rootView.findViewById(R.id.cart_totalcost);
 
-            cartTotal.setText(String.valueOf(totalCost));
+            cartTotal.setText("Rs."+String.valueOf(totalCost));
 
             Master.orders = new ArrayList<>();
 
@@ -1640,7 +1640,7 @@ public class Master extends ActionBarActivity {
             updateCartCostHandler = new Handler(){
                 public void handleMessage(Message msg){
                     if(msg.arg1==1){
-                        cartTotal.setText(String.valueOf(totalCost));
+                        cartTotal.setText("Rs."+String.valueOf(totalCost));
                     }
                 }
             };
@@ -1714,7 +1714,7 @@ public class Master extends ActionBarActivity {
             submit.setVisibility(View.INVISIBLE);
             cancel.setVisibility(View.INVISIBLE);
 
-            cartTotal.setText(String.valueOf(totalCost));
+            cartTotal.setText("Rs."+String.valueOf(totalCost));
 
             Log.i("email", LoginActivity.prefs.getString("Email", ""));
 
@@ -1768,7 +1768,7 @@ public class Master extends ActionBarActivity {
             updateCartCostHandler = new Handler(){
                 public void handleMessage(Message msg){
                     if(msg.arg1==1){
-                        cartTotal.setText(String.valueOf(totalCost));
+                        cartTotal.setText("Rs."+String.valueOf(totalCost));
                     }
                 }
             };
@@ -2359,7 +2359,7 @@ public class Master extends ActionBarActivity {
             checkoutButton = (ImageView) rootView1.findViewById(R.id.checkoutbutton);
             cartTotal = (TextView) rootView1.findViewById(R.id.cart_totalcost);
 
-            cartTotal.setText(String.valueOf(totalCost));
+            cartTotal.setText("Rs. "+String.valueOf(totalCost));
 
             /*if (savedInstanceState == null) {
                 fragManag
@@ -2600,7 +2600,7 @@ public class Master extends ActionBarActivity {
             updateCartCostHandler = new Handler(){
                 public void handleMessage(Message msg){
                     if(msg.arg1==1){
-                        cartTotal.setText(String.valueOf(totalCost));
+                        cartTotal.setText("Rs."+ String.valueOf(totalCost));
                     }
                 }
             };

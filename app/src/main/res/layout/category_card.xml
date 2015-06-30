@@ -21,7 +21,7 @@
         android:paddingTop="0dp"
 
         android:scrollbars="vertical"
-        card_view:cardCornerRadius="10dp"
+        card_view:cardCornerRadius="5dp"
         card_view:cardElevation="2dp"
         card_view:contentPadding="0dp">
 

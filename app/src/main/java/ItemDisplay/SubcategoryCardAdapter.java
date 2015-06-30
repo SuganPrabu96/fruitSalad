@@ -41,7 +41,7 @@ public class SubcategoryCardAdapter extends RecyclerView.Adapter<ViewHolderSubca
         String name = item.getSubcategtitle();
 
         if(name.length()>10){
-            viewHolder.subcategname.setText(name.substring(0, 10)+"...");
+            viewHolder.subcategname.setText(name);
         }
         else{
             viewHolder.subcategname.setText(name);

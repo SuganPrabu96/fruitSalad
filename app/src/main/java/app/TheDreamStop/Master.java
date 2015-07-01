@@ -180,6 +180,7 @@ public class Master extends ActionBarActivity {
     private static Shimmer shimmer;
     private static ShimmerTextView tv;
     private static LoadToast lt;
+    private NavDrawerListAdapter navDrawerListAdapter;
 
     // TODO change the initial value of location based on Shared prefs
 
@@ -311,7 +312,9 @@ public class Master extends ActionBarActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.list_slidermenu);
 
-        drawerList.setAdapter(new NavDrawerListAdapter(getApplicationContext(), datalist));
+        navDrawerListAdapter = new NavDrawerListAdapter(getApplicationContext(), datalist);
+
+        drawerList.setAdapter(navDrawerListAdapter);
         // Set the list's click listener
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -339,6 +342,8 @@ public class Master extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_drawer);
         mDrawerToggle.syncState();
+
+        navDrawerListAdapter.setSelectedItem(0);
 
         curFrag = 0;
 
@@ -533,6 +538,8 @@ public class Master extends ActionBarActivity {
 
         curFrag = position;
 
+        navDrawerListAdapter.setSelectedItem(position);
+
         if (position == 0) {
             fragmentTransaction.replace(R.id.frame_container, new ProductsFragment(), "ProductsFragment");
         } else if (position == 1) {
@@ -638,8 +645,8 @@ public class Master extends ActionBarActivity {
             if(position==7)k=7;
             if(position<7)k=position;
             else k=position-1;
-
             drawerList.getChildAt(k).setBackgroundColor(getResources().getColor(R.color.NavigationBarSelectedItem));
+
         } else
             for (int i = 0; i < drawerList.getChildCount(); i++)
                 drawerList.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.NavigationBarUnselectedItem));

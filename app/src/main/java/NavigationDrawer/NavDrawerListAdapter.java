@@ -17,10 +17,17 @@ public class NavDrawerListAdapter extends BaseAdapter {
 
     private Context context;
     private List<NavDrawerItem> navDrawerItems;
+    private ImageView imgIcon;
+    private TextView txtTitle;
+    private int selectedItem;
 
     public NavDrawerListAdapter(Context context, List<NavDrawerItem> navDrawerItems){
         this.context = context;
         this.navDrawerItems = navDrawerItems;
+    }
+
+    public void setSelectedItem(int selectedItem){
+        this.selectedItem = selectedItem;
     }
 
     @Override
@@ -46,13 +53,23 @@ public class NavDrawerListAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.nav_draw_list_element, null);
         }
 
-        ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
-        TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
+        imgIcon = (ImageView) convertView.findViewById(R.id.icon);
+        txtTitle = (TextView) convertView.findViewById(R.id.title);
 
         imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
         txtTitle.setText(navDrawerItems.get(position).getTitle());
 
+        if(position == selectedItem){
+            txtTitle.setTextColor(context.getResources().getColor(R.color.NavigationBarSelectedItemText));
+        } else{
+            txtTitle.setTextColor(context.getResources().getColor(R.color.NavigationBarUnselectedItemText));
+        }
+
         return convertView;
+    }
+
+    public void setSelectedItemTextColor(int position){
+
     }
 
 }

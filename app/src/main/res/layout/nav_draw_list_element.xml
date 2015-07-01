@@ -31,9 +31,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
-            android:text="Jacksabbb"
+            android:text="skdj"
             android:textSize="18sp"
-            android:textColor="#ffffff"
+            android:textColor="#D8D8D8"
             android:fontFamily="sans-serif-light"
             android:gravity="center_vertical"
             android:layout_gravity="left|center_vertical" />

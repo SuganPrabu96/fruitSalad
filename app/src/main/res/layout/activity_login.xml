@@ -13,17 +13,18 @@ android:paddingRight="20dp"
 tools:context=".LoginActivity$PlaceholderFragment"
 android:orientation="vertical">
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Login"
-    android:textSize="40sp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginTop="10dp"
-    android:textColor="#000"
-    android:clickable="false"
-    android:fontFamily="sans-serif-light"
-    />
+    <LinearLayout
+        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
 
 <EditText
     android:layout_width="match_parent"
@@ -31,7 +32,6 @@ android:orientation="vertical">
     android:textColor="@color/com_facebook_likeview_text_color"
     android:textSize="20sp"
     android:paddingLeft="10dp"
-    android:layout_marginTop="30dp"
     android:inputType="textEmailAddress"
     android:background="@drawable/edit_text_shape"
     android:id="@+id/emailId">
@@ -83,8 +83,6 @@ android:orientation="vertical">
     android:layout_height="wrap_content"
     android:layout_marginTop="25dp"
     android:text="Login"
-    android:layout_marginLeft="30dp"
-    android:layout_marginRight="30dp"
     android:gravity="center"
     android:background="@drawable/button_shape"
     android:layout_gravity="center_horizontal"
@@ -130,14 +128,10 @@ android:orientation="vertical">
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="0dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:layout_gravity="center"
          />
 
         </LinearLayout>
-
-    <!-- Code to display the gmail login button -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -149,8 +143,6 @@ android:orientation="vertical">
             android:id="@+id/googleAuthButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center" />
         </LinearLayout>

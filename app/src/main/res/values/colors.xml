@@ -20,7 +20,9 @@
     <color name="myBackgroundColor">#E3F2FD</color>
     <color name="myNavigationBarProPicBackgroundColor">#4caf50</color>
     <color name="NavigationBarSelectedItem">#ffffff</color>
-    <color name="NavigationBarUnselectedItem">#868686</color>
+    <color name="NavigationBarUnselectedItem">#848484</color>
+    <color name="NavigationBarSelectedItemText">#fff</color>
+    <color name="NavigationBarUnselectedItemText">#D8D8D8</color>
     <color name="primary">#009688</color>
     <color name="warnings">#E53935</color>
     <color name="myDrawerItemSelectedColor">#ff47d8db</color>

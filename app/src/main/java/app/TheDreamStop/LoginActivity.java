@@ -1100,6 +1100,7 @@ public class LoginActivity extends FragmentActivity implements
 
                 Intent loginIntent = new Intent(LoginActivity.this, Master.class);
                 loginIntent.putExtra("loginMethod", "App");
+                loginIntent.putExtra("userStatus","Already registered");
                 startActivity(loginIntent);
                 new ActivityAnimator().fadeAnimation(LoginActivity.this);
                 finish();
